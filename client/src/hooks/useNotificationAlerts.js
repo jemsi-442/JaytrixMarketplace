@@ -1,6 +1,25 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import useNotificationStream from "./useNotificationStream";
 import useToast from "./useToast";
+
+const RECENT_NOTIFICATION_LIMIT = 40;
+
+const getNotificationKey = (notification = {}) => {
+  const id = notification.id || notification._id;
+  if (id) {
+    return `id:${id}`;
+  }
+
+  return [
+    notification.audience,
+    notification.type,
+    notification.orderId,
+    notification.createdAt,
+    notification.message,
+  ]
+    .filter(Boolean)
+    .join(":");
+};
 
 export default function useNotificationAlerts({
   enabled = true,
@@ -9,11 +28,24 @@ export default function useNotificationAlerts({
   vibrationEnabled = true,
 } = {}) {
   const toast = useToast();
+  const recentNotificationKeys = useRef([]);
 
   const handleNotification = useCallback(
     (notification) => {
       if (!enabled || !notification) {
         return;
+      }
+
+      const notificationKey = getNotificationKey(notification);
+      if (notificationKey && recentNotificationKeys.current.includes(notificationKey)) {
+        return;
+      }
+
+      if (notificationKey) {
+        recentNotificationKeys.current = [
+          notificationKey,
+          ...recentNotificationKeys.current,
+        ].slice(0, RECENT_NOTIFICATION_LIMIT);
       }
 
       const prefix = mode === "admin" ? "Admin update" : mode === "rider" ? "Rider update" : "Order update";
