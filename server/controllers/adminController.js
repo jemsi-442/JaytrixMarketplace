@@ -5,6 +5,7 @@ import {
   getMessagingRuntimeConfig,
   retryExternalNotification,
   selectPrimaryExternalResult,
+  sendMesejiSmsText,
   sendMesejiWhatsAppText,
   updateMessagingRuntimeConfig,
 } from "../services/MessagingService.js";
@@ -212,17 +213,29 @@ export const sendMessagingTest = async (req, res) => {
   try {
     const phone = String(req.body?.phone || "").trim();
     const message = String(req.body?.message || "Test message from marketplace notifications.").trim();
+    const channel = String(req.body?.channel || "meseji_whatsapp").trim().toLowerCase();
 
     if (!phone) {
       return res.status(400).json({ message: "Phone number is required" });
     }
 
+    if (!["meseji_whatsapp", "meseji_sms"].includes(channel)) {
+      return res.status(400).json({ message: "Unsupported messaging test channel" });
+    }
+
     const config = await getMessagingRuntimeConfig();
-    const result = await sendMesejiWhatsAppText({
-      to: phone,
-      message,
-      enabledOverride: config.mesejiWhatsappEnabled,
-    });
+    const result =
+      channel === "meseji_sms"
+        ? await sendMesejiSmsText({
+            to: phone,
+            message,
+            enabledOverride: config.mesejiSmsEnabled,
+          })
+        : await sendMesejiWhatsAppText({
+            to: phone,
+            message,
+            enabledOverride: config.mesejiWhatsappEnabled,
+          });
 
     await AuditLog.create({
       userId: req.user?._id || null,
@@ -232,6 +245,7 @@ export const sendMessagingTest = async (req, res) => {
       message: result.skipped ? "Admin test message was skipped" : "Admin sent a test external message",
       meta: {
         provider: result.provider,
+        channel,
         skipped: Boolean(result.skipped),
         reason: result.reason || null,
         phone,

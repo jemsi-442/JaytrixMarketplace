@@ -415,11 +415,12 @@ test("auth, order creation, and Snippe webhook flow stays healthy", async (t) =>
       token: adminToken,
       body: {
         phone: "0712345678",
+        channel: "meseji_sms",
         message: "Integration test message",
       },
     });
     assert.equal(testMessageResponse.status, 200);
-    assert.equal(testMessageResponse.body.data.provider, "meseji_whatsapp");
+    assert.equal(testMessageResponse.body.data.provider, "meseji_sms");
     assert.equal(testMessageResponse.body.data.skipped, true);
 
     const updateSettingsResponse = await api("/api/admin/messaging-settings", {
@@ -429,6 +430,7 @@ test("auth, order creation, and Snippe webhook flow stays healthy", async (t) =>
         externalChannels: ["meseji_whatsapp"],
         externalTypes: ["rider_payment_settled"],
         mesejiWhatsappEnabled: false,
+        mesejiSmsEnabled: false,
       },
     });
     assert.equal(updateSettingsResponse.status, 200);

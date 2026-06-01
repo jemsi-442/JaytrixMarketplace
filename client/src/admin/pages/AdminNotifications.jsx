@@ -33,6 +33,7 @@ export default function AdminNotifications() {
     mesejiSmsEnabled: false,
   });
   const [testPhone, setTestPhone] = useState("");
+  const [testChannel, setTestChannel] = useState("meseji_sms");
   const [savingSettings, setSavingSettings] = useState(false);
   const [sendingTest, setSendingTest] = useState(false);
   const [error, setError] = useState("");
@@ -145,6 +146,7 @@ export default function AdminNotifications() {
       setSendingTest(true);
       const { data } = await axios.post("/admin/messaging-settings/test", {
         phone: testPhone,
+        channel: testChannel,
         message: "Test message from marketplace notifications.",
       });
       toast.success(data?.message || "Test message processed");
@@ -202,9 +204,9 @@ export default function AdminNotifications() {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">External Messaging</p>
-            <h2 className="mt-1 text-lg font-black text-slate-900">Meseji WhatsApp controls</h2>
+            <h2 className="mt-1 text-lg font-black text-slate-900">Meseji messaging controls</h2>
             <p className="mt-1 max-w-2xl text-sm text-slate-500">
-              Choose which notification types may leave the platform. API token and phone number ID still stay protected in server env.
+              Choose which notification types may leave the platform. API keys, sender IDs, and phone number IDs stay protected in server env.
             </p>
             <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
               <span className={`rounded-full px-3 py-1 ${settings?.providers?.mesejiWhatsapp?.configured ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}`}>
@@ -256,8 +258,16 @@ export default function AdminNotifications() {
               </button>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-slate-50 p-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Test Meseji WhatsApp</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Test Meseji delivery</p>
               <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                <select
+                  className="input sm:max-w-[170px]"
+                  value={testChannel}
+                  onChange={(event) => setTestChannel(event.target.value)}
+                >
+                  <option value="meseji_sms">SMS</option>
+                  <option value="meseji_whatsapp">WhatsApp</option>
+                </select>
                 <input
                   className="input flex-1"
                   value={testPhone}
@@ -273,7 +283,7 @@ export default function AdminNotifications() {
                   {sendingTest ? "Sending..." : "Send test"}
                 </button>
               </div>
-              <p className="mt-2 text-xs text-slate-500">Use this after adding Meseji token and phone number ID in server env.</p>
+              <p className="mt-2 text-xs text-slate-500">Use this after adding the Meseji SMS API key or WhatsApp credentials in server env.</p>
             </div>
           </div>
         </div>
