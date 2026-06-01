@@ -8,10 +8,10 @@ const shouldAlter =
   (process.env.DB_SYNC_ALTER === "true" ||
     (!isProduction && process.env.DB_SYNC_ALTER !== "false"));
 
-const isTemplateValue = (value = "") =>
+export const isTemplateValue = (value = "") =>
   !value || value.includes("${{") || value.startsWith("replace_with_") || value.includes("<");
 
-const resolveDatabaseUrl = (...candidates) => {
+export const resolveDatabaseUrl = (...candidates) => {
   for (const candidate of candidates) {
     const value = String(candidate || "").trim();
     if (isTemplateValue(value)) continue;
@@ -27,6 +27,14 @@ const resolveDatabaseUrl = (...candidates) => {
   }
 
   return null;
+};
+
+export const hasProductionDatabaseConfig = (env = process.env) => {
+  if (resolveDatabaseUrl(env.DATABASE_URL, env.MARIADB_URL)) {
+    return true;
+  }
+
+  return ["DB_HOST", "DB_NAME", "DB_USER"].every((key) => !isTemplateValue(env[key]));
 };
 
 const databaseUrl = resolveDatabaseUrl(process.env.DATABASE_URL, process.env.MARIADB_URL);
@@ -55,6 +63,10 @@ const sequelize = databaseUrl
     );
 
 export const connectDB = async () => {
+  if (isProduction && !hasProductionDatabaseConfig()) {
+    throw new Error("Production database config is missing. Set DATABASE_URL or DB_HOST, DB_NAME, and DB_USER.");
+  }
+
   await sequelize.authenticate();
 
   if (!shouldSync) {
