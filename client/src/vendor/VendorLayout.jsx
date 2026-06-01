@@ -4,10 +4,15 @@ import InternalFooter from "../components/InternalFooter";
 import { useAuth } from "../hooks/useAuth";
 import VendorSidebar from "./VendorSidebar";
 import VendorTopbar from "./VendorTopbar";
+import useDeliveryIssueSummary from "../hooks/useDeliveryIssueSummary";
 
 export default function VendorLayout() {
   const { user } = useAuth();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const deliveryIssueSummary = useDeliveryIssueSummary({
+    enabled: user?.role === "vendor",
+    mode: "vendor",
+  });
 
   useEffect(() => {
     if (!mobileSidebarOpen) {
@@ -26,7 +31,7 @@ export default function VendorLayout() {
 
   return (
     <div className="flex h-screen min-h-screen overflow-hidden bg-[linear-gradient(180deg,#f8fafc_0%,#eff6ff_38%,#fff7ed_100%)]">
-      <VendorSidebar className="hidden lg:flex" />
+      <VendorSidebar className="hidden lg:flex" activeIssueCount={deliveryIssueSummary.activeCount} />
 
       {mobileSidebarOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden">
@@ -38,6 +43,7 @@ export default function VendorLayout() {
           />
           <VendorSidebar
             mobile
+            activeIssueCount={deliveryIssueSummary.activeCount}
             onNavigate={() => setMobileSidebarOpen(false)}
             onClose={() => setMobileSidebarOpen(false)}
             className="relative z-10 min-h-full shadow-2xl"
@@ -46,7 +52,7 @@ export default function VendorLayout() {
       ) : null}
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-        <VendorTopbar onOpenSidebar={() => setMobileSidebarOpen(true)} />
+        <VendorTopbar activeIssueCount={deliveryIssueSummary.activeCount} onOpenSidebar={() => setMobileSidebarOpen(true)} />
         <main className="min-h-0 flex-1 overflow-y-auto bg-[linear-gradient(160deg,#f8fafc_0%,#eff6ff_52%,#fff7ed_100%)] p-4 pb-6 md:p-6">
           <Outlet />
         </main>

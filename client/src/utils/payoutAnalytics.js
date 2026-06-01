@@ -42,7 +42,7 @@ export const buildPayoutStatusChartData = (records = [], readyQueue = []) => {
     Paid: 0,
     Pending: 0,
     "On Hold": 0,
-    "Ready Queue": 0,
+    "Under Review": 0,
   };
 
   for (const record of records) {
@@ -53,7 +53,7 @@ export const buildPayoutStatusChartData = (records = [], readyQueue = []) => {
   }
 
   for (const entry of readyQueue) {
-    totals["Ready Queue"] += Number(entry.amount || 0);
+    totals["Under Review"] += Number(entry.amount || 0);
   }
 
   return Object.entries(totals)

@@ -2,11 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "../../utils/axios";
 import {
   FiBriefcase,
-  FiKey,
-  FiLoader,
   FiShield,
-  FiToggleLeft,
-  FiToggleRight,
   FiTruck,
   FiUser,
 } from "react-icons/fi";
@@ -93,13 +89,6 @@ export default function AdminUsers() {
   const [searchQuery, setSearchQuery] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [creatingRider, setCreatingRider] = useState(false);
-  const [riderForm, setRiderForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-  });
 
   const fetchUsers = async () => {
     try {
@@ -136,11 +125,6 @@ export default function AdminUsers() {
     fetchUsers();
   }, []);
 
-  const riderUsers = useMemo(
-    () => users.filter((user) => user.role === "rider" && user.riderProfile),
-    [users]
-  );
-
   const peopleUsers = useMemo(
     () => users.filter((user) => user.role !== "rider"),
     [users]
@@ -152,13 +136,14 @@ export default function AdminUsers() {
     return {
       total: peopleUsers.length,
       vendors: peopleUsers.filter((user) => user.role === "vendor").length,
+      riders: users.filter((user) => user.role === "rider").length,
       missingPhones: peopleUsers.filter((user) => !String(user.phone || "").trim()).length,
       recent: peopleUsers.filter((user) => {
         const createdAt = new Date(user.createdAt || 0).getTime();
         return Number.isFinite(createdAt) && createdAt >= recentCutoff;
       }).length,
     };
-  }, [peopleUsers]);
+  }, [peopleUsers, users]);
 
   const filteredUsers = useMemo(() => {
     const recentCutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
@@ -236,69 +221,6 @@ export default function AdminUsers() {
     return `Showing ${start}-${end} of ${filteredUsers.length}`;
   }, [currentPage, filteredUsers.length, pageSize]);
 
-  const handleCreateRider = async (e) => {
-    e.preventDefault();
-
-    try {
-      setCreatingRider(true);
-      await axios.post("/users/riders", riderForm);
-      toast.success("Rider account saved successfully");
-      setRiderForm({ name: "", email: "", phone: "", password: "" });
-      await fetchUsers();
-    } catch (err) {
-      console.error(err);
-      toast.error(err.response?.data?.message || "Failed to create rider");
-    } finally {
-      setCreatingRider(false);
-    }
-  };
-
-  const handleResetPassword = async (user) => {
-    const password = window.prompt(`Set new password for ${user.email}`);
-    if (!password) return;
-
-    try {
-      setUpdatingId(user._id);
-      await axios.patch(`/users/${user._id}/password`, { password });
-      toast.success("Password reset successfully");
-    } catch (err) {
-      console.error(err);
-      toast.error(err.response?.data?.message || "Failed to reset password");
-    } finally {
-      setUpdatingId(null);
-    }
-  };
-
-  const handleToggleRiderStatus = async (user, field) => {
-    const riderProfile = user.riderProfile;
-    if (!riderProfile) return;
-
-    try {
-      setUpdatingId(user._id);
-      const payload =
-        field === "isActive"
-          ? { isActive: !riderProfile.isActive }
-          : { available: !riderProfile.available };
-
-      const { data } = await axios.patch(`/users/${user._id}/rider-status`, payload);
-      const updated = extractOne(data);
-
-      setUsers((prev) =>
-        prev.map((entry) =>
-          entry._id === user._id
-            ? { ...entry, riderProfile: { ...entry.riderProfile, ...updated } }
-            : entry
-        )
-      );
-      toast.success("Rider status updated");
-    } catch (err) {
-      console.error(err);
-      toast.error(err.response?.data?.message || "Failed to update rider status");
-    } finally {
-      setUpdatingId(null);
-    }
-  };
-
   return (
     <div className="max-w-6xl mx-auto space-y-4 md:space-y-6">
       <div className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_44%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
@@ -306,7 +228,7 @@ export default function AdminUsers() {
         <h2 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">People Management</h2>
       </div>
 
-      <section className="grid gap-3 md:grid-cols-4">
+      <section className="grid gap-3 md:grid-cols-5">
         <div className="surface-panel-lg p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">People</p>
           <p className="mt-2 text-2xl font-black text-slate-900">{summary.total}</p>
@@ -314,6 +236,10 @@ export default function AdminUsers() {
         <div className="surface-panel-lg p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Vendors</p>
           <p className="mt-2 text-2xl font-black text-orange-600">{summary.vendors}</p>
+        </div>
+        <div className="surface-panel-lg p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Vendor riders</p>
+          <p className="mt-2 text-2xl font-black text-[#102A43]">{summary.riders}</p>
         </div>
         <div className="surface-panel-lg p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Missing phones</p>
@@ -331,131 +257,13 @@ export default function AdminUsers() {
             <FiTruck />
           </div>
           <div>
-            <h3 className="text-lg font-black text-slate-900">Create Rider Account</h3>
+            <h3 className="text-lg font-black text-slate-900">Rider management belongs to vendors</h3>
             <p className="mt-1 text-sm text-slate-500">
-              Add a new rider account to support faster delivery operations.
+              Vendors create riders from their own workspace, so admin can focus on oversight, safety, and support instead of day-to-day delivery staffing.
             </p>
           </div>
         </div>
-
-        <form onSubmit={handleCreateRider} className="mt-5 grid gap-3 md:grid-cols-2">
-          <input
-            className="input"
-            placeholder="Rider name"
-            value={riderForm.name}
-            onChange={(e) => setRiderForm((prev) => ({ ...prev, name: e.target.value }))}
-            required
-          />
-          <input
-            type="email"
-            className="input"
-            placeholder="rider@example.com"
-            value={riderForm.email}
-            onChange={(e) => setRiderForm((prev) => ({ ...prev, email: e.target.value }))}
-            required
-          />
-          <input
-            className="input"
-            placeholder="Phone number"
-            value={riderForm.phone}
-            onChange={(e) => setRiderForm((prev) => ({ ...prev, phone: e.target.value }))}
-            required
-          />
-          <input
-            type="password"
-            className="input"
-            placeholder="Temporary password"
-            value={riderForm.password}
-            onChange={(e) => setRiderForm((prev) => ({ ...prev, password: e.target.value }))}
-            required
-          />
-
-          <div className="md:col-span-2">
-            <button
-              type="submit"
-              disabled={creatingRider}
-              className="btn-primary inline-flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {creatingRider ? <FiLoader className="animate-spin" /> : <FiTruck />}
-              {creatingRider ? "Saving rider..." : "Save Rider"}
-            </button>
-          </div>
-        </form>
       </section>
-
-      {riderUsers.length > 0 && (
-        <section className="surface-panel-lg space-y-4 p-5 md:p-6">
-          <div>
-            <h3 className="text-lg font-black text-slate-900">Rider Accounts</h3>
-            <p className="mt-1 text-sm text-slate-500">
-              Monitor rider availability and keep delivery operations moving smoothly.
-            </p>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px] text-sm">
-              <thead className="bg-[linear-gradient(135deg,#eff6ff_0%,#fff7ed_100%)] text-slate-600">
-                <tr>
-                  <th className="p-3 text-left">Rider</th>
-                  <th className="p-3 text-left">Phone</th>
-                  <th className="p-3 text-left">Active</th>
-                  <th className="p-3 text-left">Available</th>
-                  <th className="p-3 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {riderUsers.map((user) => (
-                  <tr key={user._id} className="border-t border-slate-100 transition hover:bg-orange-50/30">
-                    <td className="p-3">
-                      <div className="font-semibold text-slate-900">{user.name}</div>
-                      <div className="text-xs text-slate-500">{user.email}</div>
-                    </td>
-                    <td className="p-3">{user.riderProfile.phone}</td>
-                    <td className="p-3">
-                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${user.riderProfile.isActive ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}`}>
-                        {user.riderProfile.isActive ? "Active" : "Inactive"}
-                      </span>
-                    </td>
-                    <td className="p-3">
-                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${user.riderProfile.available ? "bg-slate-100 text-[#102A43]" : "bg-slate-200 text-slate-700"}`}>
-                        {user.riderProfile.available ? "Available" : "Busy"}
-                      </span>
-                    </td>
-                    <td className="p-3">
-                      <div className="flex flex-wrap gap-2">
-                        <button
-                          disabled={updatingId === user._id}
-                          onClick={() => handleResetPassword(user)}
-                          className="inline-flex items-center gap-1 rounded-xl border border-[#102A43]/15 bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-3 py-1.5 text-white shadow-sm disabled:opacity-60"
-                        >
-                          <FiKey />
-                          Reset Password
-                        </button>
-                        <button
-                          disabled={updatingId === user._id}
-                          onClick={() => handleToggleRiderStatus(user, "isActive")}
-                          className="inline-flex items-center gap-1 rounded-xl border border-orange-300 bg-[linear-gradient(135deg,#F28C28_0%,#D97706_100%)] px-3 py-1.5 text-white shadow-sm disabled:opacity-60"
-                        >
-                          {user.riderProfile.isActive ? <FiToggleRight /> : <FiToggleLeft />}
-                          {user.riderProfile.isActive ? "Deactivate" : "Activate"}
-                        </button>
-                        <button
-                          disabled={updatingId === user._id}
-                          onClick={() => handleToggleRiderStatus(user, "available")}
-                          className="inline-flex items-center gap-1 rounded-xl border border-slate-600 bg-[linear-gradient(135deg,#334155_0%,#0f172a_100%)] px-3 py-1.5 text-white shadow-sm disabled:opacity-60"
-                        >
-                          {user.riderProfile.available ? <FiToggleRight /> : <FiToggleLeft />}
-                          {user.riderProfile.available ? "Mark Busy" : "Mark Available"}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      )}
 
       {loading ? (
         <PageState title="Loading users..." />
@@ -541,36 +349,29 @@ export default function AdminUsers() {
                       </span>
                     </td>
                     <td className="p-3">
-                      {u.role === "rider" ? (
-                        <span className="inline-flex items-center gap-1 rounded-xl border border-orange-200 bg-orange-100 px-3 py-1.5 text-orange-700">
-                          <FiTruck />
-                          Rider account
-                        </span>
-                      ) : (
-                        <div className="flex flex-wrap gap-2">
-                          {MANAGED_ROLE_OPTIONS.map((option) => {
-                            const Icon = option.icon;
-                            const isActive = u.role === option.value;
-                            const isProtectedAdmin = u.role === "admin" && option.value !== "admin";
+                      <div className="flex flex-wrap gap-2">
+                        {MANAGED_ROLE_OPTIONS.map((option) => {
+                          const Icon = option.icon;
+                          const isActive = u.role === option.value;
+                          const isProtectedAdmin = u.role === "admin" && option.value !== "admin";
 
-                            return (
-                              <button
-                                key={`${u._id}-${option.value}`}
-                                disabled={updatingId === u._id || isActive || isProtectedAdmin}
-                                onClick={() => setUserRole(u._id, option.value)}
-                                className={`inline-flex items-center gap-1 rounded-xl border px-3 py-1.5 shadow-sm transition disabled:cursor-not-allowed disabled:opacity-45 ${option.className}`}
-                              >
-                                <Icon />
-                                {isProtectedAdmin
-                                  ? "Protected Admin"
-                                  : isActive
-                                    ? `${option.label} Active`
-                                    : `Make ${option.label}`}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      )}
+                          return (
+                            <button
+                              key={`${u._id}-${option.value}`}
+                              disabled={updatingId === u._id || isActive || isProtectedAdmin}
+                              onClick={() => setUserRole(u._id, option.value)}
+                              className={`inline-flex items-center gap-1 rounded-xl border px-3 py-1.5 shadow-sm transition disabled:cursor-not-allowed disabled:opacity-45 ${option.className}`}
+                            >
+                              <Icon />
+                              {isProtectedAdmin
+                                ? "Protected Admin"
+                                : isActive
+                                  ? `${option.label} Active`
+                                  : `Make ${option.label}`}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </td>
                   </tr>
                 ))}

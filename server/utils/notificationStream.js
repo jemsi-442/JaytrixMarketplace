@@ -83,7 +83,7 @@ export const publishNotificationEvent = ({
       continue;
     }
 
-    if (audience === "customer" && normalizedUserId && client.userId !== normalizedUserId) {
+    if (["customer", "rider"].includes(audience) && normalizedUserId && client.userId !== normalizedUserId) {
       continue;
     }
 

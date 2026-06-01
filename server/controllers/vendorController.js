@@ -3,6 +3,7 @@ import { AuditLog, Order, OrderItem, Product, Rider, User } from "../models/inde
 import ProductService from "../services/ProductService.js";
 import { sendResponse } from "../utils/apiResponse.js";
 import { createNotificationRecord } from "../utils/createNotificationRecord.js";
+import { normalizeRiderBonusAmount } from "../utils/riderEarnings.js";
 import { serializeOrder, serializeUser } from "../utils/serializers.js";
 import { uploadProductImage } from "../middleware/uploadMiddleware.js";
 
@@ -189,7 +190,7 @@ export const createVendorProduct = asyncHandler(async (req, res) => {
     actorRole: "vendor",
   });
 
-  return sendResponse(res, 201, "Product submitted for review", product);
+  return sendResponse(res, 201, "Product published", product);
 });
 
 export const updateVendorProduct = asyncHandler(async (req, res) => {
@@ -205,7 +206,7 @@ export const updateVendorProduct = asyncHandler(async (req, res) => {
     actorRole: "vendor",
   });
 
-  return sendResponse(res, 200, "Product updated and sent for review", product);
+  return sendResponse(res, 200, "Product updated and published", product);
 });
 
 export const deleteVendorProduct = asyncHandler(async (req, res) => {
@@ -335,4 +336,82 @@ export const updateVendorDeliveryIssueStatus = asyncHandler(async (req, res) => 
     : [];
 
   return sendResponse(res, 200, "Delivery issue updated", summarizeVendorOrder({ ...refreshedJson, items: refreshedItems }));
+});
+
+export const updateVendorRiderBonus = asyncHandler(async (req, res) => {
+  const order = await Order.findByPk(req.params.id, {
+    include: vendorOrderIncludes,
+  });
+
+  if (!order) {
+    return sendResponse(res, 404, "Order not found");
+  }
+
+  const json = order.toJSON();
+  const vendorItems = Array.isArray(json.items)
+    ? json.items.filter((item) => Number(item.product?.createdBy) === Number(req.user._id))
+    : [];
+
+  if (!vendorItems.length) {
+    return sendResponse(res, 403, "This order does not belong to your store");
+  }
+
+  if (["cancelled", "refunded"].includes(order.status)) {
+    return sendResponse(res, 400, "Rider bonus cannot be changed for cancelled or refunded orders");
+  }
+
+  const bonusAmountInput = req.body?.bonusAmount ?? req.body?.amount ?? 0;
+  const bonusAmountResult = normalizeRiderBonusAmount(bonusAmountInput);
+  const bonusNote = normalizeNullableText(req.body?.bonusNote || req.body?.note || "");
+
+  if (bonusAmountResult.error) {
+    return sendResponse(res, 400, bonusAmountResult.error);
+  }
+
+  if (bonusNote && bonusNote.length > 240) {
+    return sendResponse(res, 400, "Bonus note must be 240 characters or less");
+  }
+
+  order.riderBonusAmount = bonusAmountResult.amount;
+  order.riderBonusNote = bonusNote;
+  await order.save();
+
+  await AuditLog.create({
+    orderId: order.id,
+    userId: req.user._id,
+    riderId: order.riderId || null,
+    userName: req.user?.name || null,
+    riderName: order.rider?.name || null,
+    type: "delivery",
+    action: "vendor_rider_bonus_updated",
+    message: `Vendor updated rider bonus for order ${order.id}`,
+    meta: {
+      vendorId: req.user._id,
+      riderId: order.riderId || null,
+      bonusAmount: order.riderBonusAmount,
+      bonusNote,
+    },
+  });
+
+  if (order.riderId) {
+    const rider = order.rider || (await Rider.findByPk(order.riderId));
+    await createNotificationRecord({
+      orderId: order.id,
+      type: "rider_bonus_updated",
+      audience: "rider",
+      userId: rider?.userId || null,
+      message: `Your rider bonus for order #${order.id} is now Tsh ${Number(order.riderBonusAmount || 0).toLocaleString()}.`,
+      phone: rider?.phone || null,
+      riderName: rider?.name || null,
+      status: "logged",
+    });
+  }
+
+  const refreshed = await Order.findByPk(order.id, { include: vendorOrderIncludes });
+  const refreshedJson = refreshed.toJSON();
+  const refreshedItems = Array.isArray(refreshedJson.items)
+    ? refreshedJson.items.filter((item) => Number(item.product?.createdBy) === Number(req.user._id))
+    : [];
+
+  return sendResponse(res, 200, "Rider bonus updated", summarizeVendorOrder({ ...refreshedJson, items: refreshedItems }));
 });

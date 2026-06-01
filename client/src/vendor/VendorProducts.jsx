@@ -37,14 +37,14 @@ const formatReviewMeta = (product) => {
 
 const getFeedbackMessage = (product) => {
   if (product.status === "approved") {
-    return product.reviewNotes || "Approved and now visible in your store.";
+    return product.reviewNotes || "Live in your store.";
   }
 
   if (product.status === "rejected") {
-    return product.reviewNotes || "Returned for changes. Update the product and submit it again.";
+    return product.reviewNotes || "Paused by marketplace operations. Update the listing to publish it again.";
   }
 
-  return "Waiting for admin review before it goes live.";
+  return "Not live yet.";
 };
 
 export default function VendorProducts() {
@@ -229,10 +229,10 @@ export default function VendorProducts() {
 
       if (editingProduct) {
         await axios.put(`/vendor/products/${editingProduct._id}`, payload);
-        toast.success("Product updated and sent for review");
+        toast.success("Product updated and live");
       } else {
         await axios.post("/vendor/products", payload);
-        toast.success("Product submitted for review");
+        toast.success("Product published");
       }
 
       resetForm();
@@ -269,7 +269,7 @@ export default function VendorProducts() {
         <div className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
           <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Store Catalog</p>
           <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Your Products</h1>
-          <p className="text-slate-500">Create, update, and keep track of what is live, waiting for review, or needs changes.</p>
+          <p className="text-slate-500">Create, update, and keep track of what is live, low on stock, or paused for changes.</p>
         </div>
 
         <button type="button" onClick={resetForm} className="btn-primary inline-flex items-center gap-2">
@@ -280,8 +280,8 @@ export default function VendorProducts() {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         {[
           { label: "Total Products", value: metrics.total, tone: "text-slate-900", icon: FiPackage, accent: "bg-slate-100 text-slate-700" },
-          { label: "Approved", value: metrics.approved, tone: "text-[#102A43]", icon: FiCheckCircle, accent: "bg-slate-100 text-[#102A43]" },
-          { label: "Pending Review", value: metrics.pending, tone: "text-amber-700", icon: FiMessageSquare, accent: "bg-amber-100 text-amber-600" },
+          { label: "Live", value: metrics.approved, tone: "text-[#102A43]", icon: FiCheckCircle, accent: "bg-slate-100 text-[#102A43]" },
+          { label: "Not Live", value: metrics.pending, tone: "text-amber-700", icon: FiMessageSquare, accent: "bg-amber-100 text-amber-600" },
           { label: "Needs Changes", value: metrics.rejected, tone: "text-red-700", icon: FiXCircle, accent: "bg-red-100 text-red-600" },
           { label: "Low Stock", value: metrics.lowStock, tone: "text-orange-700", icon: FiAlertTriangle, accent: "bg-orange-100 text-orange-600" },
         ].map((item) => {
@@ -308,7 +308,7 @@ export default function VendorProducts() {
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-red-500">Review Feedback</p>
               <h2 className="mt-1 text-lg font-black text-slate-900">Products that need updates</h2>
-              <p className="text-sm text-slate-500">Use the admin notes below, update the listing, and submit it again for review.</p>
+              <p className="text-sm text-slate-500">Use the operations notes below, update the listing, and publish it again.</p>
             </div>
             <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
               {rejectedProducts.length} product{rejectedProducts.length === 1 ? "" : "s"} need changes
@@ -366,8 +366,8 @@ export default function VendorProducts() {
               <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Status</span>
               <select className="input" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
                 <option value="all">All statuses</option>
-                <option value="approved">Approved</option>
-                <option value="pending">Pending review</option>
+                <option value="approved">Live</option>
+                <option value="pending">Not live</option>
                 <option value="rejected">Needs changes</option>
               </select>
             </label>
@@ -523,13 +523,13 @@ export default function VendorProducts() {
           <h2 className="mt-1 text-xl font-black text-slate-900">{editingProduct ? "Update Product" : "Add Product"}</h2>
           <p className="mt-2 text-sm text-slate-500">
             {editingProduct
-              ? "Saving changes sends this product back for admin review."
-              : "New products stay pending until admin approves them."}
+              ? "Saving changes publishes this product immediately."
+              : "New products publish immediately so customers can find them without delay."}
           </p>
 
           {editingProduct?.status === "rejected" ? (
             <div className="mt-4 rounded-[24px] border border-red-100 bg-red-50/70 p-4 text-sm text-slate-600">
-              <p className="font-semibold text-red-700">Latest admin feedback</p>
+              <p className="font-semibold text-red-700">Latest marketplace note</p>
               <p className="mt-2">{getFeedbackMessage(editingProduct)}</p>
             </div>
           ) : null}
@@ -608,7 +608,7 @@ export default function VendorProducts() {
               Clear
             </button>
             <button type="submit" disabled={saving} className="btn-primary disabled:opacity-60">
-              {saving ? "Saving..." : editingProduct ? "Save Changes" : "Submit Product"}
+              {saving ? "Saving..." : editingProduct ? "Save Changes" : "Publish Product"}
             </button>
           </div>
         </form>

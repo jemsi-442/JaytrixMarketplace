@@ -83,7 +83,7 @@ export const approveProduct = asyncHandler(async (req, res) => {
   return sendResponse(
     res,
     200,
-    result.idempotent ? "Product already approved" : "Product approved",
+    result.idempotent ? "Product already live" : "Product restored",
     result.product
   );
 });

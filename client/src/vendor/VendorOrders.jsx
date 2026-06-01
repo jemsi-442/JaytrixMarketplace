@@ -27,6 +27,8 @@ export default function VendorOrders() {
   const [currentPage, setCurrentPage] = useState(1);
   const [issueBusyId, setIssueBusyId] = useState(null);
   const [issueDrafts, setIssueDrafts] = useState({});
+  const [bonusBusyId, setBonusBusyId] = useState(null);
+  const [bonusDrafts, setBonusDrafts] = useState({});
   const [summary, setSummary] = useState({
     totalOrders: 0,
     totalRevenue: 0,
@@ -147,6 +149,7 @@ export default function VendorOrders() {
     try {
       setIssueBusyId(orderId);
       await axios.patch(`/vendor/orders/${orderId}/delivery-issue`, draft);
+      window.dispatchEvent(new CustomEvent("delivery-issues:refresh", { detail: { mode: "vendor" } }));
       const { data } = await axios.get("/vendor/orders");
       setOrders(extractList(data, ["orders", "items"]));
       setSummary(
@@ -165,6 +168,65 @@ export default function VendorOrders() {
       setError(err.response?.data?.message || "Failed to update delivery issue.");
     } finally {
       setIssueBusyId(null);
+    }
+  };
+
+  const updateBonusDraft = (orderId, field, value) => {
+    setBonusDrafts((current) => ({
+      ...current,
+      [String(orderId)]: {
+        bonusAmount: current[String(orderId)]?.bonusAmount ?? "",
+        bonusNote: current[String(orderId)]?.bonusNote || "",
+        [field]: value,
+      },
+    }));
+  };
+
+  const refreshOrders = async () => {
+    const { data } = await axios.get("/vendor/orders");
+    setOrders(extractList(data, ["orders", "items"]));
+    setSummary(
+      extractOne(data)?.summary || {
+        totalOrders: 0,
+        totalRevenue: 0,
+        projectedPayout: 0,
+        awaitingPayment: 0,
+        processingOrders: 0,
+        readyForPayoutOrders: 0,
+      }
+    );
+  };
+
+  const saveRiderBonus = async (order) => {
+    const draft = bonusDrafts[String(order._id)] || {};
+    const currentBonus = order.delivery?.earningEstimate?.bonusAmount || 0;
+    const bonusAmount = Number(draft.bonusAmount === "" || draft.bonusAmount === undefined ? currentBonus : draft.bonusAmount);
+    const bonusNote = draft.bonusNote === undefined ? order.delivery?.earningEstimate?.bonusNote || "" : draft.bonusNote;
+    const bonusLimit = Number(order.delivery?.earningEstimate?.bonusLimit || 0);
+
+    if (!Number.isFinite(bonusAmount) || bonusAmount < 0) {
+      setError("Rider bonus must be zero or more.");
+      return;
+    }
+
+    if (bonusLimit > 0 && bonusAmount > bonusLimit) {
+      setError(`Rider bonus cannot exceed ${formatCurrency(bonusLimit)}.`);
+      return;
+    }
+
+    try {
+      setBonusBusyId(order._id);
+      await axios.patch(`/vendor/orders/${order._id}/rider-bonus`, {
+        bonusAmount,
+        bonusNote,
+      });
+      await refreshOrders();
+      setError("");
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Failed to update rider bonus.");
+    } finally {
+      setBonusBusyId(null);
     }
   };
 
@@ -394,6 +456,62 @@ export default function VendorOrders() {
                 </div>
               </div>
             ) : null}
+
+            <div className="mt-4 rounded-[24px] border border-orange-200 bg-orange-50/70 p-4">
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-700">Rider trip bonus</p>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Add extra pay for long distance, heavy baskets, difficult routes, or late-night delivery. Your store settles rider pay directly.
+                    {order.delivery?.earningEstimate?.bonusLimit ? ` Limit: ${formatCurrency(order.delivery.earningEstimate.bonusLimit)}.` : ""}
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-slate-900">
+                    Current rider earning: {formatCurrency(order.delivery?.earningEstimate?.amount || 0)}
+                    <span className="font-normal text-slate-500">
+                      {" "}(base {formatCurrency(order.delivery?.earningEstimate?.baseAmount || 0)} + bonus {formatCurrency(order.delivery?.earningEstimate?.bonusAmount || 0)})
+                    </span>
+                  </p>
+                  {order.delivery?.earningEstimate?.bonusNote ? (
+                    <p className="mt-1 text-xs text-slate-500">Bonus note: {order.delivery.earningEstimate.bonusNote}</p>
+                  ) : null}
+                  {order.delivery?.earningEstimate?.lines?.length ? (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {order.delivery.earningEstimate.lines.map((line) => (
+                        <span key={line.label} className="rounded-full border border-orange-200 bg-white px-3 py-1 text-xs font-semibold text-orange-700">
+                          {line.label}: {formatCurrency(line.amount)}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+                <div className="grid w-full gap-3 lg:max-w-xl lg:grid-cols-[150px_1fr_auto]">
+                  <input
+                    className="input"
+                    type="number"
+                    min="0"
+                    max={order.delivery?.earningEstimate?.bonusLimit || undefined}
+                    step="500"
+                    placeholder="Bonus"
+                    value={bonusDrafts[String(order._id)]?.bonusAmount ?? order.delivery?.earningEstimate?.bonusAmount ?? 0}
+                    onChange={(event) => updateBonusDraft(order._id, "bonusAmount", event.target.value)}
+                  />
+                  <input
+                    className="input"
+                    placeholder="Reason, e.g. long route"
+                    value={bonusDrafts[String(order._id)]?.bonusNote ?? order.delivery?.earningEstimate?.bonusNote ?? ""}
+                    onChange={(event) => updateBonusDraft(order._id, "bonusNote", event.target.value)}
+                  />
+                  <button
+                    type="button"
+                    disabled={bonusBusyId === order._id}
+                    onClick={() => saveRiderBonus(order)}
+                    className="rounded-2xl border border-orange-200 bg-white px-4 py-3 text-sm font-semibold text-orange-700 transition hover:bg-orange-100 disabled:opacity-60"
+                  >
+                    {bonusBusyId === order._id ? "Saving..." : "Save bonus"}
+                  </button>
+                </div>
+              </div>
+            </div>
 
             {order.delivery?.issueReason ? (
               <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50/75 p-4">

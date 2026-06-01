@@ -179,7 +179,7 @@ export default function Storefront() {
               </span>
               <h1 className="mt-5 text-4xl font-black tracking-tight md:text-5xl">{store.storeName || store.name}</h1>
               <p className="mt-4 max-w-2xl text-base text-amber-50/90 md:text-lg">
-                {store.businessDescription || "Browse approved products from this seller and keep your shopping flow in one clean storefront."}
+                {store.businessDescription || "Browse live products from this seller and keep your shopping flow in one clean storefront."}
               </p>
               {storeBadges.length ? (
                 <div className="mt-5 flex flex-wrap gap-2 text-xs">
@@ -273,8 +273,8 @@ export default function Storefront() {
           <div className="mt-8">
             <PageState
               tone="warning"
-              title="No approved products yet"
-              description="This store is live, but the catalog will appear after admin approval."
+              title="No live products yet"
+              description="This store is live, but the catalog will appear as soon as the vendor adds products."
             />
           </div>
         ) : null}

@@ -194,6 +194,30 @@ const Order = sequelize.define(
       defaultValue: null,
       field: "delivery_issue_resolution_note",
     },
+    riderBonusAmount: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+      defaultValue: 0,
+      field: "rider_bonus_amount",
+    },
+    riderBonusNote: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      defaultValue: null,
+      field: "rider_bonus_note",
+    },
+    riderPaidAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      field: "rider_paid_at",
+    },
+    riderPaymentNote: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      defaultValue: null,
+      field: "rider_payment_note",
+    },
   },
   {
     tableName: "orders",

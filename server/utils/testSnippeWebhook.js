@@ -1,7 +1,5 @@
 import crypto from "crypto";
-import dotenv from "dotenv";
-
-dotenv.config();
+import "../config/env.js";
 
 const webhookUrl =
   process.env.SNIPPE_WEBHOOK_URL || "http://127.0.0.1:5001/api/payments/snippe/webhook";

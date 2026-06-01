@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "../../utils/axios";
 import {
   FaTruck,
-  FaCheckCircle,
   FaMoneyBillWave,
 } from "react-icons/fa";
 import { extractList } from "../../utils/apiShape";
@@ -13,9 +12,9 @@ import PaymentNetworkBadge from "../../components/PaymentNetworkBadge";
 import { getOrderStatusTone } from "../../utils/statusStyles";
 import { PLACEHOLDER_IMAGE, resolveImageUrl } from "../../utils/image";
 
-const NEXT_STATUS = {
-  paid: ["out_for_delivery", "refunded"],
-  out_for_delivery: ["delivered", "refunded"],
+const SUPPORT_STATUS_ACTIONS = {
+  paid: ["refunded"],
+  out_for_delivery: ["refunded"],
 };
 
 export default function AdminOrders() {
@@ -49,11 +48,15 @@ export default function AdminOrders() {
     fetchOrders();
   }, []);
 
-  // ================= UPDATE STATUS =================
-  const updateStatus = async (orderId, status) => {
+  const updateSupportStatus = async (orderId, status) => {
+    if (status === "refunded" && !window.confirm("Refund this order and release any reserved inventory?")) {
+      return;
+    }
+
     try {
       setUpdatingId(orderId);
       await axios.put(`/orders/${orderId}/status`, { status });
+      toast.success("Order support status updated");
       fetchOrders();
     } catch (err) {
       toast.error(err.response?.data?.message || "Status update failed");
@@ -79,6 +82,7 @@ export default function AdminOrders() {
       setUpdatingId(orderId);
       await axios.patch(`/orders/${orderId}/delivery-issue`, draft);
       toast.success("Delivery issue updated");
+      window.dispatchEvent(new CustomEvent("delivery-issues:refresh", { detail: { mode: "admin" } }));
       fetchOrders();
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to update delivery issue");
@@ -194,7 +198,7 @@ export default function AdminOrders() {
           Order Management
         </h1>
         <p className="mt-1 text-sm text-slate-500">
-          Track sales, payments, and delivery progress in one organized table.
+          Monitor sales, payments, delivery progress, and support exceptions without taking over daily fulfillment.
         </p>
       </div>
       {error ? <PageState tone="error" title="Orders unavailable" description={error} /> : null}
@@ -308,7 +312,7 @@ export default function AdminOrders() {
               <th className="p-3">Payment</th>
               <th className="p-3">Delivery</th>
               <th className="p-3">Rider</th>
-              <th className="p-3 text-right">Actions</th>
+              <th className="p-3 text-right">Support</th>
             </tr>
           </thead>
 
@@ -421,18 +425,15 @@ export default function AdminOrders() {
                 {/* ACTIONS */}
                 <td className="p-3 text-right">
                   <div className="flex flex-wrap justify-end gap-2">
-                  {NEXT_STATUS[order.status]?.map((next) => (
+                  {SUPPORT_STATUS_ACTIONS[order.status]?.map((next) => (
                     <button
                       key={next}
                       disabled={updatingId === order._id}
                       onClick={() =>
-                        updateStatus(order._id, next)
+                        updateSupportStatus(order._id, next)
                       }
-                      className="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-sm transition hover:border-amber-200 hover:bg-amber-50"
+                      className="rounded-xl border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-medium text-red-700 shadow-sm transition hover:bg-red-100 disabled:opacity-60"
                     >
-                      {next === "delivered" && (
-                        <FaCheckCircle className="inline mr-1" />
-                      )}
                       {next === "refunded" && (
                         <FaMoneyBillWave className="inline mr-1" />
                       )}
@@ -448,6 +449,11 @@ export default function AdminOrders() {
                     >
                       Save issue
                     </button>
+                  ) : null}
+                  {!SUPPORT_STATUS_ACTIONS[order.status]?.length && !order.delivery?.issueReason ? (
+                    <span className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-500">
+                      Auto-managed
+                    </span>
                   ) : null}
                   </div>
                   {order.delivery?.issueReason ? (

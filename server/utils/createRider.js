@@ -1,13 +1,12 @@
-import dotenv from "dotenv";
+import "../config/env.js";
 import { connectDB } from "../config/db.js";
 import User from "../models/User.js";
 import Rider from "../models/Rider.js";
-
-dotenv.config();
+import { requireConfiguredPassword } from "./accountSecurity.js";
 
 export const ensureRiderAccount = async () => {
   const email = process.env.RIDER_EMAIL || "rider@ramla.com";
-  const password = process.env.RIDER_PASSWORD || "Jay442tx";
+  const password = requireConfiguredPassword("RIDER_PASSWORD");
   const name = process.env.RIDER_NAME || "Ramla Rider";
   const phone = process.env.RIDER_PHONE || "0713551801";
 

@@ -1,8 +1,6 @@
-import dotenv from "dotenv";
+import "../config/env.js";
 import sequelize from "../config/db.js";
 import { runMigrations } from "../utils/migrations.js";
-
-dotenv.config();
 
 const run = async () => {
   try {

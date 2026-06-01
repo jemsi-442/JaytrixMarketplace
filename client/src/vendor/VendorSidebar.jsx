@@ -23,7 +23,7 @@ const navItems = [
   { name: "Store Profile", path: "/vendor/profile", icon: FiSettings },
 ];
 
-export default function VendorSidebar({ className = "", mobile = false, onNavigate, onClose }) {
+export default function VendorSidebar({ className = "", activeIssueCount = 0, mobile = false, onNavigate, onClose }) {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
 
@@ -90,7 +90,14 @@ export default function VendorSidebar({ className = "", mobile = false, onNaviga
               }
             >
               <Icon size={18} />
-              <span>{item.name}</span>
+              <span className="flex items-center gap-2">
+                {item.name}
+                {item.path === "/vendor/delivery-issues" && activeIssueCount > 0 ? (
+                  <span className="rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-lg shadow-red-500/20">
+                    {activeIssueCount}
+                  </span>
+                ) : null}
+              </span>
             </NavLink>
           );
         })}

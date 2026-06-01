@@ -1,13 +1,15 @@
-import dotenv from "dotenv";
+import "../config/env.js";
 import { connectDB } from "../config/db.js";
 import { Order, OrderItem, Product, User } from "../models/index.js";
+import { requireConfiguredPassword } from "./accountSecurity.js";
 import { assignRider, getOrderVendorRiderScope } from "./assignRider.js";
-
-dotenv.config();
 
 const ensureTestCustomer = async () => {
   const email = process.env.TEST_CUSTOMER_EMAIL || "customer@ramla.com";
-  const password = process.env.TEST_CUSTOMER_PASSWORD || "Jay442tx";
+  const password = requireConfiguredPassword(
+    "TEST_CUSTOMER_PASSWORD",
+    "creating or resetting the test customer"
+  );
   const name = process.env.TEST_CUSTOMER_NAME || "Test Customer";
 
   let user = await User.findOne({ where: { email } });

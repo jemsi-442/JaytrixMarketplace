@@ -15,6 +15,7 @@ const navItems = [
 export default function AdminSidebar({
   className = "",
   unreadCount = 0,
+  activeIssueCount = 0,
   mobile = false,
   onNavigate,
   onClose,
@@ -72,6 +73,11 @@ export default function AdminSidebar({
               <Icon size={18} />
               <span className="flex items-center gap-2">
                 {item.name}
+                {item.path === "/admin/delivery-issues" && activeIssueCount > 0 ? (
+                  <span className="rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-lg shadow-red-500/20">
+                    {activeIssueCount}
+                  </span>
+                ) : null}
                 {item.path === "/admin/notifications" && unreadCount > 0 ? (
                   <span className="rounded-full bg-[linear-gradient(135deg,#f59e0b_0%,#f97316_100%)] px-2 py-0.5 text-[10px] font-bold text-white shadow-lg shadow-amber-500/20">
                     {unreadCount}

@@ -109,6 +109,7 @@ export default function VendorDeliveryIssues() {
     try {
       setIssueBusyId(orderId);
       await axios.patch(`/vendor/orders/${orderId}/delivery-issue`, draft);
+      window.dispatchEvent(new CustomEvent("delivery-issues:refresh", { detail: { mode: "vendor" } }));
       await fetchOrders();
     } catch (err) {
       console.error(err);

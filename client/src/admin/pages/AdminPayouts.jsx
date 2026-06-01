@@ -10,6 +10,20 @@ import { buildPayoutStatusChartData, buildPayoutTrendData, buildSettlementPerfor
 import { getPayoutStatusTone } from "../../utils/statusStyles";
 
 const formatCurrency = (value) => `Tsh ${Number(value || 0).toLocaleString()}`;
+const formatReleaseTime = (value) => {
+  const date = value ? new Date(value) : null;
+  return date && !Number.isNaN(date.getTime()) ? date.toLocaleString() : "after review";
+};
+
+const describeQueueEntry = (entry) => {
+  if (entry.settlementState === "waiting_customer_window") {
+    return `Customer review window closes ${formatReleaseTime(entry.releaseAt)}.`;
+  }
+  if (entry.settlementState === "issue_on_hold") {
+    return "On hold while the delivery issue is being resolved.";
+  }
+  return entry.notes || "Ready to become a settlement record.";
+};
 
 export default function AdminPayouts() {
   const toast = useToast();
@@ -179,24 +193,6 @@ export default function AdminPayouts() {
     setToDate("");
   };
 
-  const createRecord = async (entry) => {
-    const notes = window.prompt("Optional settlement note", "") || "";
-    try {
-      setSubmittingId(entry._id);
-      await axios.post("/admin/vendor-payouts", {
-        orderId: entry.orderId,
-        vendorId: entry.vendorId,
-        notes,
-      });
-      toast.success("Settlement record created");
-      fetchPayouts();
-    } catch (err) {
-      console.error(err);
-      toast.error(err.response?.data?.message || "Failed to create settlement record");
-      setSubmittingId(null);
-    }
-  };
-
   const updateStatus = async (record, status) => {
     const notes = window.prompt("Update notes", record.notes || "") || record.notes || "";
     try {
@@ -223,7 +219,7 @@ export default function AdminPayouts() {
       <section className="overflow-hidden rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_42%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
         <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Vendor Settlements</p>
         <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Payout Management</h1>
-        <p className="mt-1 text-sm text-slate-500">Queue vendor settlements, mark payouts as paid, and track anything on hold.</p>
+        <p className="mt-1 text-sm text-slate-500">Review auto-created vendor settlements, mark payouts as paid, and track anything on hold.</p>
         <div className="mt-4 flex flex-wrap gap-3">
           <button
             type="button"
@@ -318,7 +314,7 @@ export default function AdminPayouts() {
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {[
-          { label: "Ready to Settle", value: formatCurrency(summary.readyQueueAmount), icon: FiClock, tone: "text-orange-700", accent: "bg-orange-100 text-orange-600" },
+          { label: "Under Review", value: formatCurrency(summary.readyQueueAmount), icon: FiClock, tone: "text-orange-700", accent: "bg-orange-100 text-orange-600" },
           { label: "Pending Records", value: summary.pendingRecords || 0, icon: FiPauseCircle, tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
           { label: "Paid Out", value: formatCurrency(summary.totalPaid), icon: FiCheckCircle, tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
           { label: "Settlement Records", value: summary.totalRecords || 0, icon: FiCreditCard, tone: "text-slate-700", accent: "bg-slate-100 text-slate-600" },
@@ -345,11 +341,11 @@ export default function AdminPayouts() {
       <section className="grid gap-4 xl:grid-cols-3">
         <AnalyticsNote
           label="Queue note"
-          title={readyQueue.length ? `${readyQueue.length} settlements are ready to be created` : "No settlement queue is building right now"}
+          title={readyQueue.length ? `${readyQueue.length} settlements are being protected before payout` : "No settlement review queue is building right now"}
           detail={
             readyQueue.length
-              ? `${formatCurrency(summary.readyQueueAmount)} is ready to move into vendor settlement records as soon as the queue is processed.`
-              : "Delivered orders will appear here once they are ready for settlement."
+              ? `${formatCurrency(summary.readyQueueAmount)} is waiting for the customer review window or delivery issue clearance.`
+              : "Delivered orders become settlement records automatically after the customer review window closes."
           }
           tone="orange"
         />
@@ -418,9 +414,9 @@ export default function AdminPayouts() {
         <div className="pointer-events-none absolute right-[-10%] top-[-20%] h-44 w-44 rounded-full bg-orange-200/35 blur-3xl" />
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#102A43]">Settlement Queue</p>
-            <h2 className="mt-1 text-lg font-black text-slate-900">Orders ready for vendor settlement</h2>
-            <p className="text-sm text-slate-500">Create a payout record once a delivered order is ready to move into settlement tracking.</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#102A43]">Protected Settlement Queue</p>
+            <h2 className="mt-1 text-lg font-black text-slate-900">Customer review window</h2>
+            <p className="text-sm text-slate-500">Delivered orders wait here before payout so customers can report delivery problems first.</p>
           </div>
           <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-700">
             {readyQueue.length} queued
@@ -435,19 +431,11 @@ export default function AdminPayouts() {
               <div className="mt-3 inline-flex rounded-full border border-orange-200/80 bg-orange-50/90 px-3 py-1.5 text-lg font-black text-orange-700 shadow-sm">
                 {formatCurrency(entry.amount)}
               </div>
-              <p className="mt-2 text-sm text-slate-500">{entry.items?.length || 0} item lines ready for settlement</p>
-              <button
-                type="button"
-                onClick={() => createRecord(entry)}
-                disabled={submittingId === entry._id}
-                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-orange-200 bg-orange-50 px-4 py-3 font-semibold text-orange-700 transition hover:bg-orange-100 disabled:opacity-60"
-              >
-                <FiCreditCard /> {submittingId === entry._id ? "Saving..." : "Create Settlement"}
-              </button>
+              <p className="mt-2 text-sm text-slate-500">{entry.items?.length || 0} item lines. {describeQueueEntry(entry)}</p>
             </article>
           ))}
           {!filteredReadyQueue.length ? (
-            <PageState tone="info" title="Nothing waiting" description="Delivered orders will appear here once they are ready for settlement." />
+            <PageState tone="info" title="Queue is clear" description="Eligible delivered orders are already represented as settlement records." />
           ) : null}
         </div>
       </section>
@@ -528,7 +516,7 @@ export default function AdminPayouts() {
               {!filteredRecords.length ? (
                 <tr>
                   <td colSpan="6" className="p-8">
-                    <PageState tone="info" title="No payout records yet" description="Create the first settlement from the queue above." />
+                    <PageState tone="info" title="No payout records yet" description="Settlement records will appear automatically after delivered vendor orders are ready." />
                   </td>
                 </tr>
               ) : null}

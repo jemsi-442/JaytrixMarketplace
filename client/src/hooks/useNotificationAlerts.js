@@ -16,7 +16,7 @@ export default function useNotificationAlerts({
         return;
       }
 
-      const prefix = mode === "admin" ? "Admin update" : "Order update";
+      const prefix = mode === "admin" ? "Admin update" : mode === "rider" ? "Rider update" : "Order update";
       toast.info(`${prefix}: ${notification.message}`);
 
       if (typeof window !== "undefined") {

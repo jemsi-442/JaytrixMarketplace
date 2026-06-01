@@ -32,14 +32,14 @@ const formatReviewDate = (value) => {
 
 const buildReviewSummary = (product) => {
   if (product.status === "approved") {
-    return product.reviewNotes || "Approved and live for customers.";
+    return product.reviewNotes || "Live for customers.";
   }
 
   if (product.status === "rejected") {
-    return product.reviewNotes || "Returned to the vendor for updates.";
+    return product.reviewNotes || "Paused and returned to the vendor for updates.";
   }
 
-  return "Waiting for an admin decision before it goes live.";
+  return "Not live yet.";
 };
 
 export default function AdminProducts() {
@@ -206,7 +206,7 @@ export default function AdminProducts() {
       await axios.put(`/products/${reviewProduct._id}/${action}`, {
         reviewNotes,
       });
-      toast.success(action === "approve" ? "Product approved" : "Feedback sent to vendor");
+      toast.success(action === "approve" ? "Product restored" : "Feedback sent to vendor");
       closeReviewModal();
       fetchProducts();
     } catch (err) {
@@ -220,9 +220,9 @@ export default function AdminProducts() {
     <div className="space-y-4 md:space-y-6">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_44%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Catalog Review</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Catalog Control</p>
           <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Products</h1>
-          <p className="text-slate-500">Review vendor submissions, keep the live catalog clean, and send helpful feedback fast.</p>
+          <p className="text-slate-500">Monitor live listings, fix catalog quality issues, and pause products only when they need attention.</p>
         </div>
 
         <button
@@ -239,8 +239,8 @@ export default function AdminProducts() {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         {[
           { label: "Catalog Items", value: metrics.total, icon: FiPackage, tone: "text-slate-900", accent: "bg-slate-100 text-slate-700" },
-          { label: "Needs Review", value: metrics.pendingReview, icon: FiShield, tone: "text-amber-700", accent: "bg-amber-100 text-amber-600" },
-          { label: "Approved", value: metrics.approved, icon: FiCheckCircle, tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
+          { label: "Not Live", value: metrics.pendingReview, icon: FiShield, tone: "text-amber-700", accent: "bg-amber-100 text-amber-600" },
+          { label: "Live", value: metrics.approved, icon: FiCheckCircle, tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
           { label: "Needs Changes", value: metrics.rejected, icon: FiXCircle, tone: "text-red-700", accent: "bg-red-100 text-red-600" },
           { label: "Low Stock", value: metrics.lowStock, icon: FiAlertTriangle, tone: "text-orange-700", accent: "bg-orange-100 text-orange-600" },
         ].map((item) => {
@@ -265,12 +265,12 @@ export default function AdminProducts() {
         <section className="rounded-[28px] border border-amber-100 bg-[linear-gradient(135deg,#fffaf0_0%,#ffffff_100%)] p-5 shadow-[0_18px_40px_rgba(15,23,42,0.06)] md:p-6">
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-amber-500">Review Queue</p>
-              <h2 className="mt-1 text-lg font-black text-slate-900">Vendor submissions waiting for a decision</h2>
-              <p className="text-sm text-slate-500">Approve products that are ready to sell, or send them back with clear notes.</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-amber-500">Not Live</p>
+              <h2 className="mt-1 text-lg font-black text-slate-900">Listings that are not visible to customers</h2>
+              <p className="text-sm text-slate-500">Restore products that should be live, or send clear notes when a vendor needs to update a listing.</p>
             </div>
             <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-              {pendingVendorQueue.length} pending vendor {pendingVendorQueue.length === 1 ? "item" : "items"}
+              {pendingVendorQueue.length} hidden vendor {pendingVendorQueue.length === 1 ? "item" : "items"}
             </span>
           </div>
 
@@ -301,7 +301,7 @@ export default function AdminProducts() {
                   onClick={() => openReviewModal(product)}
                   className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 font-semibold text-amber-700 transition hover:bg-amber-100"
                 >
-                  <FiMessageSquare /> Review Product
+                  <FiMessageSquare /> Moderate Product
                 </button>
               </article>
             ))}
@@ -333,9 +333,9 @@ export default function AdminProducts() {
             <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Status</span>
             <select className="input" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
               <option value="all">All statuses</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
+              <option value="pending">Not live</option>
+              <option value="approved">Live</option>
+              <option value="rejected">Needs changes</option>
             </select>
           </label>
 
@@ -446,7 +446,7 @@ export default function AdminProducts() {
                             type="button"
                             onClick={() => openReviewModal(product)}
                             className="rounded-xl border border-amber-200 bg-amber-50 p-2 text-amber-600 transition hover:bg-amber-100"
-                            title="Review product"
+                            title="Moderate product"
                           >
                             <FiMessageSquare />
                           </button>
@@ -542,7 +542,7 @@ function ReviewModal({ product, reviewNotes, setReviewNotes, onClose, onApprove,
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-3 backdrop-blur-[2px]">
       <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[28px] border border-white/80 bg-white/95 p-5 shadow-[0_24px_50px_rgba(15,23,42,0.18)] md:p-6">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-amber-500">Product Review</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-amber-500">Catalog Moderation</p>
         <h2 className="mt-1 text-xl font-black text-slate-900">{product.name}</h2>
         <p className="mt-2 text-sm text-slate-500">
           {product.vendor?.storeName || product.vendor?.name || "Platform catalog"}
@@ -567,14 +567,14 @@ function ReviewModal({ product, reviewNotes, setReviewNotes, onClose, onApprove,
 
           <div className="space-y-4">
             <div className="rounded-[24px] border border-amber-100 bg-amber-50/60 p-4 text-sm text-slate-600">
-              <p className="font-semibold text-slate-800">Decision Notes</p>
-              <p className="mt-2">Approve to publish this item, or reject it with a clear note the vendor can act on.</p>
+              <p className="font-semibold text-slate-800">Marketplace note</p>
+              <p className="mt-2">Keep the product live when it is fine, or pause it with a clear note the vendor can act on.</p>
             </div>
 
             <textarea
               value={reviewNotes}
               onChange={(event) => setReviewNotes(event.target.value)}
-              placeholder="Write a short review note or explain what needs to change"
+              placeholder="Write a short marketplace note or explain what needs to change"
               className="input min-h-[180px]"
             />
 
@@ -588,7 +588,7 @@ function ReviewModal({ product, reviewNotes, setReviewNotes, onClose, onApprove,
                 disabled={submitting}
                 className="inline-flex items-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 font-semibold text-red-700 transition hover:bg-red-100 disabled:opacity-60"
               >
-                <FiXCircle /> {submitting ? "Saving..." : "Reject"}
+                <FiXCircle /> {submitting ? "Saving..." : "Pause"}
               </button>
               <button
                 type="button"
@@ -596,7 +596,7 @@ function ReviewModal({ product, reviewNotes, setReviewNotes, onClose, onApprove,
                 disabled={submitting}
                 className="inline-flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 font-semibold text-emerald-700 transition hover:bg-emerald-100 disabled:opacity-60"
               >
-                <FiCheckCircle /> {submitting ? "Saving..." : "Approve"}
+                <FiCheckCircle /> {submitting ? "Saving..." : "Keep Live"}
               </button>
             </div>
           </div>

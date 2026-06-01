@@ -1,7 +1,6 @@
-import dotenv from "dotenv";
+import "./env.js";
 import { Sequelize } from "sequelize";
 
-dotenv.config();
 const isProduction = process.env.NODE_ENV === "production";
 const shouldSync = !isProduction && process.env.DB_SYNC === "true";
 const shouldAlter =

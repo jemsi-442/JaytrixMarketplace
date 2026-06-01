@@ -1,6 +1,7 @@
 import express from "express";
 import Notification from "../models/Notification.js";
 import Order from "../models/Order.js";
+import Rider from "../models/Rider.js";
 import { verifyToken, adminMiddleware } from "../middleware/authMiddleware.js";
 import { createNotificationRecord } from "../utils/createNotificationRecord.js";
 import { subscribeToNotificationStream } from "../utils/notificationStream.js";
@@ -9,9 +10,13 @@ const router = express.Router();
 
 router.get("/stream", verifyToken, async (req, res) => {
   const requestedAudience = String(req.query?.audience || "").trim().toLowerCase();
-  const audience = requestedAudience === "admin" ? "admin" : "customer";
+  const audience = ["admin", "rider"].includes(requestedAudience) ? requestedAudience : "customer";
 
   if (audience === "admin" && req.user?.role !== "admin") {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+
+  if (audience === "rider" && !["rider", "delivery"].includes(req.user?.role)) {
     return res.status(403).json({ message: "Forbidden" });
   }
 
@@ -22,7 +27,7 @@ router.get("/stream", verifyToken, async (req, res) => {
 
   const unsubscribe = subscribeToNotificationStream({
     audience,
-    userId: audience === "customer" ? req.user?._id : null,
+    userId: ["customer", "rider"].includes(audience) ? req.user?._id : null,
     res,
   });
 
@@ -33,14 +38,20 @@ router.get("/stream", verifyToken, async (req, res) => {
 
 router.get("/my", verifyToken, async (req, res) => {
   try {
+    const audience = ["rider", "delivery"].includes(req.user?.role) ? "rider" : "customer";
+    const rider = audience === "rider" ? await Rider.findOne({ where: { userId: req.user._id } }) : null;
+
     const notifications = await Notification.findAll({
-      where: { audience: "customer" },
+      where: { audience },
       include: [
         {
           model: Order,
           as: "order",
-          attributes: ["id", "userId"],
-          where: { userId: req.user._id },
+          attributes: ["id", "userId", "riderId"],
+          where:
+            audience === "rider"
+              ? { riderId: rider?.id || 0 }
+              : { userId: req.user._id },
           required: true,
         },
       ],
@@ -77,7 +88,7 @@ router.patch("/:id/read", verifyToken, async (req, res) => {
         {
           model: Order,
           as: "order",
-          attributes: ["id", "userId"],
+          attributes: ["id", "userId", "riderId"],
         },
       ],
     });
@@ -89,10 +100,17 @@ router.patch("/:id/read", verifyToken, async (req, res) => {
     const isCustomerNotification =
       notification.audience === "customer" &&
       String(notification.order.userId) === String(req.user._id);
+    const rider = ["rider", "delivery"].includes(req.user?.role)
+      ? await Rider.findOne({ where: { userId: req.user._id } })
+      : null;
+    const isRiderNotification =
+      notification.audience === "rider" &&
+      rider &&
+      String(notification.order.riderId) === String(rider.id);
     const isAdminNotification =
       notification.audience === "admin" && req.user?.role === "admin";
 
-    if (!isCustomerNotification && !isAdminNotification) {
+    if (!isCustomerNotification && !isRiderNotification && !isAdminNotification) {
       return res.status(404).json({ message: "Notification not found" });
     }
 

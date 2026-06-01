@@ -73,7 +73,7 @@ export default function VendorDashboard() {
       {
         title: "Needs Attention",
         value: pendingCount + lowStockCount,
-        note: `${pendingCount} pending review, ${lowStockCount} low stock`,
+        note: `${pendingCount} not live, ${lowStockCount} low stock`,
         icon: FiClock,
       },
     ];
@@ -167,7 +167,7 @@ export default function VendorDashboard() {
               <PageState
                 tone="info"
                 title="No orders yet"
-                description="Once customers buy your approved products, they will appear here."
+                description="Once customers buy your live products, they will appear here."
               />
             ) : null}
           </div>
@@ -209,7 +209,7 @@ export default function VendorDashboard() {
                   <FiAlertCircle className="text-orange-500" />
                   Start by adding your first product
                 </div>
-                <p className="mt-1">Products you submit will stay pending until admin review is complete.</p>
+                <p className="mt-1">Products publish immediately, so customers can find them as soon as you add them.</p>
               </div>
             ) : null}
           </div>

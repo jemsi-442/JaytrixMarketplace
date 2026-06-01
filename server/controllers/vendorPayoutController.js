@@ -32,11 +32,58 @@ const payoutIncludes = [
   },
 ];
 
+const PAYOUT_DISPUTE_WINDOW_HOURS = Math.max(0, Number(process.env.PAYOUT_DISPUTE_WINDOW_HOURS || 24));
+const PAYOUT_DISPUTE_WINDOW_MS = PAYOUT_DISPUTE_WINDOW_HOURS * 60 * 60 * 1000;
+
 const formatPayout = (payout) => ({
   ...payout.toJSON(),
   _id: payout.id,
   amount: Number(payout.amount || 0),
 });
+
+const asValidDate = (value) => {
+  const date = value ? new Date(value) : null;
+  return date && !Number.isNaN(date.getTime()) ? date : null;
+};
+
+const getDeliveredAt = (order) => asValidDate(order.deliveredAt || order.delivered_at || order.completedAt || order.completed_at);
+
+const getPayoutReleaseAt = (order) => {
+  const deliveredAt = getDeliveredAt(order);
+  return deliveredAt ? new Date(deliveredAt.getTime() + PAYOUT_DISPUTE_WINDOW_MS) : null;
+};
+
+const hasOpenDeliveryIssue = (order) => {
+  const issueReason = order.deliveryIssueReason || order.delivery_issue_reason;
+  const issueStatus = String(order.deliveryIssueStatus || order.delivery_issue_status || "open").toLowerCase();
+  return Boolean(issueReason) && issueStatus !== "resolved";
+};
+
+const getSettlementState = (order) => {
+  if (["cancelled", "refunded"].includes(order.status)) return "not_payable";
+  if (hasOpenDeliveryIssue(order)) return "issue_on_hold";
+
+  const releaseAt = getPayoutReleaseAt(order);
+  if (releaseAt && releaseAt.getTime() > Date.now()) return "waiting_customer_window";
+
+  return "ready";
+};
+
+const getSettlementNote = (settlementState, releaseAt) => {
+  if (settlementState === "waiting_customer_window") {
+    return `Customer review window is open until ${releaseAt?.toISOString() || "the release time"}.`;
+  }
+  if (settlementState === "issue_on_hold") {
+    return "Auto-recorded on hold because a delivery issue is open.";
+  }
+  if (settlementState === "not_payable") {
+    return "Auto-recorded on hold because the order is not payable.";
+  }
+  return "Auto-recorded after the customer review window.";
+};
+
+const shouldMaterializePayout = (candidate) =>
+  ["ready", "issue_on_hold", "not_payable"].includes(candidate.settlementState);
 
 const getVendorLineItems = (order, vendorId) => {
   const items = Array.isArray(order.items) ? order.items : [];
@@ -64,16 +111,22 @@ const buildDerivedPayout = async (order, vendorId) => {
   if (!items.length) return null;
 
   const amount = Number(items.reduce((sum, item) => sum + Number(item.lineTotal || 0), 0).toFixed(2));
+  const settlementState = getSettlementState(order);
+  const releaseAt = getPayoutReleaseAt(order);
+  const notes = getSettlementNote(settlementState, releaseAt);
 
   return {
     _id: `derived-${order.id}-${vendorId}`,
     vendorId,
     orderId: order.id,
     amount,
-    status: order.status === "delivered" ? "pending" : "on_hold",
-    notes: null,
+    status: settlementState === "ready" ? "pending" : "on_hold",
+    notes,
+    settlementState,
+    releaseAt: releaseAt ? releaseAt.toISOString() : null,
+    disputeWindowHours: PAYOUT_DISPUTE_WINDOW_HOURS,
     paidAt: null,
-    createdAt: order.deliveredAt || order.createdAt || order.created_at || null,
+    createdAt: order.deliveredAt || order.delivered_at || order.createdAt || order.created_at || null,
     vendor: {
       _id: vendor.id,
       id: vendor.id,
@@ -142,6 +195,50 @@ const getEligibleDerivedPayouts = async ({ vendorId = null } = {}) => {
   return derived;
 };
 
+const materializeEligiblePayoutRecords = async ({ vendorId = null, actorId = null } = {}) => {
+  const candidates = await getEligibleDerivedPayouts({ vendorId });
+  const created = [];
+
+  for (const candidate of candidates) {
+    if (!shouldMaterializePayout(candidate)) continue;
+
+    const [payout, wasCreated] = await VendorPayout.findOrCreate({
+      where: {
+        vendorId: candidate.vendorId,
+        orderId: candidate.orderId,
+      },
+      defaults: {
+        vendorId: candidate.vendorId,
+        orderId: candidate.orderId,
+        amount: candidate.amount,
+        status: candidate.status === "on_hold" ? "on_hold" : "pending",
+        notes: candidate.notes,
+        createdBy: actorId || null,
+        processedBy: null,
+        paidAt: null,
+      },
+    });
+
+    if (wasCreated) {
+      created.push(payout);
+      await AuditLog.create({
+        orderId: candidate.orderId,
+        userId: actorId || null,
+        type: "payment",
+        action: "vendor_payout_auto_created",
+        message: `Vendor payout record auto-created for order ${candidate.orderId}`,
+        meta: {
+          vendorId: candidate.vendorId,
+          amount: candidate.amount,
+          payoutStatus: payout.status,
+        },
+      });
+    }
+  }
+
+  return created;
+};
+
 const ensurePayoutCandidate = async (orderId, vendorId) => {
   const order = await Order.findByPk(orderId, { include: payoutOrderIncludes });
   if (!order) {
@@ -166,6 +263,12 @@ const ensurePayoutCandidate = async (orderId, vendorId) => {
   const payout = await buildDerivedPayout(order.toJSON(), vendorId);
   if (!payout) {
     const error = new Error("No vendor items were found for this order");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  if (payout.settlementState === "waiting_customer_window") {
+    const error = new Error("This order is still inside the customer review window");
     error.statusCode = 400;
     throw error;
   }
@@ -301,6 +404,7 @@ const sendPayoutExport = (res, filename, payouts, readyQueue) => {
 
 export const getAdminVendorPayouts = asyncHandler(async (req, res) => {
   const filters = normalizePayoutFilters(req.query);
+  await materializeEligiblePayoutRecords({ actorId: req.user?._id || null });
   const [records, readyQueue] = await Promise.all([
     VendorPayout.findAll({
       where: buildRecordWhere(filters),
@@ -327,6 +431,7 @@ export const getAdminVendorPayouts = asyncHandler(async (req, res) => {
 
 export const exportAdminVendorPayoutsCsv = asyncHandler(async (req, res) => {
   const filters = normalizePayoutFilters(req.query);
+  await materializeEligiblePayoutRecords({ actorId: req.user?._id || null });
   const [records, readyQueue] = await Promise.all([
     VendorPayout.findAll({
       where: buildRecordWhere(filters),
@@ -350,7 +455,7 @@ export const createVendorPayoutRecord = asyncHandler(async (req, res) => {
     orderId,
     amount: candidate.amount,
     status: candidate.status === "on_hold" ? "on_hold" : "pending",
-    notes,
+    notes: notes || candidate.notes,
     createdBy: req.user._id,
     processedBy: null,
     paidAt: null,
@@ -413,6 +518,7 @@ export const updateVendorPayoutRecord = asyncHandler(async (req, res) => {
 
 export const getVendorPayouts = asyncHandler(async (req, res) => {
   const filters = normalizePayoutFilters(req.query);
+  await materializeEligiblePayoutRecords({ vendorId: req.user._id });
   const [records, pendingQueue] = await Promise.all([
     VendorPayout.findAll({
       where: buildRecordWhere(filters, { vendorId: req.user._id }),
@@ -438,6 +544,7 @@ export const getVendorPayouts = asyncHandler(async (req, res) => {
 
 export const exportVendorPayoutsCsv = asyncHandler(async (req, res) => {
   const filters = normalizePayoutFilters(req.query);
+  await materializeEligiblePayoutRecords({ vendorId: req.user._id });
   const [records, pendingQueue] = await Promise.all([
     VendorPayout.findAll({
       where: buildRecordWhere(filters, { vendorId: req.user._id }),

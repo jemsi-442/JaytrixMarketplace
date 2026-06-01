@@ -9,6 +9,20 @@ import { buildBestPayoutMonth, buildPayoutStatusChartData, buildPayoutTrendData,
 import { getPayoutStatusTone } from "../utils/statusStyles";
 
 const formatCurrency = (value) => `Tsh ${Number(value || 0).toLocaleString()}`;
+const formatReleaseTime = (value) => {
+  const date = value ? new Date(value) : null;
+  return date && !Number.isNaN(date.getTime()) ? date.toLocaleString() : "after review";
+};
+
+const describeQueueEntry = (entry) => {
+  if (entry.settlementState === "waiting_customer_window") {
+    return `Customer review window closes ${formatReleaseTime(entry.releaseAt)}.`;
+  }
+  if (entry.settlementState === "issue_on_hold") {
+    return "On hold while the delivery issue is being resolved.";
+  }
+  return entry.notes || "Ready for settlement processing.";
+};
 
 export default function VendorPayouts() {
   const toast = useToast();
@@ -273,11 +287,11 @@ export default function VendorPayouts() {
       <section className="grid gap-4 xl:grid-cols-3">
         <AnalyticsNote
           label="Queue note"
-          title={readyQueue.length ? `${readyQueue.length} delivered orders are still waiting for settlement` : "No delivered orders are waiting for settlement right now"}
+          title={readyQueue.length ? `${readyQueue.length} delivered orders are in payout protection` : "No delivered orders are waiting for settlement right now"}
           detail={
             readyQueue.length
-              ? `${formatCurrency(summary.readyQueueAmount)} is still waiting for an admin settlement record.`
-              : "As soon as delivered orders become settlement-ready, they will appear here."
+              ? `${formatCurrency(summary.readyQueueAmount)} is waiting for the customer review window or delivery issue clearance.`
+              : "Delivered orders become settlement-ready automatically after the customer review window closes."
           }
           tone="orange"
         />
@@ -326,7 +340,7 @@ export default function VendorPayouts() {
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {[
-          { label: "Ready for Settlement", value: formatCurrency(summary.readyQueueAmount), icon: FiClock, tone: "text-orange-700", accent: "bg-orange-100 text-orange-600" },
+          { label: "Under Review", value: formatCurrency(summary.readyQueueAmount), icon: FiClock, tone: "text-orange-700", accent: "bg-orange-100 text-orange-600" },
           { label: "Pending Settlements", value: formatCurrency(summary.pendingAmount), icon: FiPauseCircle, tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
           { label: "Paid Out", value: formatCurrency(summary.totalPaid), icon: FiCheckCircle, tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
           { label: "Paid Records", value: summary.paidRecords || 0, icon: FiCreditCard, tone: "text-slate-700", accent: "bg-slate-100 text-slate-600" },
@@ -353,8 +367,8 @@ export default function VendorPayouts() {
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#102A43]">Awaiting Settlement</p>
-            <h2 className="mt-1 text-lg font-black text-slate-900">Delivered orders not settled yet</h2>
-            <p className="text-sm text-slate-500">These orders are ready, but the admin has not yet created a payout record for them.</p>
+            <h2 className="mt-1 text-lg font-black text-slate-900">Customer review window</h2>
+            <p className="text-sm text-slate-500">Delivered orders wait here briefly so customers can report delivery problems before payout is released.</p>
           </div>
           <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-700">
             {readyQueue.length} waiting
@@ -369,11 +383,11 @@ export default function VendorPayouts() {
               <div className="mt-3 inline-flex rounded-full border border-orange-200/80 bg-orange-50/90 px-3 py-1.5 text-lg font-black text-orange-700 shadow-sm">
                 {formatCurrency(entry.amount)}
               </div>
-              <p className="mt-2 text-sm text-slate-500">Waiting for admin settlement record</p>
+              <p className="mt-2 text-sm text-slate-500">{describeQueueEntry(entry)}</p>
             </article>
           ))}
           {!filteredReadyQueue.length ? (
-            <PageState tone="info" title="Nothing waiting" description="Once your delivered orders are ready, they will appear here until settlement is recorded." />
+            <PageState tone="info" title="Nothing waiting" description="Eligible delivered orders are already represented in your payout history." />
           ) : null}
         </div>
       </section>
@@ -418,7 +432,7 @@ export default function VendorPayouts() {
               {!filteredRecords.length ? (
                 <tr>
                   <td colSpan="5" className="p-8">
-                    <PageState tone="info" title="No payout records yet" description="Once admin starts settling your orders, the history will appear here." />
+                    <PageState tone="info" title="No payout records yet" description="Your settlement records will appear here automatically after eligible delivered orders are processed." />
                   </td>
                 </tr>
               ) : null}

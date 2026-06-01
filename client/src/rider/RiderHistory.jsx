@@ -4,8 +4,15 @@ import axios from "../utils/axios";
 import { extractList } from "../utils/apiShape";
 import PageState from "../components/PageState";
 import { PLACEHOLDER_IMAGE, resolveImageUrl } from "../utils/image";
+import {
+  formatRiderCurrency,
+  formatRiderEarningBreakdown,
+  getRiderEarning,
+  getRiderSettlementLabel,
+  getRiderSettlementTone,
+} from "../utils/riderEarnings";
 
-const formatCurrency = (value) => `TZS ${Number(value || 0).toLocaleString()}`;
+const formatCurrency = formatRiderCurrency;
 
 const formatDateTime = (value) => {
   if (!value) return "Not available";
@@ -79,6 +86,7 @@ export default function RiderHistory() {
 
   const summary = useMemo(() => {
     const totalValue = filteredOrders.reduce((sum, order) => sum + Number(order.totalAmount || 0), 0);
+    const totalEarnings = filteredOrders.reduce((sum, order) => sum + getRiderEarning(order), 0);
     const stores = new Set(filteredOrders.map((order) => getVendorLabel(order)).filter(Boolean));
     const today = new Date().toDateString();
     const completedToday = filteredOrders.filter((order) => {
@@ -89,6 +97,7 @@ export default function RiderHistory() {
     return {
       deliveries: filteredOrders.length,
       totalValue,
+      totalEarnings,
       stores: stores.size,
       completedToday,
     };
@@ -105,12 +114,14 @@ export default function RiderHistory() {
       const dayEntry = dayMap.get(key) || { label: key, deliveries: 0, value: 0, timestamp: stamp ? stamp.getTime() : 0 };
       dayEntry.deliveries += 1;
       dayEntry.value += Number(order.totalAmount || 0);
+      dayEntry.earnings = Number(dayEntry.earnings || 0) + getRiderEarning(order);
       dayMap.set(key, dayEntry);
 
       const store = getVendorLabel(order);
-      const storeEntry = storeMap.get(store) || { store, deliveries: 0, value: 0 };
+      const storeEntry = storeMap.get(store) || { store, deliveries: 0, value: 0, earnings: 0 };
       storeEntry.deliveries += 1;
       storeEntry.value += Number(order.totalAmount || 0);
+      storeEntry.earnings += getRiderEarning(order);
       storeMap.set(store, storeEntry);
     });
 
@@ -149,7 +160,7 @@ export default function RiderHistory() {
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <HistoryMetric label="Completed deliveries" value={summary.deliveries} tone="navy" />
-        <HistoryMetric label="Delivery value" value={formatCurrency(summary.totalValue)} tone="orange" />
+        <HistoryMetric label="Estimated earnings" value={formatCurrency(summary.totalEarnings)} tone="orange" />
         <HistoryMetric label="Stores served" value={summary.stores} tone="slate" />
         <HistoryMetric label="Completed today" value={summary.completedToday} tone="emerald" />
       </section>
@@ -179,7 +190,7 @@ export default function RiderHistory() {
                   <div className="space-y-1 text-center">
                     <p className="text-sm font-black text-slate-900">{entry.deliveries}</p>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">{entry.label}</p>
-                    <p className="text-xs text-slate-500">{formatCurrency(entry.value)}</p>
+                    <p className="text-xs text-slate-500">{formatCurrency(entry.earnings || 0)}</p>
                   </div>
                 </div>
               ))}
@@ -199,7 +210,7 @@ export default function RiderHistory() {
                       <p className="mt-1 text-sm text-slate-500">{entry.deliveries} completed delivery{entry.deliveries === 1 ? "" : "ies"}</p>
                     </div>
                     <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-700">
-                      {formatCurrency(entry.value)}
+                      {formatCurrency(entry.earnings || 0)}
                     </span>
                   </div>
                 </div>
@@ -275,14 +286,18 @@ export default function RiderHistory() {
                   </div>
 
                   <div className="rounded-[24px] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                    <p className="font-semibold text-slate-900">{formatCurrency(order.totalAmount)}</p>
+                    <p className="font-semibold text-slate-900">{formatCurrency(getRiderEarning(order))} earning</p>
+                    <span className={`mt-2 inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getRiderSettlementTone(order)}`}>
+                      {getRiderSettlementLabel(order)}
+                    </span>
+                    <p className="mt-1 text-xs text-slate-500">{formatCurrency(order.totalAmount)} basket value</p>
                     <p className="mt-1">{formatDateTime(completedAt)}</p>
                   </div>
                 </div>
 
                 <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                   <HistoryDetail icon={FiTruck} label="Store" value={getVendorLabel(order)} subvalue={order.items?.find((item) => item.vendor?.businessPhone)?.vendor?.businessPhone || "No store phone"} />
-                  <HistoryDetail icon={FiShoppingBag} label="Basket" value={getItemSummary(order)} subvalue={formatCurrency(order.totalAmount)} />
+                  <HistoryDetail icon={FiShoppingBag} label="Rider earning" value={formatCurrency(getRiderEarning(order))} subvalue={formatRiderEarningBreakdown(order, getItemSummary(order))} />
                   <HistoryDetail icon={FiMapPin} label="Drop-off" value={order.delivery?.address || "Pickup order"} subvalue={order.user?.phone || order.delivery?.contactPhone || "No contact phone"} />
                   <HistoryDetail icon={FiCalendar} label="Completed" value={formatDateTime(completedAt)} subvalue={`Assigned ${formatDateTime(order.delivery?.assignedAt)}`} />
                 </div>

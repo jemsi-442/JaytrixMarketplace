@@ -5,11 +5,18 @@ import { extractList } from "../utils/apiShape";
 import PageState from "../components/PageState";
 import useToast from "../hooks/useToast";
 import { PLACEHOLDER_IMAGE, resolveImageUrl } from "../utils/image";
+import {
+  formatRiderCurrency,
+  formatRiderEarningBreakdown,
+  getRiderEarning,
+  getRiderSettlementLabel,
+  getRiderSettlementTone,
+} from "../utils/riderEarnings";
 
 const AUTO_REFRESH_INTERVAL = 15000;
 const SLA_SECONDS = 120;
 
-const formatCurrency = (value) => `TZS ${Number(value || 0).toLocaleString()}`;
+const formatCurrency = formatRiderCurrency;
 
 const getRemainingSeconds = (assignedAt, now) => {
   if (!assignedAt) return null;
@@ -303,10 +310,13 @@ const RiderOrders = () => {
                       <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-[#102A43]">
                         {getVendorLabel(order)}
                       </span>
+                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${getRiderSettlementTone(order)}`}>
+                        {getRiderSettlementLabel(order)}
+                      </span>
                     </div>
 
                     <p className="mt-2 text-sm text-slate-600">
-                      {getItemSummary(order)} • {formatCurrency(order.totalAmount)}
+                      {getItemSummary(order)} • {formatCurrency(getRiderEarning(order))} estimated earning
                     </p>
                     <p className="mt-1 text-sm text-slate-500">{assignedAt ? `Assigned ${new Date(assignedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : "Assignment time unavailable"}</p>
                   </div>
@@ -317,7 +327,7 @@ const RiderOrders = () => {
                 <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                   <DetailCard icon={FiPhone} label="Customer" value={order.user?.name || "Unknown"} subvalue={order.delivery?.contactPhone || order.user?.phone || "No phone available"} />
                   <DetailCard icon={FiMapPin} label="Drop-off" value={order.delivery?.address || "Pickup order"} subvalue="Use this address to complete the handoff." />
-                  <DetailCard icon={FiShoppingBag} label="Items" value={getItemSummary(order)} subvalue={(order.items || []).slice(0, 2).map((item) => item.name).filter(Boolean).join(" • ") || "Item list unavailable"} />
+                  <DetailCard icon={FiShoppingBag} label="Rider earning" value={formatCurrency(getRiderEarning(order))} subvalue={formatRiderEarningBreakdown(order, `Basket value ${formatCurrency(order.totalAmount)}`)} />
                   <DetailCard icon={FiTruck} label="Store contact" value={getVendorLabel(order)} subvalue={storePhone || "No store phone on file"} />
                 </div>
 

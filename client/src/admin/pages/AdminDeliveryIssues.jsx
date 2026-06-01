@@ -111,6 +111,7 @@ export default function AdminDeliveryIssues() {
       setUpdatingId(orderId);
       await axios.patch(`/orders/${orderId}/delivery-issue`, draft);
       toast.success("Delivery issue updated");
+      window.dispatchEvent(new CustomEvent("delivery-issues:refresh", { detail: { mode: "admin" } }));
       fetchOrders();
     } catch (err) {
       console.error(err);

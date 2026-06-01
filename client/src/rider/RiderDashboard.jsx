@@ -4,11 +4,18 @@ import axios from "../utils/axios";
 import { extractList } from "../utils/apiShape";
 import PageState from "../components/PageState";
 import useToast from "../hooks/useToast";
+import {
+  formatRiderCurrency,
+  formatRiderEarningBreakdown,
+  getRiderEarning,
+  getRiderSettlementLabel,
+  getRiderSettlementTone,
+} from "../utils/riderEarnings";
 
 const AUTO_REFRESH_INTERVAL = 15000;
 const SLA_SECONDS = 120;
 
-const formatCurrency = (value) => `TZS ${Number(value || 0).toLocaleString()}`;
+const formatCurrency = formatRiderCurrency;
 
 const formatTime = (value, options = {}) => {
   if (!value) return "Not available";
@@ -92,6 +99,7 @@ export default function RiderDashboard() {
     });
 
     const totalValue = orders.reduce((sum, order) => sum + Number(order.totalAmount || 0), 0);
+    const potentialEarnings = orders.reduce((sum, order) => sum + getRiderEarning(order), 0);
     const topPriority = [...orders].sort((left, right) => {
       const leftAccepted = Boolean(left.delivery?.acceptedAt);
       const rightAccepted = Boolean(right.delivery?.acceptedAt);
@@ -104,6 +112,7 @@ export default function RiderDashboard() {
       awaitingAcceptance,
       urgent,
       totalValue,
+      potentialEarnings,
       topPriority,
     };
   }, [now, orders]);
@@ -151,8 +160,8 @@ export default function RiderDashboard() {
               <p className="mt-2 text-2xl font-black text-orange-700">{dashboard.awaitingAcceptance.length}</p>
             </article>
             <article className="rounded-2xl border border-white/80 bg-white/80 px-4 py-3 shadow-sm backdrop-blur">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">Delivery Value</p>
-              <p className="mt-2 text-xl font-black text-[#102A43]">{formatCurrency(dashboard.totalValue)}</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">Potential Earnings</p>
+              <p className="mt-2 text-xl font-black text-[#102A43]">{formatCurrency(dashboard.potentialEarnings)}</p>
             </article>
           </div>
         </div>
@@ -184,9 +193,9 @@ export default function RiderDashboard() {
         />
         <MetricCard
           icon={FiShoppingBag}
-          label="Average basket"
-          value={orders.length ? formatCurrency(Math.round(dashboard.totalValue / orders.length)) : "TZS 0"}
-          description="Average order value in your current queue."
+          label="Earning per delivery"
+          value={orders.length ? formatCurrency(Math.round(dashboard.potentialEarnings / orders.length)) : "TZS 0"}
+          description="Estimated earning for each completed delivery."
           tone="slate"
         />
       </section>
@@ -207,6 +216,9 @@ export default function RiderDashboard() {
                 <span className={`rounded-full px-3 py-1 text-xs font-semibold ${priority.delivery?.acceptedAt ? "bg-emerald-100 text-emerald-700" : "bg-orange-100 text-orange-700"}`}>
                   {priority.delivery?.acceptedAt ? "Accepted" : "Needs response"}
                 </span>
+                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${getRiderSettlementTone(priority)}`}>
+                  {getRiderSettlementLabel(priority)}
+                </span>
                 {prioritySecondsLeft !== null && !priority.delivery?.acceptedAt ? (
                   <span className={`rounded-full px-3 py-1 text-xs font-semibold ${prioritySecondsLeft <= 30 ? "bg-red-100 text-red-700" : "bg-slate-100 text-[#102A43]"}`}>
                     {prioritySecondsLeft}s left
@@ -219,6 +231,7 @@ export default function RiderDashboard() {
               <InfoRow icon={FiPhone} label="Customer" value={priority.user?.name || "Unknown"} subvalue={priority.delivery?.contactPhone || priority.user?.phone || "No contact phone"} />
               <InfoRow icon={FiMapPin} label="Drop-off" value={priority.delivery?.address || "Pickup order"} subvalue={`Assigned ${formatTime(priority.delivery?.assignedAt, { dateStyle: undefined })}`} />
               <InfoRow icon={FiShoppingBag} label="Basket" value={formatCurrency(priority.totalAmount)} subvalue={getItemSummary(priority)} />
+              <InfoRow icon={FiCheckCircle} label="Rider earning" value={formatCurrency(getRiderEarning(priority))} subvalue={formatRiderEarningBreakdown(priority)} />
               <InfoRow icon={FiTruck} label="Store" value={getVendorLabel(priority)} subvalue={priority.items?.[0]?.vendor?.businessPhone || "No store phone"} />
             </div>
 
@@ -328,7 +341,8 @@ export default function RiderDashboard() {
                     </div>
 
                     <div className="text-sm text-slate-600">
-                      <p className="font-semibold text-slate-900">{formatCurrency(order.totalAmount)}</p>
+                      <p className="font-semibold text-slate-900">{formatCurrency(getRiderEarning(order))} earning</p>
+                      <p className="mt-1 text-xs text-slate-500">{formatCurrency(order.totalAmount)} basket</p>
                       <p className="mt-1">{order.delivery?.contactPhone || order.user?.phone || "No contact phone"}</p>
                       <p className="mt-1">{formatTime(order.createdAt, { dateStyle: undefined })}</p>
                     </div>

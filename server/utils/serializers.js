@@ -1,3 +1,5 @@
+import { buildRiderEarningEstimate } from "./riderEarnings.js";
+
 export const toPlain = (row) => {
   if (!row) return null;
   return typeof row.toJSON === "function" ? row.toJSON() : row;
@@ -132,6 +134,7 @@ export const serializeOrder = (row) => {
       address: order.deliveryAddress,
       contactPhone: order.deliveryContactPhone,
       rider: rider || order.riderId,
+      earningEstimate: buildRiderEarningEstimate(order),
       assignedAt: order.assignedAt,
       acceptedAt: order.acceptedAt,
       completedAt: order.completedAt,

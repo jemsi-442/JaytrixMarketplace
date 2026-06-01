@@ -1,8 +1,8 @@
-import { FiBell, FiLogOut, FiMenu, FiUser } from "react-icons/fi";
+import { FiAlertCircle, FiBell, FiLogOut, FiMenu, FiUser } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
-export default function AdminTopbar({ unreadCount = 0, onOpenSidebar }) {
+export default function AdminTopbar({ unreadCount = 0, activeIssueCount = 0, onOpenSidebar }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const initial = (user?.name || "Marketplace Lead").trim().charAt(0).toUpperCase() || "M";
@@ -37,6 +37,20 @@ export default function AdminTopbar({ unreadCount = 0, onOpenSidebar }) {
       </div>
 
       <div className="flex items-center gap-3 md:gap-5">
+        <Link
+          to="/admin/delivery-issues"
+          className="relative rounded-full border border-white/80 bg-white/80 p-2.5 text-slate-600 shadow-[0_12px_30px_rgba(15,23,42,0.08)] transition hover:-translate-y-0.5 hover:text-red-700"
+          aria-label="Delivery issues"
+          title="Delivery issues"
+        >
+          <FiAlertCircle size={20} />
+          {activeIssueCount > 0 ? (
+            <span className="absolute -right-2 -top-2 min-w-[18px] rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] font-bold text-white shadow-lg shadow-red-300/30">
+              {activeIssueCount}
+            </span>
+          ) : null}
+        </Link>
+
         <Link
           to="/admin/notifications"
           className="relative rounded-full border border-white/80 bg-white/80 p-2.5 text-slate-600 shadow-[0_12px_30px_rgba(15,23,42,0.08)] transition hover:-translate-y-0.5 hover:text-slate-900"

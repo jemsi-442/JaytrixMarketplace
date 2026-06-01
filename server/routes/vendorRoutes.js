@@ -8,11 +8,15 @@ import {
   updateVendorDeliveryIssueStatus,
   updateVendorProduct,
   updateVendorProfile,
+  updateVendorRiderBonus,
 } from "../controllers/vendorController.js";
 import {
   createVendorRider,
+  exportVendorRiderEarningsCsv,
+  getVendorRiderEarnings,
   getVendorRiders,
   resetVendorRiderPassword,
+  updateVendorRiderOrderSettlement,
   updateVendorRiderStatus,
 } from "../controllers/vendorRiderController.js";
 import { exportVendorPayoutsCsv, getVendorPayouts } from "../controllers/vendorPayoutController.js";
@@ -31,6 +35,10 @@ router.put("/products/:id", upload.single("image"), updateVendorProduct);
 router.delete("/products/:id", deleteVendorProduct);
 router.get("/orders", getVendorOrders);
 router.patch("/orders/:id/delivery-issue", updateVendorDeliveryIssueStatus);
+router.patch("/orders/:id/rider-bonus", updateVendorRiderBonus);
+router.get("/riders/earnings/export.csv", exportVendorRiderEarningsCsv);
+router.get("/riders/earnings", getVendorRiderEarnings);
+router.patch("/riders/earnings/orders/:orderId/settlement", updateVendorRiderOrderSettlement);
 router.get("/riders", getVendorRiders);
 router.post("/riders", createVendorRider);
 router.patch("/riders/:id/status", updateVendorRiderStatus);

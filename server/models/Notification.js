@@ -55,6 +55,30 @@ const Notification = sequelize.define(
       allowNull: true,
       defaultValue: null,
     },
+    externalChannel: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
+      field: "external_channel",
+    },
+    externalStatus: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
+      field: "external_status",
+    },
+    externalSentAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      field: "external_sent_at",
+    },
+    externalError: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      defaultValue: null,
+      field: "external_error",
+    },
   },
   {
     tableName: "notifications",

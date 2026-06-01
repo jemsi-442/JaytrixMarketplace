@@ -8,6 +8,7 @@ import NotificationEvent from "./NotificationEvent.js";
 import AuditLog from "./AuditLog.js";
 import VendorPayout from "./VendorPayout.js";
 import ProductReview from "./ProductReview.js";
+import AppSetting from "./AppSetting.js";
 
 User.hasOne(Rider, { foreignKey: "userId", as: "riderProfile" });
 Rider.belongsTo(User, { foreignKey: "userId", as: "user" });
@@ -63,4 +64,5 @@ export {
   NotificationEvent,
   AuditLog,
   VendorPayout,
+  AppSetting,
 };

@@ -7,12 +7,17 @@ import { useAuth } from "../../hooks/useAuth";
 import useNotificationAlerts from "../../hooks/useNotificationAlerts";
 import useNotificationPreferences from "../../hooks/useNotificationPreferences";
 import useNotificationSummary from "../../hooks/useNotificationSummary";
+import useDeliveryIssueSummary from "../../hooks/useDeliveryIssueSummary";
 
 export default function AdminLayout() {
   const { user } = useAuth();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const notificationPreferences = useNotificationPreferences("admin");
   const notificationSummary = useNotificationSummary({
+    enabled: user?.role === "admin",
+    mode: "admin",
+  });
+  const deliveryIssueSummary = useDeliveryIssueSummary({
     enabled: user?.role === "admin",
     mode: "admin",
   });
@@ -42,7 +47,7 @@ export default function AdminLayout() {
 
   return (
     <div className="flex h-screen min-h-screen overflow-hidden bg-[linear-gradient(180deg,#f8fafc_0%,#eff6ff_36%,#fff7ed_100%)]">
-      <AdminSidebar className="hidden lg:flex" unreadCount={unreadCount} />
+      <AdminSidebar className="hidden lg:flex" unreadCount={unreadCount} activeIssueCount={deliveryIssueSummary.activeCount} />
 
       {mobileSidebarOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden">
@@ -55,6 +60,7 @@ export default function AdminLayout() {
           <AdminSidebar
             mobile
             unreadCount={unreadCount}
+            activeIssueCount={deliveryIssueSummary.activeCount}
             onNavigate={() => setMobileSidebarOpen(false)}
             onClose={() => setMobileSidebarOpen(false)}
             className="relative z-10 min-h-full shadow-2xl"
@@ -65,6 +71,7 @@ export default function AdminLayout() {
       <div className="flex min-w-0 min-h-0 flex-1 flex-col">
         <AdminTopbar
           unreadCount={unreadCount}
+          activeIssueCount={deliveryIssueSummary.activeCount}
           onOpenSidebar={() => setMobileSidebarOpen(true)}
         />
         <main className="min-h-0 flex-1 overflow-y-auto bg-[linear-gradient(160deg,#f8fafc_0%,#eff6ff_48%,#fff7ed_100%)] p-4 pb-6 md:p-6">

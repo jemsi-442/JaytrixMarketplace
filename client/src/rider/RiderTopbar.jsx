@@ -1,9 +1,19 @@
 import { FiMenu, FiTruck, FiUser } from "react-icons/fi";
 import { useAuth } from "../hooks/useAuth";
+import useNotificationAlerts from "../hooks/useNotificationAlerts";
+import useNotificationPreferences from "../hooks/useNotificationPreferences";
 
 export default function RiderTopbar({ onOpenSidebar }) {
   const { user } = useAuth();
   const initial = (user?.name || "Rider").trim().charAt(0).toUpperCase() || "R";
+  const notificationPreferences = useNotificationPreferences("rider");
+
+  useNotificationAlerts({
+    enabled: Boolean(user),
+    mode: "rider",
+    soundEnabled: notificationPreferences.soundEnabled,
+    vibrationEnabled: notificationPreferences.vibrationEnabled,
+  });
 
   return (
     <header className="sticky top-0 z-30 relative flex h-20 items-center justify-between overflow-hidden border-b border-white/70 bg-[linear-gradient(135deg,rgba(248,250,252,0.97)_0%,rgba(239,246,255,0.96)_44%,rgba(255,247,237,0.95)_100%)] px-4 shadow-[0_18px_48px_rgba(15,23,42,0.08)] backdrop-blur-xl md:px-6">

@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+import "./config/env.js";
 
 import express from "express";
 import cors from "cors";
@@ -23,6 +22,7 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 import { riderAutoTimeout } from "./jobs/riderTimeout.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 import { isCloudinaryConfigured } from "./middleware/uploadMiddleware.js";
+import { isUnsafeConfiguredPassword } from "./utils/accountSecurity.js";
 import { isSmtpConfigured } from "./utils/mailer.js";
 import { ensureAdminAccount } from "./utils/createAdmin.js";
 import { isSnippeConfigured, isSnippeWebhookConfigured } from "./utils/snippe.js";
@@ -77,9 +77,9 @@ const validateProductionEnv = () => {
 
   if (
     process.env.AUTO_BOOTSTRAP_ADMIN !== "false" &&
-    (!process.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD === "Jay442tx")
+    isUnsafeConfiguredPassword(process.env.ADMIN_PASSWORD || "")
   ) {
-    throw new Error("Disable AUTO_BOOTSTRAP_ADMIN or set a non-default ADMIN_PASSWORD before production deploy");
+    throw new Error("Disable AUTO_BOOTSTRAP_ADMIN or set a strong ADMIN_PASSWORD before production deploy");
   }
 
   if (!isCloudinaryConfigured()) {

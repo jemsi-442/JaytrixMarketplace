@@ -401,6 +401,48 @@ test("auth, order creation, and Snippe webhook flow stays healthy", async (t) =>
     assert.equal(adminUser.role, "admin");
   });
 
+  await t.test("lets admin verify messaging settings without exposing secrets", async () => {
+    const settingsResponse = await api("/api/admin/messaging-settings", {
+      method: "GET",
+      token: adminToken,
+    });
+    assert.equal(settingsResponse.status, 200);
+    assert.ok(Array.isArray(settingsResponse.body.data.externalChannels));
+    assert.equal(typeof settingsResponse.body.data.providers.mesejiWhatsapp.configured, "boolean");
+
+    const testMessageResponse = await api("/api/admin/messaging-settings/test", {
+      method: "POST",
+      token: adminToken,
+      body: {
+        phone: "0712345678",
+        message: "Integration test message",
+      },
+    });
+    assert.equal(testMessageResponse.status, 200);
+    assert.equal(testMessageResponse.body.data.provider, "meseji_whatsapp");
+    assert.equal(testMessageResponse.body.data.skipped, true);
+
+    const updateSettingsResponse = await api("/api/admin/messaging-settings", {
+      method: "PATCH",
+      token: adminToken,
+      body: {
+        externalChannels: ["meseji_whatsapp"],
+        externalTypes: ["rider_payment_settled"],
+        mesejiWhatsappEnabled: false,
+      },
+    });
+    assert.equal(updateSettingsResponse.status, 200);
+    assert.deepEqual(updateSettingsResponse.body.data.externalChannels, ["meseji_whatsapp"]);
+
+    const messagingAuditCount = await AuditLog.count({
+      where: {
+        type: "notification",
+        action: ["messaging_test_sent", "messaging_settings_updated"],
+      },
+    });
+    assert.ok(messagingAuditCount >= 2);
+  });
+
   await t.test("syncs saved products to the customer account", async () => {
     const emptySavedProductsResponse = await api("/api/users/me/saved-products", {
       method: "GET",
@@ -484,8 +526,9 @@ test("auth, order creation, and Snippe webhook flow stays healthy", async (t) =>
     });
 
     assert.equal(createVendorProductResponse.status, 201);
-    assert.equal(createVendorProductResponse.body.data.status, "pending");
+    assert.equal(createVendorProductResponse.body.data.status, "approved");
     assert.equal(Number(createVendorProductResponse.body.data.createdBy), Number(createdCustomer.id));
+    vendorProductId = createVendorProductResponse.body.data._id;
 
     const createRejectedVendorProductResponse = await api("/api/vendor/products", {
       method: "POST",
@@ -501,25 +544,7 @@ test("auth, order creation, and Snippe webhook flow stays healthy", async (t) =>
     });
 
     assert.equal(createRejectedVendorProductResponse.status, 201);
-    assert.equal(createRejectedVendorProductResponse.body.data.status, "pending");
-
-    const approveVendorProductResponse = await api(
-      `/api/products/${createVendorProductResponse.body.data._id}/approve`,
-      {
-        method: "PUT",
-        token: adminToken,
-        body: { reviewNotes: "Approved for the storefront after review." },
-      }
-    );
-
-    assert.equal(approveVendorProductResponse.status, 200);
-    assert.equal(approveVendorProductResponse.body.data.status, "approved");
-    assert.equal(approveVendorProductResponse.body.data.vendor.storeSlug, "integration-vendor-store");
-    vendorProductId = approveVendorProductResponse.body.data._id;
-    assert.equal(
-      approveVendorProductResponse.body.data.reviewNotes,
-      "Approved for the storefront after review."
-    );
+    assert.equal(createRejectedVendorProductResponse.body.data.status, "approved");
 
     const rejectVendorProductResponse = await api(
       `/api/products/${createRejectedVendorProductResponse.body.data._id}/reject`,
@@ -527,7 +552,7 @@ test("auth, order creation, and Snippe webhook flow stays healthy", async (t) =>
         method: "PUT",
         token: adminToken,
         body: {
-          reviewNotes: "Please add clearer photos and a fuller description before approval.",
+          reviewNotes: "Please add clearer photos and a fuller description before publishing again.",
         },
       }
     );
@@ -710,6 +735,42 @@ const updatedCustomer = await User.findByPk(createdCustomer.id);
     assert.equal(refreshedOrder.paymentReference, createdOrderReference);
     assert.equal(refreshedOrder.paymentProvider, "airtel_money");
     assert.equal(refreshedOrder.paymentStatus, "pending");
+  });
+
+  await t.test("lets admin retry a skipped external notification safely", async () => {
+    const notification = await Notification.create({
+      orderId: createdOrderId,
+      audience: "customer",
+      type: "rider_payment_settled",
+      message: `Retry external notification ${runId}`,
+      phone: "0712345678",
+      status: "logged",
+      externalChannel: "meseji_whatsapp",
+      externalStatus: "skipped",
+      externalError: "Initial skip during integration test",
+    });
+
+    const retryResponse = await api(`/api/admin/notifications/${notification.id}/retry-external`, {
+      method: "POST",
+      token: adminToken,
+    });
+
+    assert.equal(retryResponse.status, 200);
+    assert.equal(retryResponse.body.data.externalStatus, "skipped");
+    assert.equal(retryResponse.body.data.externalChannel, "meseji_whatsapp");
+    assert.match(retryResponse.body.data.externalError || "", /meseji whatsapp is not configured/i);
+
+    const audit = await AuditLog.findOne({
+      where: {
+        type: "notification",
+        action: "external_notification_retried",
+        orderId: createdOrderId,
+      },
+      order: [["created_at", "DESC"]],
+    });
+
+    assert.ok(audit);
+    assert.equal(audit.meta.notificationId, notification.id);
   });
 
   await t.test("accepts a signed Snippe webhook and marks the order paid", async () => {
@@ -930,6 +991,154 @@ const updatedCustomer = await User.findByPk(createdCustomer.id);
     assert.equal(vendorOrder.payment.status, "completed");
     assert.ok(vendorOrder.items.some((item) => item.lineTotal === 1500));
     assert.ok(vendorOrder.items.some((item) => item.estimatedPayout === 1500));
+    assert.equal(vendorOrder.delivery.earningEstimate.baseAmount, Number(process.env.RIDER_DELIVERY_EARNING || 3000));
+    assert.equal(vendorOrder.delivery.earningEstimate.bonusAmount, 0);
+
+    const riderBonusResponse = await api(`/api/vendor/orders/${vendorOrderId}/rider-bonus`, {
+      method: "PATCH",
+      token,
+      body: {
+        bonusAmount: 2500,
+        bonusNote: "Long route bonus.",
+      },
+    });
+
+    assert.equal(riderBonusResponse.status, 200);
+    assert.equal(riderBonusResponse.body.data.delivery.earningEstimate.bonusAmount, 2500);
+    assert.equal(
+      riderBonusResponse.body.data.delivery.earningEstimate.amount,
+      Number(process.env.RIDER_DELIVERY_EARNING || 3000) + 2500
+    );
+    assert.equal(riderBonusResponse.body.data.delivery.earningEstimate.bonusNote, "Long route bonus.");
+
+    const refreshedVendorOrdersResponse = await api("/api/vendor/orders", {
+      method: "GET",
+      token,
+    });
+    assert.equal(refreshedVendorOrdersResponse.status, 200);
+    const refreshedVendorOrder = refreshedVendorOrdersResponse.body.data.items.find((item) => item._id === vendorOrderId);
+    assert.ok(refreshedVendorOrder);
+    assert.equal(refreshedVendorOrder.delivery.earningEstimate.bonusAmount, 2500);
+    assert.equal(refreshedVendorOrder.vendorSummary.estimatedPayout, 1500);
+
+    const createVendorRiderResponse = await api("/api/vendor/riders", {
+      method: "POST",
+      token,
+      body: {
+        name: "Vendor Earnings Rider",
+        email: `vendor_rider_${runId}@example.com`,
+        phone: "0712345678",
+        password: "RiderPass123",
+      },
+    });
+    assert.equal(createVendorRiderResponse.status, 201);
+    const vendorRiderId = createVendorRiderResponse.body.data.id;
+    const vendorRiderLoginResponse = await api("/api/auth/login", {
+      method: "POST",
+      body: {
+        email: `vendor_rider_${runId}@example.com`,
+        password: "RiderPass123",
+      },
+    });
+    assert.equal(vendorRiderLoginResponse.status, 200);
+    const vendorRiderToken = vendorRiderLoginResponse.body.token;
+
+    await Order.update(
+      {
+        riderId: vendorRiderId,
+        assignedAt: new Date(),
+      },
+      { where: { id: vendorOrderId } }
+    );
+
+    const riderEarningsResponse = await api("/api/vendor/riders/earnings", {
+      method: "GET",
+      token,
+    });
+    assert.equal(riderEarningsResponse.status, 200);
+    assert.equal(riderEarningsResponse.body.data.settlement.payer, "vendor");
+    assert.equal(riderEarningsResponse.body.data.settlement.companyLiability, false);
+    assert.ok(riderEarningsResponse.body.data.summary.projectedTotal >= Number(process.env.RIDER_DELIVERY_EARNING || 3000) + 2500);
+    const riderEarnings = riderEarningsResponse.body.data.items.find(
+      (item) => Number(item.rider.id) === Number(vendorRiderId)
+    );
+    assert.ok(riderEarnings);
+    assert.equal(riderEarnings.activeDeliveries, 1);
+    assert.equal(riderEarnings.bonusTotal, 2500);
+    assert.equal(riderEarnings.recentOrders[0].earning.funding.payer, "vendor");
+
+    const riderEarningsExportResponse = await fetch(`${baseUrl}/api/vendor/riders/earnings/export.csv`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    assert.equal(riderEarningsExportResponse.status, 200);
+    assert.match(riderEarningsExportResponse.headers.get("content-type") || "", /text\/csv/);
+    const riderEarningsCsv = await riderEarningsExportResponse.text();
+    assert.match(riderEarningsCsv, /rider_name,phone/);
+    assert.match(riderEarningsCsv, /Vendor Earnings Rider/);
+    assert.match(riderEarningsCsv, /2500\.00/);
+
+    await Order.update(
+      {
+        status: "delivered",
+        deliveredAt: new Date(),
+        completedAt: new Date(),
+      },
+      { where: { id: vendorOrderId } }
+    );
+
+    const markRiderPaidResponse = await api(`/api/vendor/riders/earnings/orders/${vendorOrderId}/settlement`, {
+      method: "PATCH",
+      token,
+      body: {
+        paid: true,
+        paymentNote: "Settled directly with rider.",
+      },
+    });
+
+    assert.equal(markRiderPaidResponse.status, 200);
+    const settledRiderEarnings = markRiderPaidResponse.body.data.items.find(
+      (item) => Number(item.rider.id) === Number(vendorRiderId)
+    );
+    assert.ok(settledRiderEarnings);
+    assert.equal(settledRiderEarnings.completedDeliveries, 1);
+    assert.equal(settledRiderEarnings.unpaidTotal, 0);
+    assert.equal(settledRiderEarnings.paidTotal, Number(process.env.RIDER_DELIVERY_EARNING || 3000) + 2500);
+    assert.ok(settledRiderEarnings.recentOrders[0].riderPaidAt);
+
+    const riderPaymentNotification = await Notification.findOne({
+      where: {
+        orderId: vendorOrderId,
+        audience: "rider",
+        type: "rider_payment_settled",
+      },
+    });
+    assert.ok(riderPaymentNotification);
+    assert.match(riderPaymentNotification.message, /marked paid/);
+
+    const riderNotificationsResponse = await api("/api/notifications/my", {
+      method: "GET",
+      token: vendorRiderToken,
+    });
+    assert.equal(riderNotificationsResponse.status, 200);
+    assert.ok(
+      riderNotificationsResponse.body.some(
+        (notification) =>
+          notification.type === "rider_payment_settled" &&
+          Number(notification.orderId) === Number(vendorOrderId)
+      )
+    );
+
+    const pauseVendorRiderResponse = await api(`/api/vendor/riders/${vendorRiderId}/status`, {
+      method: "PATCH",
+      token,
+      body: {
+        isActive: false,
+        available: false,
+      },
+    });
+    assert.equal(pauseVendorRiderResponse.status, 200);
 
     const revertRoleResponse = await api(`/api/users/${createdCustomer.id}/role`, {
       method: "PATCH",
@@ -1016,27 +1225,41 @@ const updatedCustomer = await User.findByPk(createdCustomer.id);
       token: adminToken,
     });
     assert.equal(adminPayoutsResponse.status, 200);
-    assert.ok(
-      adminPayoutsResponse.body.data.readyQueue.some(
-        (entry) => Number(entry.orderId) === Number(payoutOrderId) && Number(entry.vendorId) === Number(createdCustomer.id)
-      )
+    const earlyPayoutRecord = adminPayoutsResponse.body.data.items.find(
+      (entry) => Number(entry.orderId) === Number(payoutOrderId) && Number(entry.vendorId) === Number(createdCustomer.id)
+    );
+    assert.equal(earlyPayoutRecord, undefined);
+    const protectedSettlement = adminPayoutsResponse.body.data.readyQueue.find(
+      (entry) => Number(entry.orderId) === Number(payoutOrderId) && Number(entry.vendorId) === Number(createdCustomer.id)
+    );
+    assert.ok(protectedSettlement);
+    assert.equal(protectedSettlement.status, "on_hold");
+    assert.equal(protectedSettlement.settlementState, "waiting_customer_window");
+    assert.equal(protectedSettlement.amount, 1500);
+
+    const payoutDisputeWindowHours = Number(process.env.PAYOUT_DISPUTE_WINDOW_HOURS || 24);
+    const releasedAt = new Date(Date.now() - (payoutDisputeWindowHours + 1) * 60 * 60 * 1000);
+    await Order.update(
+      {
+        deliveredAt: releasedAt,
+        completedAt: releasedAt,
+      },
+      { where: { id: payoutOrderId } }
     );
 
-    const createPayoutRecordResponse = await api("/api/admin/vendor-payouts", {
-      method: "POST",
+    const releasedAdminPayoutsResponse = await api("/api/admin/vendor-payouts", {
+      method: "GET",
       token: adminToken,
-      body: {
-        orderId: payoutOrderId,
-        vendorId: createdCustomer.id,
-        notes: "Weekly vendor settlement batch.",
-      },
     });
+    assert.equal(releasedAdminPayoutsResponse.status, 200);
+    const autoPayoutRecord = releasedAdminPayoutsResponse.body.data.items.find(
+      (entry) => Number(entry.orderId) === Number(payoutOrderId) && Number(entry.vendorId) === Number(createdCustomer.id)
+    );
+    assert.ok(autoPayoutRecord);
+    assert.equal(autoPayoutRecord.status, "pending");
+    assert.equal(autoPayoutRecord.amount, 1500);
 
-    assert.equal(createPayoutRecordResponse.status, 201);
-    assert.equal(createPayoutRecordResponse.body.data.status, "pending");
-    assert.equal(createPayoutRecordResponse.body.data.amount, 1500);
-
-    const markPayoutPaidResponse = await api(`/api/admin/vendor-payouts/${createPayoutRecordResponse.body.data._id}`, {
+    const markPayoutPaidResponse = await api(`/api/admin/vendor-payouts/${autoPayoutRecord._id}`, {
       method: "PUT",
       token: adminToken,
       body: {

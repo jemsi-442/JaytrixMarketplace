@@ -679,7 +679,7 @@ export default function AdminDashboard() {
           <HealthCard
             label="Restock Alerts"
             value={inventorySignals.lowStockCount || 0}
-            suffix="approved products at 5 or less"
+            suffix="live products at 5 or less"
             tone="alert"
           />
           <HealthCard

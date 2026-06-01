@@ -1,6 +1,12 @@
 import { Op } from "sequelize";
-import { Order, Notification, User, Rider } from "../models/index.js";
+import { AuditLog, Order, Notification, User, Rider } from "../models/index.js";
 import { createNotificationRecord } from "../utils/createNotificationRecord.js";
+import {
+  getMessagingRuntimeConfig,
+  retryExternalNotification,
+  sendMesejiWhatsAppText,
+  updateMessagingRuntimeConfig,
+} from "../services/MessagingService.js";
 import { serializeOrder } from "../utils/serializers.js";
 
 // GET /admin/audit?status=&rider=&date=
@@ -30,6 +36,14 @@ export const getAuditLogs = async (req, res) => {
       where: { audience: "admin" },
     });
 
+    const auditEvents = await AuditLog.findAll({
+      where: {
+        type: ["notification", "payment"],
+      },
+      order: [["created_at", "DESC"]],
+      limit: 200,
+    });
+
     const logs = [];
 
     orders.forEach((row) => {
@@ -49,6 +63,7 @@ export const getAuditLogs = async (req, res) => {
       const n = typeof nRow.toJSON === "function" ? nRow.toJSON() : nRow;
       logs.push({
         _id: n.id,
+        source: "notification_record",
         orderId: n.orderId,
         userName: n.customerName,
         riderName: n.riderName || null,
@@ -58,7 +73,31 @@ export const getAuditLogs = async (req, res) => {
         message: n.message,
         status: n.status || "logged",
         read: Boolean(n.read),
+        externalChannel: n.externalChannel || null,
+        externalStatus: n.externalStatus || null,
+        externalSentAt: n.externalSentAt || null,
+        externalError: n.externalError || null,
         createdAt: n.createdAt,
+      });
+    });
+
+    auditEvents.forEach((eventRow) => {
+      const event = typeof eventRow.toJSON === "function" ? eventRow.toJSON() : eventRow;
+      logs.push({
+        _id: `audit-${event.id}`,
+        source: "audit_log",
+        orderId: event.orderId || null,
+        userName: event.userName || null,
+        riderName: event.riderName || null,
+        type: event.type,
+        action: event.action,
+        notificationType: event.action,
+        audience: event.meta?.audience || null,
+        message: event.message,
+        status: event.meta?.skipped ? "skipped" : event.meta?.status || "logged",
+        read: true,
+        meta: event.meta || {},
+        createdAt: event.createdAt || event.created_at || null,
       });
     });
 
@@ -96,5 +135,176 @@ export const sendNotification = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to send notification" });
+  }
+};
+
+export const getMessagingSettings = async (req, res) => {
+  try {
+    const config = await getMessagingRuntimeConfig();
+    return res.json({
+      data: {
+        ...config,
+        providers: {
+          mesejiWhatsapp: {
+            configured: config.mesejiConfigured,
+            enabled: config.mesejiWhatsappEnabled,
+          },
+        },
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Failed to fetch messaging settings" });
+  }
+};
+
+export const updateMessagingSettings = async (req, res) => {
+  try {
+    const config = await updateMessagingRuntimeConfig({
+      externalChannels: req.body?.externalChannels,
+      externalTypes: req.body?.externalTypes,
+      mesejiWhatsappEnabled: req.body?.mesejiWhatsappEnabled,
+    });
+
+    await AuditLog.create({
+      userId: req.user?._id || null,
+      userName: req.user?.name || null,
+      type: "notification",
+      action: "messaging_settings_updated",
+      message: "Admin updated external messaging settings",
+      meta: {
+        externalChannels: config.externalChannels,
+        externalTypes: config.externalTypes,
+        mesejiWhatsappEnabled: config.mesejiWhatsappEnabled,
+      },
+    });
+
+    return res.json({
+      message: "Messaging settings updated",
+      data: {
+        ...config,
+        providers: {
+          mesejiWhatsapp: {
+            configured: config.mesejiConfigured,
+            enabled: config.mesejiWhatsappEnabled,
+          },
+        },
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Failed to update messaging settings" });
+  }
+};
+
+export const sendMessagingTest = async (req, res) => {
+  try {
+    const phone = String(req.body?.phone || "").trim();
+    const message = String(req.body?.message || "Test message from marketplace notifications.").trim();
+
+    if (!phone) {
+      return res.status(400).json({ message: "Phone number is required" });
+    }
+
+    const config = await getMessagingRuntimeConfig();
+    const result = await sendMesejiWhatsAppText({
+      to: phone,
+      message,
+      enabledOverride: config.mesejiWhatsappEnabled,
+    });
+
+    await AuditLog.create({
+      userId: req.user?._id || null,
+      userName: req.user?.name || null,
+      type: "notification",
+      action: "messaging_test_sent",
+      message: result.skipped ? "Admin test message was skipped" : "Admin sent a test external message",
+      meta: {
+        provider: result.provider,
+        skipped: Boolean(result.skipped),
+        reason: result.reason || null,
+        phone,
+      },
+    });
+
+    return res.json({
+      message: result.skipped ? "Test message skipped" : "Test message sent",
+      data: result,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: err.message || "Failed to send test message",
+      data: err.payload || null,
+    });
+  }
+};
+
+export const retryNotificationDelivery = async (req, res) => {
+  try {
+    const notification = await Notification.findByPk(req.params.id);
+
+    if (!notification) {
+      return res.status(404).json({ message: "Notification not found" });
+    }
+
+    if (notification.externalStatus === "sent") {
+      return res.status(400).json({ message: "Notification has already been sent externally" });
+    }
+
+    let results = null;
+
+    try {
+      results = await retryExternalNotification(notification);
+    } catch (deliveryError) {
+      notification.externalChannel = "meseji_whatsapp";
+      notification.externalStatus = "failed";
+      notification.externalError = deliveryError.message || "External delivery failed";
+      notification.externalSentAt = null;
+      await notification.save();
+      throw deliveryError;
+    }
+
+    const primary = Array.isArray(results) ? results[0] : null;
+
+    if (!primary) {
+      notification.externalChannel = null;
+      notification.externalStatus = "skipped";
+      notification.externalError = "No external channel is enabled";
+      notification.externalSentAt = null;
+    } else {
+      notification.externalChannel = primary.provider || null;
+      notification.externalStatus = primary.skipped ? "skipped" : "sent";
+      notification.externalError = primary.reason || null;
+      notification.externalSentAt = primary.skipped ? null : new Date();
+    }
+
+    await notification.save();
+
+    await AuditLog.create({
+      userId: req.user?._id || null,
+      userName: req.user?.name || null,
+      orderId: notification.orderId || null,
+      type: "notification",
+      action: "external_notification_retried",
+      message: `Admin retried external delivery for notification ${notification.id}`,
+      meta: {
+        notificationId: notification.id,
+        externalChannel: notification.externalChannel,
+        externalStatus: notification.externalStatus,
+        externalError: notification.externalError,
+      },
+    });
+
+    return res.json({
+      message: notification.externalStatus === "sent" ? "External notification sent" : "External notification skipped",
+      data: notification,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: err.message || "Failed to retry external notification",
+      data: err.payload || null,
+    });
   }
 };

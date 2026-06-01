@@ -1,12 +1,11 @@
-import dotenv from "dotenv";
+import "../config/env.js";
 import { connectDB } from "../config/db.js";
 import User from "../models/User.js";
-
-dotenv.config();
+import { requireConfiguredPassword } from "./accountSecurity.js";
 
 export const ensureAdminAccount = async ({ resetExisting = false } = {}) => {
   const email = process.env.ADMIN_EMAIL || "admin@ramla.com";
-  const password = process.env.ADMIN_PASSWORD || "Jay442tx";
+  const password = requireConfiguredPassword("ADMIN_PASSWORD");
   const name = process.env.ADMIN_NAME || "Ramla Admin";
 
   const existing = await User.findOne({ where: { email } });

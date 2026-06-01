@@ -96,12 +96,12 @@ class ProductService {
     const product = await Product.create({
       ...payload,
       createdBy: actorId || null,
-      status: actorRole === "vendor" ? "pending" : "pending",
-      approvedAt: null,
-      approvedBy: null,
+      status: "approved",
+      approvedAt: new Date(),
+      approvedBy: actorRole === "admin" ? actorId || null : null,
       reviewedAt: null,
       reviewedBy: null,
-      reviewNotes: null,
+      reviewNotes: actorRole === "vendor" ? "Auto-published by vendor." : null,
     });
 
     const createdProduct = await Product.findByPk(product.id, { include: productIncludes });
@@ -195,12 +195,12 @@ class ProductService {
     }
 
     if (actorRole === "vendor") {
-      payload.status = "pending";
-      payload.approvedAt = null;
-      payload.approvedBy = null;
+      payload.status = "approved";
+      payload.approvedAt = product.approvedAt || new Date();
+      payload.approvedBy = product.approvedBy || null;
       payload.reviewedAt = null;
       payload.reviewedBy = null;
-      payload.reviewNotes = null;
+      payload.reviewNotes = product.status === "rejected" ? "Vendor updated and republished this listing." : product.reviewNotes;
     }
 
     await product.update(payload);
