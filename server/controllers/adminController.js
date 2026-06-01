@@ -4,6 +4,7 @@ import { createNotificationRecord } from "../utils/createNotificationRecord.js";
 import {
   getMessagingRuntimeConfig,
   retryExternalNotification,
+  selectPrimaryExternalResult,
   sendMesejiWhatsAppText,
   updateMessagingRuntimeConfig,
 } from "../services/MessagingService.js";
@@ -149,6 +150,10 @@ export const getMessagingSettings = async (req, res) => {
             configured: config.mesejiConfigured,
             enabled: config.mesejiWhatsappEnabled,
           },
+          mesejiSms: {
+            configured: config.mesejiSmsConfigured,
+            enabled: config.mesejiSmsEnabled,
+          },
         },
       },
     });
@@ -164,6 +169,7 @@ export const updateMessagingSettings = async (req, res) => {
       externalChannels: req.body?.externalChannels,
       externalTypes: req.body?.externalTypes,
       mesejiWhatsappEnabled: req.body?.mesejiWhatsappEnabled,
+      mesejiSmsEnabled: req.body?.mesejiSmsEnabled,
     });
 
     await AuditLog.create({
@@ -176,6 +182,7 @@ export const updateMessagingSettings = async (req, res) => {
         externalChannels: config.externalChannels,
         externalTypes: config.externalTypes,
         mesejiWhatsappEnabled: config.mesejiWhatsappEnabled,
+        mesejiSmsEnabled: config.mesejiSmsEnabled,
       },
     });
 
@@ -187,6 +194,10 @@ export const updateMessagingSettings = async (req, res) => {
           mesejiWhatsapp: {
             configured: config.mesejiConfigured,
             enabled: config.mesejiWhatsappEnabled,
+          },
+          mesejiSms: {
+            configured: config.mesejiSmsConfigured,
+            enabled: config.mesejiSmsEnabled,
           },
         },
       },
@@ -265,7 +276,7 @@ export const retryNotificationDelivery = async (req, res) => {
       throw deliveryError;
     }
 
-    const primary = Array.isArray(results) ? results[0] : null;
+    const primary = selectPrimaryExternalResult(results);
 
     if (!primary) {
       notification.externalChannel = null;
@@ -274,9 +285,9 @@ export const retryNotificationDelivery = async (req, res) => {
       notification.externalSentAt = null;
     } else {
       notification.externalChannel = primary.provider || null;
-      notification.externalStatus = primary.skipped ? "skipped" : "sent";
+      notification.externalStatus = primary.failed ? "failed" : primary.skipped ? "skipped" : "sent";
       notification.externalError = primary.reason || null;
-      notification.externalSentAt = primary.skipped ? null : new Date();
+      notification.externalSentAt = primary.skipped || primary.failed ? null : new Date();
     }
 
     await notification.save();

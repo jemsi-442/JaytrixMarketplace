@@ -1,5 +1,8 @@
 import Notification from "../models/Notification.js";
-import { deliverExternalNotification } from "../services/MessagingService.js";
+import {
+  deliverExternalNotification,
+  selectPrimaryExternalResult,
+} from "../services/MessagingService.js";
 import { enqueueNotificationEvent, publishNotificationEvent } from "./notificationStream.js";
 
 const toPayload = (notification) => ({
@@ -80,12 +83,12 @@ export const createNotificationRecord = async ({
     userId,
   })
     .then(async (results) => {
-      const primary = Array.isArray(results) ? results[0] : null;
+      const primary = selectPrimaryExternalResult(results);
       if (!primary) return;
 
       notification.externalChannel = primary.provider || null;
-      notification.externalStatus = primary.skipped ? "skipped" : "sent";
-      notification.externalSentAt = primary.skipped ? null : new Date();
+      notification.externalStatus = primary.failed ? "failed" : primary.skipped ? "skipped" : "sent";
+      notification.externalSentAt = primary.skipped || primary.failed ? null : new Date();
       notification.externalError = primary.reason || null;
       await notification.save();
     })

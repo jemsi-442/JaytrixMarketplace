@@ -30,6 +30,7 @@ export default function AdminNotifications() {
     externalChannels: "",
     externalTypes: "",
     mesejiWhatsappEnabled: false,
+    mesejiSmsEnabled: false,
   });
   const [testPhone, setTestPhone] = useState("");
   const [savingSettings, setSavingSettings] = useState(false);
@@ -52,6 +53,7 @@ export default function AdminNotifications() {
         externalChannels: (nextSettings?.externalChannels || []).join(","),
         externalTypes: (nextSettings?.externalTypes || []).join(","),
         mesejiWhatsappEnabled: Boolean(nextSettings?.mesejiWhatsappEnabled),
+        mesejiSmsEnabled: Boolean(nextSettings?.mesejiSmsEnabled),
       });
       setError("");
     } catch (err) {
@@ -119,6 +121,7 @@ export default function AdminNotifications() {
           .map((entry) => entry.trim())
           .filter(Boolean),
         mesejiWhatsappEnabled: settingsDraft.mesejiWhatsappEnabled,
+        mesejiSmsEnabled: settingsDraft.mesejiSmsEnabled,
       });
       const nextSettings = data?.data || null;
       setSettings(nextSettings);
@@ -126,6 +129,7 @@ export default function AdminNotifications() {
         externalChannels: (nextSettings?.externalChannels || []).join(","),
         externalTypes: (nextSettings?.externalTypes || []).join(","),
         mesejiWhatsappEnabled: Boolean(nextSettings?.mesejiWhatsappEnabled),
+        mesejiSmsEnabled: Boolean(nextSettings?.mesejiSmsEnabled),
       });
       toast.success(data?.message || "Messaging settings updated");
     } catch (err) {
@@ -209,6 +213,12 @@ export default function AdminNotifications() {
               <span className={`rounded-full px-3 py-1 ${settingsDraft.mesejiWhatsappEnabled ? "bg-orange-100 text-orange-700" : "bg-slate-100 text-slate-600"}`}>
                 {settingsDraft.mesejiWhatsappEnabled ? "WhatsApp enabled" : "WhatsApp disabled"}
               </span>
+              <span className={`rounded-full px-3 py-1 ${settings?.providers?.mesejiSms?.configured ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>
+                {settings?.providers?.mesejiSms?.configured ? "Meseji SMS configured" : "SMS endpoint missing"}
+              </span>
+              <span className={`rounded-full px-3 py-1 ${settingsDraft.mesejiSmsEnabled ? "bg-blue-100 text-[#102A43]" : "bg-slate-100 text-slate-600"}`}>
+                {settingsDraft.mesejiSmsEnabled ? "SMS enabled" : "SMS disabled"}
+              </span>
             </div>
           </div>
           <div className="grid w-full gap-3 lg:max-w-xl">
@@ -217,7 +227,7 @@ export default function AdminNotifications() {
               className="input"
               value={settingsDraft.externalChannels}
               onChange={(event) => setSettingsDraft((current) => ({ ...current, externalChannels: event.target.value }))}
-              placeholder="meseji_whatsapp"
+              placeholder="meseji_whatsapp,meseji_sms"
             />
             <label className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Allowed notification types</label>
             <input
@@ -233,6 +243,13 @@ export default function AdminNotifications() {
                 className={`rounded-full border px-4 py-2 text-sm font-semibold ${settingsDraft.mesejiWhatsappEnabled ? "border-orange-300 bg-orange-50 text-orange-700" : "border-slate-200 bg-white text-slate-600"}`}
               >
                 Meseji WhatsApp {settingsDraft.mesejiWhatsappEnabled ? "On" : "Off"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setSettingsDraft((current) => ({ ...current, mesejiSmsEnabled: !current.mesejiSmsEnabled }))}
+                className={`rounded-full border px-4 py-2 text-sm font-semibold ${settingsDraft.mesejiSmsEnabled ? "border-[#102A43]/20 bg-blue-50 text-[#102A43]" : "border-slate-200 bg-white text-slate-600"}`}
+              >
+                Meseji SMS {settingsDraft.mesejiSmsEnabled ? "On" : "Off"}
               </button>
               <button type="button" onClick={saveMessagingSettings} disabled={savingSettings} className="btn-primary disabled:opacity-60">
                 {savingSettings ? "Saving..." : "Save messaging settings"}

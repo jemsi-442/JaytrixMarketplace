@@ -2,8 +2,10 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   deliverExternalNotification,
+  isMesejiSmsConfigured,
   isMesejiWhatsAppConfigured,
   normalizeWhatsAppPhone,
+  sendMesejiSmsText,
   sendMesejiWhatsAppText,
 } from "../services/MessagingService.js";
 
@@ -58,6 +60,28 @@ test("Meseji WhatsApp remains disabled until explicitly configured", async () =>
   );
 });
 
+test("Meseji SMS remains disabled until endpoint and sender are configured", async () => {
+  await withEnv(
+    {
+      MESEJI_SMS_ENABLED: "false",
+      MESEJI_API_TOKEN: "test_token",
+      MESEJI_SMS_ENDPOINT: "replace_with_meseji_sms_endpoint",
+      MESEJI_SMS_SENDER: "Ecommerce",
+      NOTIFICATION_EXTERNAL_CHANNELS: "meseji_sms",
+      MESSAGING_SETTINGS_SOURCE: "env",
+    },
+    async () => {
+      assert.equal(isMesejiSmsConfigured(), false);
+      const result = await sendMesejiSmsText({
+        to: "0712345678",
+        message: "Test SMS",
+      });
+      assert.equal(result.skipped, true);
+      assert.equal(result.provider, "meseji_sms");
+    }
+  );
+});
+
 test("external notifications are no-op unless Meseji channel is enabled", async () => {
   await withEnv(
     {
@@ -95,4 +119,49 @@ test("external notifications skip types that are not allowlisted", async () => {
       assert.match(results[0].reason, /not enabled/);
     }
   );
+});
+
+test("external notifications can use SMS when Meseji SMS channel is enabled", async () => {
+  const originalFetch = global.fetch;
+  let requestBody = null;
+
+  global.fetch = async (url, init = {}) => {
+    requestBody = JSON.parse(String(init.body || "{}"));
+    return new Response(JSON.stringify({ status: true, data: { id: "sms-test" } }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  };
+
+  try {
+    await withEnv(
+      {
+        NOTIFICATION_EXTERNAL_CHANNELS: "meseji_sms",
+        NOTIFICATION_EXTERNAL_TYPES: "rider_payment_settled",
+        MESSAGING_SETTINGS_SOURCE: "env",
+        MESEJI_SMS_ENABLED: "true",
+        MESEJI_API_TOKEN: "test_token",
+        MESEJI_SMS_ENDPOINT: "https://api.meseji.app/api/v1/sms/messages/text",
+        MESEJI_SMS_SENDER: "Ecommerce",
+      },
+      async () => {
+        const results = await deliverExternalNotification({
+          type: "rider_payment_settled",
+          phone: "0712345678",
+          message: "Rider paid",
+        });
+
+        assert.equal(results.length, 1);
+        assert.equal(results[0].skipped, false);
+        assert.equal(results[0].provider, "meseji_sms");
+        assert.deepEqual(requestBody, {
+          to: "255712345678",
+          from: "Ecommerce",
+          text: "Rider paid",
+        });
+      }
+    );
+  } finally {
+    global.fetch = originalFetch;
+  }
 });

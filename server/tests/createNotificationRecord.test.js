@@ -20,10 +20,12 @@ test("createNotificationRecord stores skipped external delivery status", async (
   const previous = {
     NOTIFICATION_EXTERNAL_CHANNELS: process.env.NOTIFICATION_EXTERNAL_CHANNELS,
     NOTIFICATION_EXTERNAL_TYPES: process.env.NOTIFICATION_EXTERNAL_TYPES,
+    MESSAGING_SETTINGS_SOURCE: process.env.MESSAGING_SETTINGS_SOURCE,
   };
 
   process.env.NOTIFICATION_EXTERNAL_CHANNELS = "meseji_whatsapp";
   process.env.NOTIFICATION_EXTERNAL_TYPES = "rider_payment_settled";
+  process.env.MESSAGING_SETTINGS_SOURCE = "env";
 
   try {
     const notification = await createNotificationRecord({
@@ -48,6 +50,12 @@ test("createNotificationRecord stores skipped external delivery status", async (
       delete process.env.NOTIFICATION_EXTERNAL_TYPES;
     } else {
       process.env.NOTIFICATION_EXTERNAL_TYPES = previous.NOTIFICATION_EXTERNAL_TYPES;
+    }
+
+    if (previous.MESSAGING_SETTINGS_SOURCE === undefined) {
+      delete process.env.MESSAGING_SETTINGS_SOURCE;
+    } else {
+      process.env.MESSAGING_SETTINGS_SOURCE = previous.MESSAGING_SETTINGS_SOURCE;
     }
   }
 });

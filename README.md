@@ -175,6 +175,9 @@ MESEJI_WHATSAPP_ENABLED=false
 MESEJI_BASE_URL=https://api.meseji.app
 MESEJI_API_TOKEN=replace_with_meseji_api_token
 MESEJI_WHATSAPP_FROM=replace_with_meseji_phone_number_id
+MESEJI_SMS_ENABLED=false
+MESEJI_SMS_ENDPOINT=replace_with_meseji_sms_endpoint
+MESEJI_SMS_SENDER=Ecommerce
 ```
 
 Flow:
@@ -190,8 +193,9 @@ Realtime notification notes:
 - Set a unique `NOTIFICATION_INSTANCE_ID` per backend instance.
 - `notification_events` acts as a MariaDB outbox so multi-instance deployments can relay notification events across instances.
 - Old outbox rows are cleaned up automatically based on `NOTIFICATION_EVENT_RETENTION_HOURS`.
-- External WhatsApp delivery is off until Meseji credentials are configured and admin enables the channel in Admin Notifications.
+- External WhatsApp/SMS delivery is off until Meseji credentials are configured and admin enables the channel in Admin Notifications.
 - Admin can retry skipped/failed external deliveries from the Notifications page without creating a duplicate in-app notification.
+- Meseji's public API docs currently document WhatsApp endpoints; SMS is supported in this code through `MESEJI_SMS_ENDPOINT` so the exact SMS endpoint can be set after confirming it from the Meseji dashboard/support.
 
 ## Marketplace Operations
 
@@ -243,12 +247,15 @@ Recommended notification env vars on multi-instance deploys:
 - `NOTIFICATION_RELAY_INTERVAL_MS=2000`
 - `NOTIFICATION_EVENT_CLEANUP_INTERVAL_MS=600000`
 - `NOTIFICATION_EVENT_RETENTION_HOURS=24`
-- `NOTIFICATION_EXTERNAL_CHANNELS=meseji_whatsapp`
+- `NOTIFICATION_EXTERNAL_CHANNELS=meseji_whatsapp,meseji_sms`
 - `NOTIFICATION_EXTERNAL_TYPES=rider_payment_settled,customer_delivery_issue_update`
 - `MESEJI_WHATSAPP_ENABLED=false`
 - `MESEJI_BASE_URL=https://api.meseji.app`
 - `MESEJI_API_TOKEN=...`
 - `MESEJI_WHATSAPP_FROM=...`
+- `MESEJI_SMS_ENABLED=false`
+- `MESEJI_SMS_ENDPOINT=...`
+- `MESEJI_SMS_SENDER=Ecommerce`
 
 Production checklist:
 

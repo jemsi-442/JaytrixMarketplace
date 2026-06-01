@@ -5,6 +5,7 @@ const SETTINGS = {
   externalChannels: "notifications.external_channels",
   externalTypes: "notifications.external_types",
   mesejiWhatsappEnabled: "meseji.whatsapp_enabled",
+  mesejiSmsEnabled: "meseji.sms_enabled",
 };
 
 const trimSlash = (value = "") => String(value || "").replace(/\/+$/, "");
@@ -27,6 +28,9 @@ const getMesejiConfig = () => ({
   baseUrl: trimSlash(process.env.MESEJI_BASE_URL || DEFAULT_MESEJI_BASE_URL),
   token: String(process.env.MESEJI_API_TOKEN || "").trim(),
   from: String(process.env.MESEJI_WHATSAPP_FROM || "").trim(),
+  smsEnabled: isEnabled(process.env.MESEJI_SMS_ENABLED),
+  smsEndpoint: String(process.env.MESEJI_SMS_ENDPOINT || "").trim(),
+  smsSender: String(process.env.MESEJI_SMS_SENDER || process.env.APP_NAME || "").trim(),
 });
 
 const getSettingValue = async (key, fallback = "") => {
@@ -51,13 +55,21 @@ export const getMessagingRuntimeConfig = async () => {
     SETTINGS.mesejiWhatsappEnabled,
     process.env.MESEJI_WHATSAPP_ENABLED || "false"
   );
+  const mesejiSmsEnabled = await getSettingValue(
+    SETTINGS.mesejiSmsEnabled,
+    process.env.MESEJI_SMS_ENABLED || "false"
+  );
 
   return {
     externalChannels: parseList(externalChannels),
     externalTypes: parseList(externalTypes),
     mesejiWhatsappEnabled: isEnabled(mesejiWhatsappEnabled),
+    mesejiSmsEnabled: isEnabled(mesejiSmsEnabled),
     mesejiConfigured: isMesejiWhatsAppConfigured({
       enabledOverride: isEnabled(mesejiWhatsappEnabled),
+    }),
+    mesejiSmsConfigured: isMesejiSmsConfigured({
+      enabledOverride: isEnabled(mesejiSmsEnabled),
     }),
   };
 };
@@ -66,15 +78,18 @@ export const updateMessagingRuntimeConfig = async ({
   externalChannels,
   externalTypes,
   mesejiWhatsappEnabled,
+  mesejiSmsEnabled,
 }) => {
   const normalizedChannels = Array.isArray(externalChannels) ? externalChannels.join(",") : String(externalChannels || "");
   const normalizedTypes = Array.isArray(externalTypes) ? externalTypes.join(",") : String(externalTypes || "");
-  const normalizedEnabled = isEnabled(mesejiWhatsappEnabled) ? "true" : "false";
+  const normalizedWhatsappEnabled = isEnabled(mesejiWhatsappEnabled) ? "true" : "false";
+  const normalizedSmsEnabled = isEnabled(mesejiSmsEnabled) ? "true" : "false";
 
   await Promise.all([
     AppSetting.upsert({ key: SETTINGS.externalChannels, value: normalizedChannels }),
     AppSetting.upsert({ key: SETTINGS.externalTypes, value: normalizedTypes }),
-    AppSetting.upsert({ key: SETTINGS.mesejiWhatsappEnabled, value: normalizedEnabled }),
+    AppSetting.upsert({ key: SETTINGS.mesejiWhatsappEnabled, value: normalizedWhatsappEnabled }),
+    AppSetting.upsert({ key: SETTINGS.mesejiSmsEnabled, value: normalizedSmsEnabled }),
   ]);
 
   return getMessagingRuntimeConfig();
@@ -84,6 +99,17 @@ export const isMesejiWhatsAppConfigured = ({ enabledOverride = null } = {}) => {
   const config = getMesejiConfig();
   const enabled = enabledOverride === null ? config.enabled : Boolean(enabledOverride);
   return enabled && isConfiguredValue(config.token) && isConfiguredValue(config.from);
+};
+
+export const isMesejiSmsConfigured = ({ enabledOverride = null } = {}) => {
+  const config = getMesejiConfig();
+  const enabled = enabledOverride === null ? config.smsEnabled : Boolean(enabledOverride);
+  return (
+    enabled &&
+    isConfiguredValue(config.token) &&
+    isConfiguredValue(config.smsEndpoint) &&
+    isConfiguredValue(config.smsSender)
+  );
 };
 
 export const normalizeWhatsAppPhone = (phone = "") => {
@@ -139,6 +165,7 @@ export const sendMesejiWhatsAppText = async ({ to, message, enabledOverride = nu
     const error = new Error(payload?.message || `Meseji WhatsApp failed with ${response.status}`);
     error.status = response.status;
     error.payload = payload;
+    error.provider = "meseji_whatsapp";
     throw error;
   }
 
@@ -149,33 +176,126 @@ export const sendMesejiWhatsAppText = async ({ to, message, enabledOverride = nu
   };
 };
 
+export const sendMesejiSmsText = async ({ to, message, enabledOverride = null }) => {
+  const config = getMesejiConfig();
+
+  if (!isMesejiSmsConfigured({ enabledOverride })) {
+    return {
+      skipped: true,
+      provider: "meseji_sms",
+      reason: "Meseji SMS is not configured",
+    };
+  }
+
+  const normalizedTo = normalizeWhatsAppPhone(to);
+  const text = String(message || "").trim();
+
+  if (!normalizedTo || !text) {
+    return {
+      skipped: true,
+      provider: "meseji_sms",
+      reason: "Missing recipient or message",
+    };
+  }
+
+  const response = await fetch(config.smsEndpoint, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${config.token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      to: normalizedTo,
+      from: config.smsSender,
+      text,
+    }),
+  });
+
+  const responseText = await response.text();
+  const payload = responseText ? JSON.parse(responseText) : null;
+
+  if (!response.ok) {
+    const error = new Error(payload?.message || `Meseji SMS failed with ${response.status}`);
+    error.status = response.status;
+    error.payload = payload;
+    error.provider = "meseji_sms";
+    throw error;
+  }
+
+  return {
+    skipped: false,
+    provider: "meseji_sms",
+    payload,
+  };
+};
+
+export const selectPrimaryExternalResult = (results = []) => {
+  if (!Array.isArray(results) || !results.length) {
+    return null;
+  }
+
+  return (
+    results.find((result) => result && !result.skipped && !result.failed) ||
+    results.find((result) => result && result.failed) ||
+    results[0]
+  );
+};
+
 export const deliverExternalNotification = async (notificationInput = {}) => {
   const runtimeConfig = await getMessagingRuntimeConfig();
   const channels = runtimeConfig.externalChannels;
   const allowedTypes = runtimeConfig.externalTypes;
   const type = String(notificationInput.type || "").trim().toLowerCase();
 
-  if (!channels.includes("meseji_whatsapp")) {
+  const enabledChannels = channels.filter((channel) =>
+    ["meseji_whatsapp", "meseji_sms"].includes(channel)
+  );
+
+  if (!enabledChannels.length) {
     return [];
   }
 
   if (!allowedTypes.includes("*") && (!type || !allowedTypes.includes(type))) {
-    return [
-      {
-        skipped: true,
-        provider: "meseji_whatsapp",
-        reason: "Notification type is not enabled for external delivery",
-      },
-    ];
+    return enabledChannels.map((channel) => ({
+      skipped: true,
+      provider: channel,
+      reason: "Notification type is not enabled for external delivery",
+    }));
   }
 
-  const result = await sendMesejiWhatsAppText({
-    to: notificationInput.phone,
-    message: notificationInput.message,
-    enabledOverride: runtimeConfig.mesejiWhatsappEnabled,
-  });
+  const deliveries = [];
 
-  return [result];
+  if (enabledChannels.includes("meseji_whatsapp")) {
+    deliveries.push(
+      sendMesejiWhatsAppText({
+        to: notificationInput.phone,
+        message: notificationInput.message,
+        enabledOverride: runtimeConfig.mesejiWhatsappEnabled,
+      })
+    );
+  }
+
+  if (enabledChannels.includes("meseji_sms")) {
+    deliveries.push(
+      sendMesejiSmsText({
+        to: notificationInput.phone,
+        message: notificationInput.message,
+        enabledOverride: runtimeConfig.mesejiSmsEnabled,
+      })
+    );
+  }
+
+  return Promise.all(
+    deliveries.map((delivery) =>
+      delivery.catch((error) => ({
+        failed: true,
+        skipped: false,
+        provider: error.provider || "meseji",
+        reason: error.message || "External delivery failed",
+        payload: error.payload || null,
+      }))
+    )
+  );
 };
 
 export const retryExternalNotification = async (notification) => {
@@ -194,8 +314,11 @@ export const retryExternalNotification = async (notification) => {
 
 export default {
   deliverExternalNotification,
+  isMesejiSmsConfigured,
   isMesejiWhatsAppConfigured,
   normalizeWhatsAppPhone,
   retryExternalNotification,
+  selectPrimaryExternalResult,
+  sendMesejiSmsText,
   sendMesejiWhatsAppText,
 };
