@@ -3,6 +3,7 @@ import { verifyToken, adminMiddleware } from "../middleware/authMiddleware.js";
 import {
   getAuditLogs,
   getMessagingSettings,
+  getMessagingSmsStats,
   retryNotificationDelivery,
   sendMessagingTest,
   sendNotification,
@@ -22,6 +23,7 @@ router.post("/notifications/send", verifyToken, adminMiddleware, sendNotificatio
 router.get("/messaging-settings", verifyToken, adminMiddleware, getMessagingSettings);
 router.patch("/messaging-settings", verifyToken, adminMiddleware, updateMessagingSettings);
 router.post("/messaging-settings/test", verifyToken, adminMiddleware, sendMessagingTest);
+router.get("/messaging-settings/sms-stats", verifyToken, adminMiddleware, getMessagingSmsStats);
 router.post("/notifications/:id/retry-external", verifyToken, adminMiddleware, retryNotificationDelivery);
 router.get("/vendor-payouts/export.csv", verifyToken, adminMiddleware, exportAdminVendorPayoutsCsv);
 router.get("/vendor-payouts", verifyToken, adminMiddleware, getAdminVendorPayouts);

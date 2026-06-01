@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   deliverExternalNotification,
+  getMesejiSmsUserStats,
   isMesejiSmsConfigured,
   isMesejiWhatsAppConfigured,
   normalizeWhatsAppPhone,
@@ -165,6 +166,50 @@ test("external notifications can use SMS when Meseji SMS channel is enabled", as
           message: "Rider paid",
           contacts: "255712345678",
         });
+      }
+    );
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+test("Meseji SMS user stats use the documented account stats endpoint", async () => {
+  const originalFetch = global.fetch;
+  let requestUrl = null;
+  let requestHeaders = null;
+
+  global.fetch = async (url, init = {}) => {
+    requestUrl = String(url);
+    requestHeaders = init.headers || {};
+    return new Response(
+      JSON.stringify({
+        total_messages_sent: 12,
+        successful_deliveries: 11,
+        failed_deliveries: 1,
+        success_rate: 91.7,
+        balance: 5000,
+      }),
+      {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }
+    );
+  };
+
+  try {
+    await withEnv(
+      {
+        MESEJI_TZ_API_KEY: "zs_test_key",
+        MESEJI_TZ_BASE_URL: "https://meseji.co.tz/api/v1",
+      },
+      async () => {
+        const result = await getMesejiSmsUserStats();
+
+        assert.equal(result.skipped, false);
+        assert.equal(result.provider, "meseji_sms");
+        assert.equal(requestUrl, "https://meseji.co.tz/api/v1/sms/user-stats");
+        assert.equal(requestHeaders["x-api-key"], "zs_test_key");
+        assert.equal(result.payload.balance, 5000);
       }
     );
   } finally {

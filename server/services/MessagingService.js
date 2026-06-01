@@ -113,6 +113,11 @@ export const isMesejiSmsConfigured = ({ enabledOverride = null } = {}) => {
   );
 };
 
+export const isMesejiSmsApiConfigured = () => {
+  const config = getMesejiConfig();
+  return isConfiguredValue(config.smsApiKey) && isConfiguredValue(config.smsBaseUrl);
+};
+
 export const normalizeWhatsAppPhone = (phone = "") => {
   const digits = String(phone || "").replace(/\D/g, "");
 
@@ -230,6 +235,43 @@ export const sendMesejiSmsText = async ({ to, message, enabledOverride = null })
   };
 };
 
+export const getMesejiSmsUserStats = async () => {
+  const config = getMesejiConfig();
+
+  if (!isMesejiSmsApiConfigured()) {
+    return {
+      skipped: true,
+      provider: "meseji_sms",
+      reason: "Meseji SMS API key is not configured",
+    };
+  }
+
+  const response = await fetch(`${config.smsBaseUrl}/sms/user-stats`, {
+    method: "GET",
+    headers: {
+      "x-api-key": config.smsApiKey,
+      "Content-Type": "application/json",
+    },
+  });
+
+  const responseText = await response.text();
+  const payload = responseText ? JSON.parse(responseText) : null;
+
+  if (!response.ok) {
+    const error = new Error(payload?.message || `Meseji SMS stats failed with ${response.status}`);
+    error.status = response.status;
+    error.payload = payload;
+    error.provider = "meseji_sms";
+    throw error;
+  }
+
+  return {
+    skipped: false,
+    provider: "meseji_sms",
+    payload,
+  };
+};
+
 export const selectPrimaryExternalResult = (results = []) => {
   if (!Array.isArray(results) || !results.length) {
     return null;
@@ -315,6 +357,8 @@ export const retryExternalNotification = async (notification) => {
 
 export default {
   deliverExternalNotification,
+  getMesejiSmsUserStats,
+  isMesejiSmsApiConfigured,
   isMesejiSmsConfigured,
   isMesejiWhatsAppConfigured,
   normalizeWhatsAppPhone,

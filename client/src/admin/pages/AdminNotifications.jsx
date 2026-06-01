@@ -26,6 +26,7 @@ export default function AdminNotifications() {
   const [markingId, setMarkingId] = useState(null);
   const [retryingId, setRetryingId] = useState(null);
   const [settings, setSettings] = useState(null);
+  const [smsStats, setSmsStats] = useState(null);
   const [settingsDraft, setSettingsDraft] = useState({
     externalChannels: "",
     externalTypes: "",
@@ -45,11 +46,13 @@ export default function AdminNotifications() {
       setLoading(true);
       const { data } = await axios.get("/admin/audit");
       const settingsResponse = await axios.get("/admin/messaging-settings");
+      const smsStatsResponse = await axios.get("/admin/messaging-settings/sms-stats");
       const logs = extractList(data, ["items"]);
       setNotifications(logs.filter((item) => item.type === "notification"));
       setPaymentLogs(logs.filter((item) => item.type === "payment"));
       const nextSettings = settingsResponse.data?.data || null;
       setSettings(nextSettings);
+      setSmsStats(smsStatsResponse.data?.data || null);
       setSettingsDraft({
         externalChannels: (nextSettings?.externalChannels || []).join(","),
         externalTypes: (nextSettings?.externalTypes || []).join(","),
@@ -210,13 +213,13 @@ export default function AdminNotifications() {
             </p>
             <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
               <span className={`rounded-full px-3 py-1 ${settings?.providers?.mesejiWhatsapp?.configured ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}`}>
-                {settings?.providers?.mesejiWhatsapp?.configured ? "Meseji configured" : "Meseji credentials missing"}
+                {settings?.providers?.mesejiWhatsapp?.configured ? "WhatsApp configured" : "WhatsApp credentials missing"}
               </span>
               <span className={`rounded-full px-3 py-1 ${settingsDraft.mesejiWhatsappEnabled ? "bg-orange-100 text-orange-700" : "bg-slate-100 text-slate-600"}`}>
                 {settingsDraft.mesejiWhatsappEnabled ? "WhatsApp enabled" : "WhatsApp disabled"}
               </span>
               <span className={`rounded-full px-3 py-1 ${settings?.providers?.mesejiSms?.configured ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>
-                {settings?.providers?.mesejiSms?.configured ? "Meseji SMS configured" : "SMS endpoint missing"}
+                {settings?.providers?.mesejiSms?.configured ? "Meseji SMS configured" : "SMS API key or sender missing"}
               </span>
               <span className={`rounded-full px-3 py-1 ${settingsDraft.mesejiSmsEnabled ? "bg-blue-100 text-[#102A43]" : "bg-slate-100 text-slate-600"}`}>
                 {settingsDraft.mesejiSmsEnabled ? "SMS enabled" : "SMS disabled"}
@@ -284,6 +287,27 @@ export default function AdminNotifications() {
                 </button>
               </div>
               <p className="mt-2 text-xs text-slate-500">Use this after adding the Meseji SMS API key or WhatsApp credentials in server env.</p>
+            </div>
+            <div className="rounded-3xl border border-[#102A43]/10 bg-blue-50/60 p-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">SMS account health</p>
+              {smsStats?.skipped ? (
+                <p className="mt-2 text-sm font-semibold text-slate-600">{smsStats.reason || "SMS stats unavailable"}</p>
+              ) : (
+                <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                  <span className="rounded-2xl bg-white px-3 py-2 font-semibold text-[#102A43]">
+                    Balance: {smsStats?.payload?.balance ?? "N/A"}
+                  </span>
+                  <span className="rounded-2xl bg-white px-3 py-2 font-semibold text-[#102A43]">
+                    Success: {smsStats?.payload?.success_rate ?? "N/A"}%
+                  </span>
+                  <span className="rounded-2xl bg-white px-3 py-2 text-xs font-semibold text-slate-600">
+                    Sent: {smsStats?.payload?.total_messages_sent ?? "N/A"}
+                  </span>
+                  <span className="rounded-2xl bg-white px-3 py-2 text-xs font-semibold text-slate-600">
+                    Failed: {smsStats?.payload?.failed_deliveries ?? "N/A"}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>

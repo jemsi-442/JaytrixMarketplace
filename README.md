@@ -147,6 +147,7 @@ Frontend default URL: `http://localhost:5173`
 - `GET /api/admin/audit`
 - `GET /api/admin/messaging-settings`
 - `PATCH /api/admin/messaging-settings`
+- `GET /api/admin/messaging-settings/sms-stats`
 - `POST /api/admin/notifications/:id/retry-external`
 - `GET /api/vendor/orders`
 - `PATCH /api/vendor/orders/:id/rider-bonus`
@@ -197,6 +198,7 @@ Realtime notification notes:
 - External WhatsApp/SMS delivery is off until Meseji credentials are configured and admin enables the channel in Admin Notifications.
 - Admin can retry skipped/failed external deliveries from the Notifications page without creating a duplicate in-app notification.
 - Meseji Tanzania SMS uses `POST /sms/send` on `https://meseji.co.tz/api/v1` with the `x-api-key` header.
+- Admin Notifications can also check Meseji SMS balance and delivery health through `GET /sms/user-stats`.
 
 ## Marketplace Operations
 

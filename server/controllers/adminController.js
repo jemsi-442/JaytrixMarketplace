@@ -3,6 +3,7 @@ import { AuditLog, Order, Notification, User, Rider } from "../models/index.js";
 import { createNotificationRecord } from "../utils/createNotificationRecord.js";
 import {
   getMessagingRuntimeConfig,
+  getMesejiSmsUserStats,
   retryExternalNotification,
   selectPrimaryExternalResult,
   sendMesejiSmsText,
@@ -260,6 +261,23 @@ export const sendMessagingTest = async (req, res) => {
     console.error(err);
     return res.status(500).json({
       message: err.message || "Failed to send test message",
+      data: err.payload || null,
+    });
+  }
+};
+
+export const getMessagingSmsStats = async (req, res) => {
+  try {
+    const result = await getMesejiSmsUserStats();
+
+    return res.json({
+      message: result.skipped ? "SMS stats skipped" : "SMS stats fetched",
+      data: result,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: err.message || "Failed to fetch SMS stats",
       data: err.payload || null,
     });
   }
