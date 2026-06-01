@@ -29,8 +29,9 @@ const getMesejiConfig = () => ({
   token: String(process.env.MESEJI_API_TOKEN || "").trim(),
   from: String(process.env.MESEJI_WHATSAPP_FROM || "").trim(),
   smsEnabled: isEnabled(process.env.MESEJI_SMS_ENABLED),
-  smsEndpoint: String(process.env.MESEJI_SMS_ENDPOINT || "").trim(),
-  smsSender: String(process.env.MESEJI_SMS_SENDER || process.env.APP_NAME || "").trim(),
+  smsBaseUrl: trimSlash(process.env.MESEJI_TZ_BASE_URL || "https://meseji.co.tz/api/v1"),
+  smsApiKey: String(process.env.MESEJI_TZ_API_KEY || "").trim(),
+  smsSenderId: String(process.env.MESEJI_SMS_SENDER_ID || process.env.APP_NAME || "").trim(),
 });
 
 const getSettingValue = async (key, fallback = "") => {
@@ -106,9 +107,9 @@ export const isMesejiSmsConfigured = ({ enabledOverride = null } = {}) => {
   const enabled = enabledOverride === null ? config.smsEnabled : Boolean(enabledOverride);
   return (
     enabled &&
-    isConfiguredValue(config.token) &&
-    isConfiguredValue(config.smsEndpoint) &&
-    isConfiguredValue(config.smsSender)
+    isConfiguredValue(config.smsApiKey) &&
+    isConfiguredValue(config.smsBaseUrl) &&
+    isConfiguredValue(config.smsSenderId)
   );
 };
 
@@ -198,16 +199,16 @@ export const sendMesejiSmsText = async ({ to, message, enabledOverride = null })
     };
   }
 
-  const response = await fetch(config.smsEndpoint, {
+  const response = await fetch(`${config.smsBaseUrl}/sms/send`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${config.token}`,
+      "x-api-key": config.smsApiKey,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      to: normalizedTo,
-      from: config.smsSender,
-      text,
+      sender_id: config.smsSenderId,
+      message: text,
+      contacts: normalizedTo,
     }),
   });
 

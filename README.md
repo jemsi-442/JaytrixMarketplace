@@ -176,8 +176,9 @@ MESEJI_BASE_URL=https://api.meseji.app
 MESEJI_API_TOKEN=replace_with_meseji_api_token
 MESEJI_WHATSAPP_FROM=replace_with_meseji_phone_number_id
 MESEJI_SMS_ENABLED=false
-MESEJI_SMS_ENDPOINT=replace_with_meseji_sms_endpoint
-MESEJI_SMS_SENDER=Ecommerce
+MESEJI_TZ_BASE_URL=https://meseji.co.tz/api/v1
+MESEJI_TZ_API_KEY=replace_with_meseji_tz_api_key
+MESEJI_SMS_SENDER_ID=MESEJI
 ```
 
 Flow:
@@ -195,7 +196,7 @@ Realtime notification notes:
 - Old outbox rows are cleaned up automatically based on `NOTIFICATION_EVENT_RETENTION_HOURS`.
 - External WhatsApp/SMS delivery is off until Meseji credentials are configured and admin enables the channel in Admin Notifications.
 - Admin can retry skipped/failed external deliveries from the Notifications page without creating a duplicate in-app notification.
-- Meseji's public API docs currently document WhatsApp endpoints; SMS is supported in this code through `MESEJI_SMS_ENDPOINT` so the exact SMS endpoint can be set after confirming it from the Meseji dashboard/support.
+- Meseji Tanzania SMS uses `POST /sms/send` on `https://meseji.co.tz/api/v1` with the `x-api-key` header.
 
 ## Marketplace Operations
 
@@ -254,8 +255,9 @@ Recommended notification env vars on multi-instance deploys:
 - `MESEJI_API_TOKEN=...`
 - `MESEJI_WHATSAPP_FROM=...`
 - `MESEJI_SMS_ENABLED=false`
-- `MESEJI_SMS_ENDPOINT=...`
-- `MESEJI_SMS_SENDER=Ecommerce`
+- `MESEJI_TZ_BASE_URL=https://meseji.co.tz/api/v1`
+- `MESEJI_TZ_API_KEY=...`
+- `MESEJI_SMS_SENDER_ID=MESEJI`
 
 Production checklist:
 

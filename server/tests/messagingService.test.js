@@ -60,13 +60,13 @@ test("Meseji WhatsApp remains disabled until explicitly configured", async () =>
   );
 });
 
-test("Meseji SMS remains disabled until endpoint and sender are configured", async () => {
+test("Meseji SMS remains disabled until API key and sender are configured", async () => {
   await withEnv(
     {
       MESEJI_SMS_ENABLED: "false",
-      MESEJI_API_TOKEN: "test_token",
-      MESEJI_SMS_ENDPOINT: "replace_with_meseji_sms_endpoint",
-      MESEJI_SMS_SENDER: "Ecommerce",
+      MESEJI_TZ_API_KEY: "replace_with_meseji_tz_api_key",
+      MESEJI_TZ_BASE_URL: "https://meseji.co.tz/api/v1",
+      MESEJI_SMS_SENDER_ID: "Ecommerce",
       NOTIFICATION_EXTERNAL_CHANNELS: "meseji_sms",
       MESSAGING_SETTINGS_SOURCE: "env",
     },
@@ -123,11 +123,15 @@ test("external notifications skip types that are not allowlisted", async () => {
 
 test("external notifications can use SMS when Meseji SMS channel is enabled", async () => {
   const originalFetch = global.fetch;
+  let requestUrl = null;
+  let requestHeaders = null;
   let requestBody = null;
 
   global.fetch = async (url, init = {}) => {
+    requestUrl = String(url);
+    requestHeaders = init.headers || {};
     requestBody = JSON.parse(String(init.body || "{}"));
-    return new Response(JSON.stringify({ status: true, data: { id: "sms-test" } }), {
+    return new Response(JSON.stringify({ status: "queued", batch_id: "sms-test" }), {
       status: 200,
       headers: { "content-type": "application/json" },
     });
@@ -140,9 +144,9 @@ test("external notifications can use SMS when Meseji SMS channel is enabled", as
         NOTIFICATION_EXTERNAL_TYPES: "rider_payment_settled",
         MESSAGING_SETTINGS_SOURCE: "env",
         MESEJI_SMS_ENABLED: "true",
-        MESEJI_API_TOKEN: "test_token",
-        MESEJI_SMS_ENDPOINT: "https://api.meseji.app/api/v1/sms/messages/text",
-        MESEJI_SMS_SENDER: "Ecommerce",
+        MESEJI_TZ_API_KEY: "zs_test_key",
+        MESEJI_TZ_BASE_URL: "https://meseji.co.tz/api/v1",
+        MESEJI_SMS_SENDER_ID: "MESEJI",
       },
       async () => {
         const results = await deliverExternalNotification({
@@ -154,10 +158,12 @@ test("external notifications can use SMS when Meseji SMS channel is enabled", as
         assert.equal(results.length, 1);
         assert.equal(results[0].skipped, false);
         assert.equal(results[0].provider, "meseji_sms");
+        assert.equal(requestUrl, "https://meseji.co.tz/api/v1/sms/send");
+        assert.equal(requestHeaders["x-api-key"], "zs_test_key");
         assert.deepEqual(requestBody, {
-          to: "255712345678",
-          from: "Ecommerce",
-          text: "Rider paid",
+          sender_id: "MESEJI",
+          message: "Rider paid",
+          contacts: "255712345678",
         });
       }
     );
