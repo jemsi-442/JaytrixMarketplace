@@ -3,6 +3,7 @@ import useNotificationStream from "./useNotificationStream";
 import useToast from "./useToast";
 
 const RECENT_NOTIFICATION_LIMIT = 40;
+const FEEDBACK_COOLDOWN_MS = 1200;
 
 const getNotificationKey = (notification = {}) => {
   const id = notification.id || notification._id;
@@ -29,6 +30,7 @@ export default function useNotificationAlerts({
 } = {}) {
   const toast = useToast();
   const recentNotificationKeys = useRef([]);
+  const lastFeedbackAt = useRef(0);
 
   const handleNotification = useCallback(
     (notification) => {
@@ -62,12 +64,19 @@ export default function useNotificationAlerts({
         );
       }
 
-      if (vibrationEnabled) {
-        triggerNotificationVibration();
-      }
+      const now = Date.now();
+      const canPlayFeedback = now - lastFeedbackAt.current >= FEEDBACK_COOLDOWN_MS;
 
-      if (soundEnabled) {
-        playNotificationChime().catch(() => {});
+      if (canPlayFeedback) {
+        lastFeedbackAt.current = now;
+
+        if (vibrationEnabled) {
+          triggerNotificationVibration();
+        }
+
+        if (soundEnabled) {
+          playNotificationChime().catch(() => {});
+        }
       }
     },
     [enabled, mode, soundEnabled, toast, vibrationEnabled]
