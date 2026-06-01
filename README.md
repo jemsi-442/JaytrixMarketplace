@@ -12,11 +12,15 @@ Ecommerce is a multi-vendor marketplace and delivery platform built for shoppers
 
 ## Core Features
 
-- User registration/login
-- Product management
+- Shopper and vendor registration with phone capture
+- Vendor storefront and product management
+- Vendor products publish immediately to avoid admin bottlenecks
 - Order lifecycle: `pending -> paid -> out_for_delivery -> delivered/cancelled/refunded`
 - Rider assignment and timeout re-assignment job
-- Admin dashboard metrics
+- Vendor-managed riders, rider bonuses, and rider settlement tracking
+- Vendor payout queue with customer dispute/review window protection
+- Realtime in-app notifications and optional Meseji WhatsApp delivery
+- Admin dashboard metrics, audit logs, and marketplace operations controls
 
 ## Project Structure
 
@@ -140,6 +144,13 @@ Frontend default URL: `http://localhost:5173`
 - `PUT /api/rider/orders/:id/reject`
 - `PUT /api/rider/orders/:id/delivered`
 - `GET /api/admin/dashboard`
+- `GET /api/admin/audit`
+- `GET /api/admin/messaging-settings`
+- `PATCH /api/admin/messaging-settings`
+- `POST /api/admin/notifications/:id/retry-external`
+- `GET /api/vendor/orders`
+- `PATCH /api/vendor/orders/:id/rider-bonus`
+- `GET /api/vendor/riders/earnings`
 - `POST /api/payments/snippe/webhook`
 
 ## Snippe Mobile Money
@@ -151,10 +162,19 @@ SNIPPE_API_KEY=your_snippe_api_key
 SNIPPE_BASE_URL=https://api.snippe.sh
 SNIPPE_WEBHOOK_SECRET=your_snippe_webhook_secret
 SNIPPE_WEBHOOK_URL=https://your-backend-domain/api/payments/snippe/webhook
+PAYOUT_DISPUTE_WINDOW_HOURS=24
+RIDER_DELIVERY_EARNING=3000
+RIDER_BONUS_MAX_AMOUNT=50000
 NOTIFICATION_INSTANCE_ID=backend-1
 NOTIFICATION_RELAY_INTERVAL_MS=2000
 NOTIFICATION_EVENT_CLEANUP_INTERVAL_MS=600000
 NOTIFICATION_EVENT_RETENTION_HOURS=24
+NOTIFICATION_EXTERNAL_CHANNELS=
+NOTIFICATION_EXTERNAL_TYPES=rider_payment_settled,customer_delivery_issue_update
+MESEJI_WHATSAPP_ENABLED=false
+MESEJI_BASE_URL=https://api.meseji.app
+MESEJI_API_TOKEN=replace_with_meseji_api_token
+MESEJI_WHATSAPP_FROM=replace_with_meseji_phone_number_id
 ```
 
 Flow:
@@ -170,6 +190,16 @@ Realtime notification notes:
 - Set a unique `NOTIFICATION_INSTANCE_ID` per backend instance.
 - `notification_events` acts as a MariaDB outbox so multi-instance deployments can relay notification events across instances.
 - Old outbox rows are cleaned up automatically based on `NOTIFICATION_EVENT_RETENTION_HOURS`.
+- External WhatsApp delivery is off until Meseji credentials are configured and admin enables the channel in Admin Notifications.
+- Admin can retry skipped/failed external deliveries from the Notifications page without creating a duplicate in-app notification.
+
+## Marketplace Operations
+
+- Vendors can create their own riders and manage rider status from the vendor dashboard.
+- Vendors can add delivery bonuses per order; rider base pay comes from `RIDER_DELIVERY_EARNING`, and bonus limits are controlled by `RIDER_BONUS_MAX_AMOUNT`.
+- Rider payments are a vendor/rider settlement matter. Vendors can mark rider jobs paid and add settlement notes.
+- Vendor payouts are protected by `PAYOUT_DISPUTE_WINDOW_HOURS`. Delivered orders stay on hold until the customer review/dispute window has passed.
+- Admin no longer needs to approve every vendor product before it appears; admin still keeps moderation power through product rejection and operations audit logs.
 
 Local webhook smoke test:
 
@@ -203,6 +233,9 @@ Required env vars on Render:
 - `SMTP_SECURE=false`
 - `SMTP_USER=...`
 - `SMTP_PASS=...`
+- `PAYOUT_DISPUTE_WINDOW_HOURS=24`
+- `RIDER_DELIVERY_EARNING=3000`
+- `RIDER_BONUS_MAX_AMOUNT=50000`
 
 Recommended notification env vars on multi-instance deploys:
 
@@ -210,6 +243,12 @@ Recommended notification env vars on multi-instance deploys:
 - `NOTIFICATION_RELAY_INTERVAL_MS=2000`
 - `NOTIFICATION_EVENT_CLEANUP_INTERVAL_MS=600000`
 - `NOTIFICATION_EVENT_RETENTION_HOURS=24`
+- `NOTIFICATION_EXTERNAL_CHANNELS=meseji_whatsapp`
+- `NOTIFICATION_EXTERNAL_TYPES=rider_payment_settled,customer_delivery_issue_update`
+- `MESEJI_WHATSAPP_ENABLED=false`
+- `MESEJI_BASE_URL=https://api.meseji.app`
+- `MESEJI_API_TOKEN=...`
+- `MESEJI_WHATSAPP_FROM=...`
 
 Production checklist:
 

@@ -151,11 +151,18 @@ const runCoreChecks = async () => {
       `Admin dashboard fetch failed: ${JSON.stringify(dashboardResponse.body)}`
     );
 
-    logStep("Fetching admin notifications");
-    const adminNotificationsResponse = await request("/notifications", { token: adminToken });
+    logStep("Fetching admin operations audit");
+    const adminNotificationsResponse = await request("/admin/audit", { token: adminToken });
     assert(
       adminNotificationsResponse.status === 200,
-      `Admin notifications fetch failed: ${JSON.stringify(adminNotificationsResponse.body)}`
+      `Admin audit fetch failed: ${JSON.stringify(adminNotificationsResponse.body)}`
+    );
+
+    logStep("Fetching admin messaging settings");
+    const messagingSettingsResponse = await request("/admin/messaging-settings", { token: adminToken });
+    assert(
+      messagingSettingsResponse.status === 200,
+      `Messaging settings fetch failed: ${JSON.stringify(messagingSettingsResponse.body)}`
     );
   }
 
