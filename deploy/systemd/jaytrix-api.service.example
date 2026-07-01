@@ -1,0 +1,17 @@
+[Unit]
+Description=JAYTRIX Marketplace API
+After=network.target mariadb.service
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/jaytrix/server
+ExecStart=/usr/bin/npm start
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+EnvironmentFile=/var/www/jaytrix/server/.env
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target

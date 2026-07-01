@@ -219,6 +219,8 @@ This sends a signed local `payment.completed` webhook for order `123` and amount
 
 ## Deploy (Render - Backend)
 
+For VPS hosting with Nginx, systemd, MariaDB, and HTTPS, see [`docs/VPS_DEPLOYMENT.md`](docs/VPS_DEPLOYMENT.md).
+
 Set:
 
 - Root Directory: `server`
