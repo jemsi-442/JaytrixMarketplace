@@ -6,6 +6,7 @@ import useNotificationAlerts from "../hooks/useNotificationAlerts";
 import useNotificationPreferences from "../hooks/useNotificationPreferences";
 import useNotificationSummary from "../hooks/useNotificationSummary";
 import CustomerSidebar from "./CustomerSidebar";
+import CustomerMobileCommerceDock from "./CustomerMobileCommerceDock";
 import CustomerTopbar from "./CustomerTopbar";
 
 export default function CustomerLayout() {
@@ -74,6 +75,7 @@ export default function CustomerLayout() {
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         <CustomerTopbar unreadCount={unreadCount} onOpenSidebar={() => setMobileSidebarOpen(true)} />
+        <CustomerMobileCommerceDock />
         <main className="min-h-0 flex-1 overflow-y-auto bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.08),transparent_30%),linear-gradient(160deg,#f8fafc_0%,#eff6ff_52%,#fff7ed_100%)]">
           <Outlet />
         </main>
