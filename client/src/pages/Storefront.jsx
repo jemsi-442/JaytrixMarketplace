@@ -168,7 +168,7 @@ export default function Storefront() {
   }
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#fff7ed_52%,#ffffff_100%)]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.08),transparent_30%),linear-gradient(180deg,#f8fafc_0%,#eff6ff_48%,#ffffff_100%)]">
       <section className="relative overflow-hidden bg-[linear-gradient(130deg,#0f172a_0%,#14532d_40%,#9a3412_100%)] text-white">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(16,185,129,0.22),transparent_34%)]" />
         <div className="relative mx-auto max-w-7xl px-4 py-12 md:px-6 md:py-16">

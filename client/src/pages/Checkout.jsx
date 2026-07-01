@@ -132,7 +132,7 @@ const Checkout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(160deg,#fffaf5_0%,#f8fafc_45%,#eef2ff_100%)] px-4 py-8 md:px-6 md:py-12">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.08),transparent_30%),linear-gradient(160deg,#f8fafc_0%,#eff6ff_48%,#ffffff_100%)] px-4 py-8 md:px-6 md:py-12">
       <div className="mx-auto max-w-6xl space-y-6">
         <section className="rounded-[32px] border border-white/80 bg-white/[0.92] p-6 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-7">
           <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
@@ -157,7 +157,7 @@ const Checkout = () => {
                   key={item.key}
                   className={`rounded-2xl border px-3 py-3 text-left text-sm shadow-sm transition ${
                     step === index
-                      ? "border-[#062A63]/15 bg-[linear-gradient(135deg,#eff6ff_0%,#fff7ed_100%)] text-[#062A63]"
+                      ? "border-[#062A63]/15 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_100%)] text-[#062A63]"
                       : "border-slate-200 bg-white text-slate-500"
                   }`}
                 >
@@ -189,7 +189,7 @@ const Checkout = () => {
 
                   <div className="rounded-[24px] border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-600">
                     <div className="flex items-start gap-3">
-                      <div className="rounded-2xl bg-amber-50 p-3 text-amber-600">
+                      <div className="rounded-2xl bg-blue-50 p-3 text-[#062A63]">
                         <FiClock />
                       </div>
                       <div>
@@ -287,7 +287,7 @@ const Checkout = () => {
                             }
                             className={`rounded-[24px] border px-4 py-3 text-left shadow-sm transition ${
                               active
-                                ? "border-[#062A63]/15 bg-[linear-gradient(135deg,#eff6ff_0%,#fff7ed_100%)]"
+                                ? "border-[#062A63]/15 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_100%)]"
                                 : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
                             }`}
                           >
@@ -333,14 +333,14 @@ const Checkout = () => {
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2">
-                  <div className="rounded-[24px] border border-slate-200 bg-[linear-gradient(135deg,#f8fafc_0%,#fff7ed_100%)] px-4 py-4 text-sm text-slate-700">
+                  <div className="rounded-[24px] border border-slate-200 bg-[linear-gradient(135deg,#f8fafc_0%,#eff6ff_100%)] px-4 py-4 text-sm text-slate-700">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Delivery plan</p>
                     <p className="mt-2 font-semibold text-slate-900">{delivery.type === 'home' ? 'Deliver to address' : 'Pickup at store'}</p>
                     <p className="mt-2 text-slate-600">{delivery.type === 'home' ? delivery.address : 'You will collect this order from the seller.'}</p>
                     <p className="mt-2 inline-flex items-center gap-2 text-slate-600"><FiMapPin /> {delivery.contactPhone}</p>
                   </div>
 
-                  <div className="rounded-[24px] border border-slate-200 bg-[linear-gradient(135deg,#f8fafc_0%,#fff7ed_100%)] px-4 py-4 text-sm text-slate-700">
+                  <div className="rounded-[24px] border border-slate-200 bg-[linear-gradient(135deg,#f8fafc_0%,#eff6ff_100%)] px-4 py-4 text-sm text-slate-700">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Payment route</p>
                     <p className="mt-2 font-semibold text-slate-900">Mobile Money</p>
                     {payment.network ? (
@@ -375,11 +375,11 @@ const Checkout = () => {
 
           <aside className="sticky top-24 h-fit space-y-4 rounded-[32px] border border-white/80 bg-white/[0.92] p-5 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-6">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-amber-500">Quick Summary</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Quick Summary</p>
               <h3 className="mt-1 text-xl font-black text-slate-900">Order Summary</h3>
             </div>
 
-            <div className="space-y-3 rounded-[24px] border border-slate-200 bg-[linear-gradient(135deg,#fffaf5_0%,#f8fafc_100%)] p-4 text-sm">
+            <div className="space-y-3 rounded-[24px] border border-slate-200 bg-[linear-gradient(135deg,#eff6ff_0%,#f8fafc_100%)] p-4 text-sm">
               <div className="flex justify-between text-slate-600">
                 <span>Subtotal</span>
                 <span>TZS {summary.subtotal.toLocaleString()}</span>
@@ -405,7 +405,7 @@ const Checkout = () => {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="rounded-2xl bg-orange-50 p-3 text-orange-700">
+                <div className="rounded-2xl bg-blue-50 p-3 text-[#062A63]">
                   <FiSmartphone />
                 </div>
                 <div>
@@ -414,7 +414,7 @@ const Checkout = () => {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="rounded-2xl bg-amber-50 p-3 text-amber-700">
+                <div className="rounded-2xl bg-slate-100 p-3 text-slate-700">
                   <FiTruck />
                 </div>
                 <div>

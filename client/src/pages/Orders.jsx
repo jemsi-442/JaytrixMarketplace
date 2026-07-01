@@ -2043,12 +2043,12 @@ export default function Orders() {
   };
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#f0fdf4_32%,#fff7ed_100%)] px-4 py-8 md:px-6 md:py-12">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.08),transparent_30%),linear-gradient(180deg,#f8fafc_0%,#eff6ff_42%,#ffffff_100%)] px-4 py-8 md:px-6 md:py-12">
       <div className="mx-auto max-w-6xl space-y-6">
         <motion.section
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="overflow-hidden rounded-[32px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#ffffff_0%,#eff6ff_48%,#fff7ed_100%)] p-6 shadow-[0_24px_50px_rgba(15,23,42,0.08)]"
+          className="overflow-hidden rounded-[32px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#ffffff_0%,#eff6ff_58%,#f8fafc_100%)] p-6 shadow-[0_24px_50px_rgba(15,23,42,0.08)]"
         >
           <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
             <div>

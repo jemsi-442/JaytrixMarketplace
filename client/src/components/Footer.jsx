@@ -1,12 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import BrandMark from "./BrandMark";
 
-function CompactFooter() {
+function SimpleFooter() {
   return (
-    <footer className="mt-12 border-t border-slate-200 bg-white/90 px-4 py-5 text-center">
-      <p className="text-xs font-medium tracking-[0.14em] text-slate-500">
-        © 2026 JAYTRIX Systems. All rights reserved.
-      </p>
+    <footer className="border-t border-slate-200/80 bg-white/[0.86] px-4 py-5 text-center backdrop-blur">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 text-xs text-slate-500 sm:flex-row">
+        <p className="font-semibold tracking-[0.14em]">© 2026 JAYTRIX Systems</p>
+        <p className="font-medium">Secure shopping, mobile money checkout, and tracked delivery.</p>
+      </div>
     </footer>
   );
 }
@@ -67,7 +68,7 @@ function FullFooter() {
 
 export default function Footer() {
   const { pathname } = useLocation();
-  const isCompact = pathname === "/shop";
+  const usesBrandFooter = pathname === "/" || pathname === "/login";
 
-  return isCompact ? <CompactFooter /> : <FullFooter />;
+  return usesBrandFooter ? <FullFooter /> : <SimpleFooter />;
 }

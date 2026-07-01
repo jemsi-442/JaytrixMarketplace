@@ -139,7 +139,7 @@ export default function Cart() {
   }
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#fff7ed_45%,#ffffff_100%)] px-4 py-8 md:px-6 md:py-12">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.08),transparent_28%),linear-gradient(180deg,#f8fafc_0%,#eff6ff_45%,#ffffff_100%)] px-4 py-8 md:px-6 md:py-12">
       <div className="mx-auto max-w-7xl space-y-8">
         <section className="rounded-[32px] border border-white/80 bg-white/[0.92] p-6 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-7">
           <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
@@ -165,7 +165,7 @@ export default function Cart() {
                   <p className="mt-1 text-slate-500">Everything here is ready for one cleaner move into checkout.</p>
                 </div>
                 <div className="flex flex-wrap gap-2 text-xs">
-                  <span className="rounded-full bg-orange-50 px-3 py-1 font-semibold text-orange-700">Mobile money checkout</span>
+                  <span className="rounded-full bg-blue-50 px-3 py-1 font-semibold text-[#062A63]">Mobile money checkout</span>
                   <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-[#062A63]">Trackable order updates</span>
                 </div>
               </div>
@@ -200,7 +200,7 @@ export default function Cart() {
                                 {ready ? 'Ready for checkout' : 'Currently unavailable'}
                               </span>
                               {saved ? (
-                                <span className="rounded-full bg-orange-50 px-3 py-1 font-semibold text-orange-700">Saved by you</span>
+                                <span className="rounded-full bg-blue-50 px-3 py-1 font-semibold text-[#062A63]">Saved by you</span>
                               ) : null}
                             </div>
                           </div>
@@ -238,7 +238,7 @@ export default function Cart() {
                             onClick={() => handleToggleSaved(item)}
                             className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${
                               saved
-                                ? 'border border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100'
+                                ? 'border border-[#062A63]/20 bg-blue-50 text-[#062A63] hover:bg-blue-100'
                                 : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
                             }`}
                           >
@@ -262,11 +262,11 @@ export default function Cart() {
           <aside>
             <div className="sticky top-24 space-y-4 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] md:p-6">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-amber-500">Checkout summary</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Checkout summary</p>
                 <h2 className="mt-1 text-xl font-black text-slate-900">Order Summary</h2>
               </div>
 
-              <div className="rounded-[24px] border border-slate-200 bg-[linear-gradient(135deg,#fffaf5_0%,#f8fafc_100%)] p-4">
+              <div className="rounded-[24px] border border-slate-200 bg-[linear-gradient(135deg,#eff6ff_0%,#f8fafc_100%)] p-4">
                 <div className="space-y-3 text-sm text-slate-700">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
@@ -302,7 +302,7 @@ export default function Cart() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="rounded-2xl bg-orange-50 p-3 text-orange-700">
+                  <div className="rounded-2xl bg-blue-50 p-3 text-[#062A63]">
                     <FiTruck />
                   </div>
                   <div>
@@ -311,7 +311,7 @@ export default function Cart() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="rounded-2xl bg-amber-50 p-3 text-amber-700">
+                  <div className="rounded-2xl bg-slate-100 p-3 text-slate-700">
                     <FiCheckCircle />
                   </div>
                   <div>

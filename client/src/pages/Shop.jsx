@@ -296,13 +296,13 @@ export default function Shop() {
   };
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#f0fdf4_28%,#fff7ed_100%)]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.08),transparent_28%),linear-gradient(180deg,#f8fafc_0%,#eff6ff_42%,#ffffff_100%)]">
       <section className="relative overflow-hidden bg-[linear-gradient(135deg,#031326_0%,#062A63_46%,#0A3A78_100%)] text-white">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(148,163,184,0.18),transparent_26%)]" />
         <div className="relative mx-auto max-w-7xl px-4 py-12 md:px-6 md:py-16">
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-orange-100">Marketplace catalog</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-100">Marketplace catalog</p>
               <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">Find the products and stores worth your attention.</h1>
               <p className="mt-4 max-w-2xl text-slate-200">
                 Browse the full marketplace, compare seller shelves, and move from discovery to checkout without friction.
@@ -383,7 +383,7 @@ export default function Shop() {
                   <button
                     type="button"
                     onClick={() => setMobileFiltersOpen((value) => !value)}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-orange-200 hover:bg-orange-50 xl:hidden"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-[#062A63]/20 hover:bg-blue-50 xl:hidden"
                   >
                     <FiSliders /> Filters
                   </button>
@@ -410,10 +410,10 @@ export default function Shop() {
             </div>
 
             {highlightedStores.length ? (
-              <div className="mt-5 rounded-[28px] border border-amber-200 bg-[linear-gradient(135deg,#fff7ed_0%,#ffffff_100%)] p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]">
+              <div className="mt-5 rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_100%)] p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]">
                 <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-amber-600">Seller shelves</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Seller shelves</p>
                     <h2 className="mt-1 text-xl font-black text-slate-900">Stores showing up in your current view</h2>
                     <p className="mt-1 text-sm text-slate-500">Move into seller-led discovery when a storefront is matching the shopping lane you opened.</p>
                   </div>
@@ -454,7 +454,7 @@ export default function Shop() {
                                 </div>
                               ) : null}
                             </div>
-                            <div className="rounded-2xl bg-amber-50 p-3 text-amber-600">
+                            <div className="rounded-2xl bg-blue-50 p-3 text-[#062A63]">
                               <FiPackage size={16} />
                             </div>
                           </div>
@@ -550,8 +550,8 @@ export default function Shop() {
                         onClick={() => handleToggleSaved(product)}
                         className={`absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border bg-white/90 transition ${
                           saved
-                            ? "border-orange-200 text-orange-500"
-                            : "border-slate-200 text-slate-600 hover:text-orange-500"
+                            ? "border-[#062A63]/20 text-[#062A63]"
+                            : "border-slate-200 text-slate-600 hover:text-[#062A63]"
                         }`}
                       >
                         <FiHeart />
@@ -563,7 +563,7 @@ export default function Shop() {
                         <div>
                           <h3 className="line-clamp-1 text-lg font-black text-slate-900">{product.name}</h3>
                           {product.vendor?.storeSlug ? (
-                            <Link to={`/stores/${product.vendor.storeSlug}`} className="mt-1 inline-flex text-sm font-medium text-amber-600 hover:text-amber-700">
+                            <Link to={`/stores/${product.vendor.storeSlug}`} className="mt-1 inline-flex text-sm font-medium text-[#062A63] hover:text-[#031326]">
                               {product.vendor.storeName || product.vendor.name}
                             </Link>
                           ) : (
@@ -586,7 +586,7 @@ export default function Shop() {
 
                       <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
                         {saved ? (
-                          <span className="rounded-full bg-orange-50 px-3 py-1 font-semibold text-orange-700">Saved by you</span>
+                          <span className="rounded-full bg-blue-50 px-3 py-1 font-semibold text-[#062A63]">Saved by you</span>
                         ) : null}
                         {detailBadges.map((badge) => (
                           <span key={badge.label} className={`rounded-full px-3 py-1 font-semibold ${getSignalToneClasses(badge.tone)}`}>
