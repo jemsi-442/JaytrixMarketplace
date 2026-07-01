@@ -126,14 +126,25 @@ export default function Cart() {
 
   if (cart.length === 0) {
     return (
-      <div className="min-h-screen bg-slate-50 px-4 py-16">
-        <div className="mx-auto max-w-3xl rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm md:p-14">
-          <FiShoppingCart className="mx-auto mb-4 text-5xl text-slate-400" />
-          <h2 className="text-3xl font-black text-slate-900">Your cart is empty</h2>
-          <p className="mt-3 text-slate-500">Add products from the marketplace first.</p>
-          <Link to="/shop" className="btn-primary mt-7 inline-flex items-center gap-2">
-            Continue shopping <FiArrowRight />
-          </Link>
+      <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.08),transparent_28%),linear-gradient(180deg,#f8fafc_0%,#eff6ff_45%,#ffffff_100%)] px-4 py-12 md:px-6">
+        <div className="mx-auto max-w-5xl space-y-6">
+          <div className="rounded-[32px] border border-slate-200 bg-white p-10 text-center shadow-[0_24px_55px_rgba(15,23,42,0.08)] md:p-14">
+            <FiShoppingCart className="mx-auto mb-4 text-5xl text-slate-400" />
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Cart checkpoint</p>
+            <h2 className="mt-2 text-3xl font-black text-slate-900">Your cart is empty right now</h2>
+            <p className="mx-auto mt-3 max-w-xl text-slate-500">
+              Start from trusted marketplace picks, reopen saved products, or return to your dashboard to continue the journey.
+            </p>
+            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+              <Link to="/shop" className="btn-primary inline-flex items-center justify-center gap-2">
+                Continue shopping <FiArrowRight />
+              </Link>
+              <Link to="/account/wishlist" className="btn-secondary inline-flex items-center justify-center gap-2">
+                <FiHeart /> Saved picks
+              </Link>
+            </div>
+          </div>
+          <CustomerJourneyStrip active="checkout" compact />
         </div>
       </div>
     );
