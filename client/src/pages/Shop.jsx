@@ -303,10 +303,10 @@ export default function Shop() {
         <div className="relative mx-auto max-w-7xl px-4 py-12 md:px-6 md:py-16">
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-100">Marketplace catalog</p>
-              <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">Find the products and stores worth your attention.</h1>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-100">Shop JAYTRIX</p>
+              <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">Find products and stores you can buy from with confidence.</h1>
               <p className="mt-4 max-w-2xl text-slate-200">
-                Browse the full marketplace, compare seller shelves, and move from discovery to checkout without friction.
+                Browse trusted shelves, compare clear choices, and move from discovery to checkout without noise.
               </p>
             </div>
 
@@ -326,12 +326,12 @@ export default function Shop() {
         <section className="mt-6 rounded-[28px] border border-slate-200 bg-white/90 p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] md:p-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Shopping lanes</p>
-              <h2 className="mt-1 text-2xl font-black text-slate-900">Open the marketplace through stronger entry points</h2>
-              <p className="mt-2 max-w-2xl text-slate-600">Pick a shopping lane to shape the shelf around speed, value, or seller discovery before you start comparing products.</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Shop your way</p>
+              <h2 className="mt-1 text-2xl font-black text-slate-900">Start with the kind of shopping trip you want</h2>
+              <p className="mt-2 max-w-2xl text-slate-600">Choose a simple path for today, then compare products, save strong picks, or continue straight to checkout.</p>
             </div>
             <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-600">
-              <FiFilter /> {activeFilterCount ? `${activeFilterCount} filter${activeFilterCount === 1 ? "" : "s"} active` : "Full marketplace view"}
+              <FiFilter /> {activeFilterCount ? `${activeFilterCount} filter${activeFilterCount === 1 ? "" : "s"} active` : "All products ready"}
             </div>
           </div>
 
