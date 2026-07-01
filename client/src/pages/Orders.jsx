@@ -125,23 +125,6 @@ export default function Orders({ view = "overview" }) {
   }, []);
 
   useEffect(() => {
-    const scrollToHashSection = () => {
-      if (typeof window === "undefined" || !window.location.hash) return;
-      const targetId = window.location.hash.replace("#", "");
-      const section = document.getElementById(targetId);
-      section?.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-
-    const timeoutId = window.setTimeout(scrollToHashSection, 250);
-    window.addEventListener("hashchange", scrollToHashSection);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-      window.removeEventListener("hashchange", scrollToHashSection);
-    };
-  }, []);
-
-  useEffect(() => {
     const deliveredProductIds = Array.from(
       new Set(
         orders
@@ -1072,7 +1055,7 @@ export default function Orders({ view = "overview" }) {
         title: "Complete your pending payment",
         description: `Order #${String(paymentOrder._id || paymentOrder.id || "").slice(-6)} is waiting for mobile money confirmation.`,
         label: "Open order",
-        targetId: "orders-list",
+        href: "/account/orders",
         tone: "blue",
       };
     }
@@ -1083,7 +1066,7 @@ export default function Orders({ view = "overview" }) {
         title: "Review your delivered item",
         description: `${nextReviewTarget.item?.name || "A delivered item"} is ready for feedback so future shoppers can buy with confidence.`,
         label: "Review now",
-        targetId: "review-reminders",
+        href: "/account/orders",
         tone: "blue",
       };
     }
@@ -1094,7 +1077,7 @@ export default function Orders({ view = "overview" }) {
         title: "Turn saved items into a cart",
         description: "Some saved products are ready now. Add them to cart when you are ready to checkout.",
         label: "Open wishlist",
-        targetId: "wishlist",
+        href: "/account/wishlist",
         tone: "blue",
       };
     }
@@ -2118,15 +2101,6 @@ export default function Orders({ view = "overview" }) {
     }
   };
 
-  const jumpToDashboardSection = (targetId) => {
-    const section = document.getElementById(targetId);
-    section?.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    if (typeof window !== "undefined") {
-      window.history.replaceState(null, "", `#${targetId}`);
-    }
-  };
-
   const isOverviewView = view === "overview";
   const showProfilePanel = isOverviewView || view === "profile";
   const showShoppingPanel = isOverviewView || view === "wishlist";
@@ -2197,7 +2171,6 @@ export default function Orders({ view = "overview" }) {
             bestMove={clientBestMove}
             activeOrder={activeOrderFocus}
             signals={clientShoppingSignals}
-            onJump={jumpToDashboardSection}
           />
         ) : null}
 
@@ -4176,26 +4149,18 @@ export default function Orders({ view = "overview" }) {
   );
 }
 
-function ClientCommandCenter({ bestMove, activeOrder, signals = [], onJump }) {
+function ClientCommandCenter({ bestMove, activeOrder, signals = [] }) {
   const activeOrderId = activeOrder?._id || activeOrder?.id;
   const activeOrderStatus = activeOrder?.status ? String(activeOrder.status).replaceAll("_", " ") : "No active order";
   const activeOrderTotal = Number(activeOrder?.totalAmount || 0);
 
-  const actionButton = bestMove?.href ? (
+  const actionButton = (
     <Link
-      to={bestMove.href}
-      className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#062A63] shadow-sm transition hover:-translate-y-0.5"
-    >
-      {bestMove.label} <FiArrowRight />
-    </Link>
-  ) : (
-    <button
-      type="button"
-      onClick={() => bestMove?.targetId && onJump?.(bestMove.targetId)}
+      to={bestMove?.href || "/shop"}
       className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#062A63] shadow-sm transition hover:-translate-y-0.5"
     >
       {bestMove?.label || "Open"} <FiArrowRight />
-    </button>
+    </Link>
   );
 
   return (
@@ -4245,20 +4210,18 @@ function ClientCommandCenter({ bestMove, activeOrder, signals = [], onJump }) {
         </div>
 
         <div className="mt-5 flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => onJump?.("orders-list")}
+          <Link
+            to="/account/orders"
             className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white"
           >
             View orders
-          </button>
-          <button
-            type="button"
-            onClick={() => onJump?.("wishlist")}
+          </Link>
+          <Link
+            to="/account/wishlist"
             className="inline-flex items-center justify-center gap-2 rounded-full border border-[#062A63]/15 bg-blue-50 px-4 py-2 text-sm font-semibold text-[#062A63] transition hover:bg-blue-100"
           >
             <FiHeart /> Saved picks
-          </button>
+          </Link>
           <Link
             to="/shop"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5"
