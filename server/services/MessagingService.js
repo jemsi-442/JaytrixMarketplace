@@ -235,6 +235,19 @@ export const sendMesejiSmsText = async ({ to, message, enabledOverride = null })
   };
 };
 
+export const normalizeMesejiSmsStats = (payload = {}) => {
+  const summary = payload.summary || payload.data || payload;
+
+  return {
+    balance: summary.balance ?? null,
+    successRate: summary.success_rate ?? summary.successRate ?? null,
+    totalSent: summary.total_messages_sent ?? summary.total_sent ?? null,
+    successfulDeliveries: summary.successful_deliveries ?? summary.total_delivered ?? null,
+    failedDeliveries: summary.failed_deliveries ?? summary.total_failed ?? null,
+    rate: summary.rate ?? null,
+  };
+};
+
 export const getMesejiSmsUserStats = async () => {
   const config = getMesejiConfig();
 
@@ -269,6 +282,7 @@ export const getMesejiSmsUserStats = async () => {
     skipped: false,
     provider: "meseji_sms",
     payload,
+    stats: normalizeMesejiSmsStats(payload),
   };
 };
 
@@ -361,6 +375,7 @@ export default {
   isMesejiSmsApiConfigured,
   isMesejiSmsConfigured,
   isMesejiWhatsAppConfigured,
+  normalizeMesejiSmsStats,
   normalizeWhatsAppPhone,
   retryExternalNotification,
   selectPrimaryExternalResult,

@@ -5,6 +5,7 @@ import {
   getMesejiSmsUserStats,
   isMesejiSmsConfigured,
   isMesejiWhatsAppConfigured,
+  normalizeMesejiSmsStats,
   normalizeWhatsAppPhone,
   selectPrimaryExternalResult,
   sendMesejiSmsText,
@@ -211,11 +212,53 @@ test("Meseji SMS user stats use the documented account stats endpoint", async ()
         assert.equal(requestUrl, "https://meseji.co.tz/api/v1/sms/user-stats");
         assert.equal(requestHeaders["x-api-key"], "zs_test_key");
         assert.equal(result.payload.balance, 5000);
+        assert.equal(result.stats.balance, 5000);
       }
     );
   } finally {
     global.fetch = originalFetch;
   }
+});
+
+test("normalizes documented and live Meseji SMS stats payload shapes", () => {
+  assert.deepEqual(
+    normalizeMesejiSmsStats({
+      total_messages_sent: 1523,
+      successful_deliveries: 1489,
+      failed_deliveries: 34,
+      success_rate: 97.8,
+      balance: 5000,
+    }),
+    {
+      balance: 5000,
+      successRate: 97.8,
+      totalSent: 1523,
+      successfulDeliveries: 1489,
+      failedDeliveries: 34,
+      rate: null,
+    }
+  );
+
+  assert.deepEqual(
+    normalizeMesejiSmsStats({
+      summary: {
+        total_sent: 1,
+        total_delivered: 1,
+        total_failed: 0,
+        success_rate: "100.00%",
+        balance: 65.66,
+        rate: 15,
+      },
+    }),
+    {
+      balance: 65.66,
+      successRate: "100.00%",
+      totalSent: 1,
+      successfulDeliveries: 1,
+      failedDeliveries: 0,
+      rate: 15,
+    }
+  );
 });
 
 test("primary external result prefers delivered SMS over skipped WhatsApp", () => {

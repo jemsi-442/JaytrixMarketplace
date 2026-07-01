@@ -295,16 +295,16 @@ export default function AdminNotifications() {
               ) : (
                 <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
                   <span className="rounded-2xl bg-white px-3 py-2 font-semibold text-[#102A43]">
-                    Balance: {smsStats?.payload?.balance ?? "N/A"}
+                    Balance: {smsStats?.stats?.balance ?? "N/A"}
                   </span>
                   <span className="rounded-2xl bg-white px-3 py-2 font-semibold text-[#102A43]">
-                    Success: {smsStats?.payload?.success_rate ?? "N/A"}%
+                    Success: {smsStats?.stats?.successRate ?? "N/A"}
                   </span>
                   <span className="rounded-2xl bg-white px-3 py-2 text-xs font-semibold text-slate-600">
-                    Sent: {smsStats?.payload?.total_messages_sent ?? "N/A"}
+                    Sent: {smsStats?.stats?.totalSent ?? "N/A"}
                   </span>
                   <span className="rounded-2xl bg-white px-3 py-2 text-xs font-semibold text-slate-600">
-                    Failed: {smsStats?.payload?.failed_deliveries ?? "N/A"}
+                    Failed: {smsStats?.stats?.failedDeliveries ?? "N/A"}
                   </span>
                 </div>
               )}
