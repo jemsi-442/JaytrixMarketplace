@@ -50,7 +50,7 @@ function FullFooter() {
           </p>
           <div className="mt-4 space-y-3 text-sm text-slate-300">
             <p>support@jaytrix.co.tz</p>
-            <p>+255 713 551 801</p>
+            <p>+255 683 186 987</p>
             <p>Dar es Salaam, Tanzania</p>
           </div>
         </div>

@@ -34,7 +34,7 @@ export default function AdminSidebar({
 
   return (
     <aside
-      className={`sticky top-0 flex h-screen shrink-0 flex-col overflow-y-auto border-r border-slate-900/10 bg-[linear-gradient(180deg,#031326_0%,#062A63_48%,#151A21_100%)] text-slate-200 transition-[width] duration-300 ease-out ${collapsed && !mobile ? "w-24" : "w-72"} ${className}`}
+      className={`sticky top-0 flex h-screen shrink-0 flex-col overflow-y-auto border-r border-slate-800 bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.18),transparent_30%),linear-gradient(180deg,#020617_0%,#0f172a_52%,#111827_100%)] text-slate-200 transition-[width] duration-300 ease-out ${collapsed && !mobile ? "w-24" : "w-72"} ${className}`}
     >
       <div className={`relative border-b border-white/10 py-6 ${collapsed && !mobile ? "px-4" : "px-6"}`}>
         <div className={`flex items-start gap-4 ${collapsed && !mobile ? "justify-center" : "justify-between"}`}>

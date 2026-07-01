@@ -352,19 +352,19 @@ export default function Home() {
   return (
     <div className="w-full overflow-hidden bg-[linear-gradient(180deg,#f8fafc_0%,#eff6ff_36%,#fff7ed_100%)] text-slate-900">
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.16),transparent_28%),radial-gradient(circle_at_top_right,rgba(148,163,184,0.12),transparent_28%),linear-gradient(135deg,#0f172a_0%,#172554_48%,#1e293b_100%)]" />
-        <div className="absolute -left-16 top-24 h-48 w-48 rounded-full bg-orange-300/20 blur-3xl" />
-        <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-slate-300/15 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.22),transparent_30%),radial-gradient(circle_at_top_right,rgba(94,164,255,0.13),transparent_30%),linear-gradient(135deg,#020617_0%,#0f172a_52%,#111827_100%)]" />
+        <div className="absolute -left-16 top-24 h-48 w-48 rounded-full bg-sky-400/18 blur-3xl" />
+        <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-blue-200/10 blur-3xl" />
 
         <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-16 md:grid-cols-[1.05fr_0.95fr] md:px-6 md:py-24">
           <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
-            <span className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-1 text-xs uppercase tracking-[0.28em] text-orange-100">
+            <span className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-1 text-xs uppercase tracking-[0.28em] text-sky-100">
               Discover trusted sellers in one place
             </span>
 
             <h1 className="mt-5 max-w-3xl text-4xl font-black leading-[1.02] tracking-tight text-white sm:text-5xl md:text-6xl">
               The marketplace built to help shoppers buy faster
-              <span className="block bg-[linear-gradient(90deg,#bfdbfe_0%,#5ea4ff_58%,#fed7aa_100%)] bg-clip-text text-transparent">
+              <span className="block bg-[linear-gradient(90deg,#e0f2fe_0%,#5ea4ff_58%,#ffffff_100%)] bg-clip-text text-transparent">
                 and sellers grow with confidence.
               </span>
             </h1>
@@ -398,14 +398,14 @@ export default function Home() {
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.55, delay: 0.1 }} className="relative">
             <div className="grid gap-4 md:grid-cols-[0.95fr_1.05fr]">
               <div className="rounded-[2rem] border border-white/10 bg-white/10 p-5 backdrop-blur-xl shadow-2xl shadow-slate-950/35">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-orange-100">Marketplace promise</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-100">Marketplace promise</p>
                 <div className="mt-5 space-y-4">
                   {trustPoints.map((item) => {
                     const Icon = item.icon;
                     return (
                       <div key={item.title} className="rounded-2xl border border-white/10 bg-slate-950/20 p-4">
                         <div className="flex items-start gap-3">
-                          <div className="rounded-2xl bg-white/10 p-3 text-orange-100">
+                          <div className="rounded-2xl bg-white/10 p-3 text-sky-100">
                             <Icon size={20} />
                           </div>
                           <div>
@@ -420,7 +420,7 @@ export default function Home() {
               </div>
 
               <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.07)_100%)] p-5 backdrop-blur-xl shadow-2xl shadow-black/35">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-orange-100">Now trending</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-100">Now trending</p>
                 <div className="mt-5 rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
                   <div className="aspect-[4/4.4] overflow-hidden rounded-[1.25rem] bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))]">
                     <img
