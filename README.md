@@ -113,9 +113,9 @@ npm run create-test-order
 
 Default local credentials:
 
-- Admin: `admin@ramla.com` / `Jay442tx`
-- Rider: `rider@ramla.com` / `Jay442tx`
-- Test customer: `customer@ramla.com` / `Jay442tx`
+- Admin: `admin@jaytrix.test` / value from `ADMIN_PASSWORD`
+- Rider: `rider@jaytrix.test` / value from `RIDER_PASSWORD`
+- Test customer: `customer@jaytrix.test` / value from `TEST_CUSTOMER_PASSWORD`
 
 ## Frontend Setup
 

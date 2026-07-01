@@ -5,7 +5,7 @@ import { requireConfiguredPassword } from "./accountSecurity.js";
 import { assignRider, getOrderVendorRiderScope } from "./assignRider.js";
 
 const ensureTestCustomer = async () => {
-  const email = process.env.TEST_CUSTOMER_EMAIL || "customer@ramla.com";
+  const email = process.env.TEST_CUSTOMER_EMAIL || "customer@jaytrix.test";
   const password = requireConfiguredPassword(
     "TEST_CUSTOMER_PASSWORD",
     "creating or resetting the test customer"

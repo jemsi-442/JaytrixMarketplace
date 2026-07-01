@@ -34,7 +34,7 @@ export const sendPasswordResetEmail = async ({ to, resetUrl, appName }) => {
     throw new Error("SMTP is not configured");
   }
 
-  const brand = appName || process.env.APP_NAME || "Ecommerce";
+  const brand = appName || process.env.APP_NAME || "JAYTRIX Systems";
 
   await getTransporter().sendMail({
     from: process.env.MAIL_FROM,
@@ -46,7 +46,7 @@ export const sendPasswordResetEmail = async ({ to, resetUrl, appName }) => {
         <h2 style="margin-bottom: 12px;">${brand} Password Reset</h2>
         <p>You requested a password reset.</p>
         <p>
-          <a href="${resetUrl}" style="display:inline-block;padding:12px 18px;background:#e11d48;color:#ffffff;text-decoration:none;border-radius:8px;">
+          <a href="${resetUrl}" style="display:inline-block;padding:12px 18px;background:#062A63;color:#ffffff;text-decoration:none;border-radius:8px;">
             Reset Password
           </a>
         </p>

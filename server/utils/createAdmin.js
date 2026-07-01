@@ -4,9 +4,9 @@ import User from "../models/User.js";
 import { requireConfiguredPassword } from "./accountSecurity.js";
 
 export const ensureAdminAccount = async ({ resetExisting = false } = {}) => {
-  const email = process.env.ADMIN_EMAIL || "admin@ramla.com";
+  const email = process.env.ADMIN_EMAIL || "admin@jaytrix.test";
   const password = requireConfiguredPassword("ADMIN_PASSWORD");
-  const name = process.env.ADMIN_NAME || "Ramla Admin";
+  const name = process.env.ADMIN_NAME || "JAYTRIX Admin";
 
   const existing = await User.findOne({ where: { email } });
 

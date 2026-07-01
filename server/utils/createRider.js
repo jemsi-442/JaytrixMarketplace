@@ -5,9 +5,9 @@ import Rider from "../models/Rider.js";
 import { requireConfiguredPassword } from "./accountSecurity.js";
 
 export const ensureRiderAccount = async () => {
-  const email = process.env.RIDER_EMAIL || "rider@ramla.com";
+  const email = process.env.RIDER_EMAIL || "rider@jaytrix.test";
   const password = requireConfiguredPassword("RIDER_PASSWORD");
-  const name = process.env.RIDER_NAME || "Ramla Rider";
+  const name = process.env.RIDER_NAME || "JAYTRIX Rider";
   const phone = process.env.RIDER_PHONE || "0713551801";
 
   let user = await User.findOne({ where: { email } });
