@@ -157,7 +157,7 @@ const cleanupOldNotificationEvents = async ({
 
   await NotificationEvent.destroy({
     where: {
-      createdAt: { [Op.lt]: cutoff },
+      created_at: { [Op.lt]: cutoff },
     },
   });
 };

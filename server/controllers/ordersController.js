@@ -234,6 +234,7 @@ const shouldCreateReplacementPayment = (error) => {
   return (
     message.includes("create a new payment") ||
     message.includes("new payment") ||
+    message.includes("only trigger push for pending payments") ||
     message.includes("not support push") ||
     message.includes("push retrigger")
   );
