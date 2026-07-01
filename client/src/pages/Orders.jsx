@@ -56,6 +56,10 @@ export default function Orders({ view = "overview" }) {
   const [activeReview, setActiveReview] = useState(null);
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [reviewCelebration, setReviewCelebration] = useState(null);
+  const [showWelcomeSetup, setShowWelcomeSetup] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem("jaytrix:customer-welcome") === "true";
+  });
   const [selectedLaneKey, setSelectedLaneKey] = useState(() => {
     if (typeof window === 'undefined') return '';
     return window.localStorage.getItem('shopper-best-lane') || '';
@@ -2273,6 +2277,17 @@ export default function Orders({ view = "overview" }) {
         </motion.section>
 
         {isOverviewView ? (
+          <CustomerWelcomeSetup
+            show={showWelcomeSetup}
+            profile={profile}
+            onDismiss={() => {
+              localStorage.removeItem("jaytrix:customer-welcome");
+              setShowWelcomeSetup(false);
+            }}
+          />
+        ) : null}
+
+        {isOverviewView ? (
           <ClientCommandCenter
             bestMove={clientBestMove}
             activeOrder={activeOrderFocus}
@@ -4264,6 +4279,80 @@ export default function Orders({ view = "overview" }) {
         />
       ) : null}
     </div>
+  );
+}
+
+function CustomerWelcomeSetup({ show, profile, onDismiss }) {
+  if (!show) {
+    return null;
+  }
+
+  const setupCards = [
+    {
+      title: "Secure mobile money",
+      description: "You approve payment on your phone before money leaves your account.",
+      icon: FiShield,
+    },
+    {
+      title: "Tracked delivery",
+      description: "Payment and delivery progress stays visible inside your dashboard.",
+      icon: FiClock,
+    },
+    {
+      title: "Trusted shopping",
+      description: "Save products, compare stores, and review delivered items with confidence.",
+      icon: FiHeart,
+    },
+  ];
+
+  return (
+    <section className="overflow-hidden rounded-[32px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#031326_0%,#062A63_55%,#0A3A78_100%)] p-5 text-white shadow-[0_24px_60px_rgba(2,6,23,0.18)] md:p-6">
+      <div className="grid gap-5 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-100">Welcome to JAYTRIX</p>
+          <h2 className="mt-3 text-3xl font-black tracking-tight">Your shopping account is ready, {profile.name || "shopper"}.</h2>
+          <p className="mt-3 text-sm leading-6 text-slate-200">
+            Start from trusted products, keep your phone ready for payment prompts, and track everything from this dashboard.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            <Link
+              to="/shop"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#062A63] transition hover:-translate-y-0.5"
+            >
+              Explore marketplace <FiArrowRight />
+            </Link>
+            <Link
+              to="/account/profile"
+              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/15"
+            >
+              Complete profile
+            </Link>
+            <button
+              type="button"
+              onClick={onDismiss}
+              className="inline-flex items-center justify-center rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+            >
+              I understand
+            </button>
+          </div>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-3">
+          {setupCards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <div key={card.title} className="rounded-2xl border border-white/10 bg-white/[0.08] p-4">
+                <div className="rounded-2xl bg-white/10 p-3 text-white w-fit">
+                  <Icon />
+                </div>
+                <h3 className="mt-4 font-black text-white">{card.title}</h3>
+                <p className="mt-2 text-sm leading-5 text-slate-300">{card.description}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }
 

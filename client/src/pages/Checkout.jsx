@@ -5,6 +5,7 @@ import api from "../utils/axios";
 import PaymentNetworkBadge from "../components/PaymentNetworkBadge";
 import { useCart } from "../hooks/useCart";
 import { useToast } from "../hooks/useToast";
+import { useAuth } from "../hooks/useAuth";
 import { MOBILE_PAYMENT_NETWORK_OPTIONS } from "../utils/paymentNetworkLogo";
 import {
   detectMobileNetworkFromPhone,
@@ -21,6 +22,7 @@ const STEPS = [
 const Checkout = () => {
   const { cart, clearCart } = useCart();
   const toast = useToast();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const cartItems = cart;
   const [step, setStep] = useState(0);
@@ -29,7 +31,7 @@ const Checkout = () => {
   const [delivery, setDelivery] = useState({
     type: "home",
     address: "",
-    contactPhone: "",
+    contactPhone: user?.phone || "",
   });
 
   const [payment, setPayment] = useState({
@@ -56,6 +58,12 @@ const Checkout = () => {
     payment.method === "mobile_money" && delivery.contactPhone && payment.network
       ? validatePhoneForNetwork(delivery.contactPhone, payment.network)
       : null;
+
+  useEffect(() => {
+    if (user?.phone && !delivery.contactPhone) {
+      setDelivery((current) => ({ ...current, contactPhone: user.phone }));
+    }
+  }, [delivery.contactPhone, user?.phone]);
 
   useEffect(() => {
     if (!inferredNetwork) {
@@ -356,6 +364,20 @@ const Checkout = () => {
                     {payment.method === "mobile_money" && phoneNetworkValidation && !phoneNetworkValidation.valid ? (
                       <p className="mt-2 text-sm text-red-600">{phoneNetworkValidation.message}</p>
                     ) : null}
+                  </div>
+                </div>
+
+                <div className="rounded-[24px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_100%)] px-4 py-4">
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-2xl bg-blue-50 p-3 text-[#062A63]">
+                      <FiShield />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-slate-900">Before money leaves your account</p>
+                      <p className="mt-1 text-sm leading-6 text-slate-600">
+                        JAYTRIX creates your order first, sends one mobile money prompt, and you approve payment on your phone. If the prompt is not approved, the dashboard keeps the order visible for retry or support.
+                      </p>
+                    </div>
                   </div>
                 </div>
 

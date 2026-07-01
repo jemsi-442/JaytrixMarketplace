@@ -66,7 +66,8 @@ export default function Register() {
           navigate("/vendor", { replace: true });
           break;
         default:
-          navigate("/shop", { replace: true });
+          localStorage.setItem("jaytrix:customer-welcome", "true");
+          navigate("/account", { replace: true });
       }
     } catch (err) {
       setError(err.response?.data?.message || "Failed to create account.");

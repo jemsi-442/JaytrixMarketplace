@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { FiCheckCircle, FiHeart, FiMinus, FiPlus, FiShoppingBag, FiStar, FiXCircle } from "react-icons/fi";
+import { FiCheckCircle, FiCreditCard, FiHeart, FiMinus, FiPlus, FiShield, FiShoppingBag, FiStar, FiTruck, FiXCircle } from "react-icons/fi";
 import { Link, useParams } from "react-router-dom";
 import RecommendationShelf from "../components/RecommendationShelf";
 import api from "../utils/axios";
@@ -32,6 +32,65 @@ function RatingStars({ value = 0, className = "h-4 w-4" }) {
           />
         );
       })}
+    </div>
+  );
+}
+
+function ProductTrustPanel({ availableStock = 0, reviewCount = 0, storeName = "Marketplace seller" }) {
+  const signals = [
+    {
+      title: "Protected checkout",
+      description: "Mobile money payment is requested only after you review the order.",
+      icon: FiShield,
+    },
+    {
+      title: availableStock > 0 ? "Ready stock" : "Stock check needed",
+      description: availableStock > 0
+        ? `${availableStock} item${availableStock === 1 ? "" : "s"} available before checkout.`
+        : "This item is currently unavailable for checkout.",
+      icon: FiCheckCircle,
+    },
+    {
+      title: "Tracked delivery",
+      description: "Payment and delivery progress will appear in your dashboard.",
+      icon: FiTruck,
+    },
+    {
+      title: "Trusted seller",
+      description: `${storeName} is visible before you add this product to cart.`,
+      icon: FiCreditCard,
+    },
+  ];
+
+  return (
+    <div className="mt-5 rounded-[26px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_58%,#fff7ed_100%)] p-4">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#062A63]">Buyer protection</p>
+          <h3 className="mt-1 text-lg font-black text-slate-900">Confidence before you add to cart</h3>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600 shadow-sm">
+          {reviewCount ? `${reviewCount} shopper review${reviewCount === 1 ? "" : "s"}` : "Review signal building"}
+        </span>
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        {signals.map((signal) => {
+          const Icon = signal.icon;
+          return (
+            <div key={signal.title} className="rounded-2xl border border-white/80 bg-white/85 p-3">
+              <div className="flex items-start gap-3">
+                <div className="rounded-2xl bg-blue-50 p-2.5 text-[#062A63]">
+                  <Icon />
+                </div>
+                <div>
+                  <p className="text-sm font-black text-slate-900">{signal.title}</p>
+                  <p className="mt-1 text-xs leading-5 text-slate-600">{signal.description}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -372,6 +431,12 @@ export default function ProductDetails() {
                 </Link>
               </div>
             ) : null}
+
+            <ProductTrustPanel
+              availableStock={availableStock}
+              reviewCount={ratingSummary.reviewCount}
+              storeName={product.vendor?.storeName || product.vendor?.name || "Marketplace seller"}
+            />
 
             {product.variants?.length > 0 ? (
               <div className="mt-7">
