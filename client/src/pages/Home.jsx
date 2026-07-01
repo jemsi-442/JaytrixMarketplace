@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiArrowRight, FiShield, FiStar, FiTruck } from "react-icons/fi";
+import { FiArrowRight, FiCreditCard, FiShield, FiStar, FiTruck, FiUsers } from "react-icons/fi";
 import { useAuth } from "../hooks/useAuth";
 import MarketplaceRating from "../components/MarketplaceRating";
 import api from "../utils/axios";
@@ -11,39 +11,57 @@ import { PLACEHOLDER_IMAGE, resolveImageUrl } from "../utils/image";
 const trustPoints = [
   {
     icon: FiShield,
-    title: "Trusted sellers",
-    desc: "Every store on the marketplace goes through review before products go live.",
+    title: "Buy with confidence",
+    desc: "Shop from sellers built for reliability, clear prices, and a smoother buying experience.",
   },
   {
     icon: FiTruck,
-    title: "Smooth delivery",
-    desc: "Orders, payments, and rider handoff stay clear from checkout to doorstep.",
+    title: "Delivery you can follow",
+    desc: "From payment to doorstep, your order journey stays visible and easy to understand.",
   },
   {
     icon: FiStar,
-    title: "Better picks",
-    desc: "Shoppers see stronger products first, while sellers get space to build a brand.",
+    title: "Better choices faster",
+    desc: "Find products that feel worth your money without searching through unnecessary noise.",
   },
 ];
 
 const quickCollections = [
   {
-    title: "Fresh arrivals",
-    subtitle: "Recently added pieces shoppers are starting to notice.",
+    title: "New arrivals",
+    subtitle: "Fresh picks from active sellers.",
     search: "new",
     color: "from-[#062A63] via-[#07306B] to-[#0B5FFF]",
   },
   {
-    title: "Best value",
-    subtitle: "Easy picks for customers who want strong value at a good price.",
+    title: "Smart value",
+    subtitle: "Good choices for everyday budgets.",
     price: "0-50000",
     color: "from-[#0B5FFF] via-[#1273FF] to-[#5EA4FF]",
   },
   {
-    title: "Statement picks",
-    subtitle: "Premium products that deserve the front row of the marketplace.",
+    title: "Premium picks",
+    subtitle: "Standout products for bigger moments.",
     price: "100000-10000000",
     color: "from-[#062A63] via-[#0A3A78] to-[#0B5FFF]",
+  },
+];
+
+const businessHighlights = [
+  {
+    icon: FiUsers,
+    title: "For shoppers",
+    desc: "A calmer place to discover products, save favorites, pay, and follow orders in one account.",
+  },
+  {
+    icon: FiStar,
+    title: "For sellers",
+    desc: "A stronger storefront experience that helps good products earn trust and repeat customers.",
+  },
+  {
+    icon: FiCreditCard,
+    title: "For payments",
+    desc: "Mobile money checkout is kept close to the order journey so customers know what happens next.",
   },
 ];
 
@@ -118,31 +136,31 @@ export default function Home() {
         <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-16 md:grid-cols-[1.05fr_0.95fr] md:px-6 md:py-24">
           <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
             <span className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-1 text-xs uppercase tracking-[0.28em] text-sky-100">
-              Discover trusted sellers in one place
+              JAYTRIX marketplace
             </span>
 
             <h1 className="mt-5 max-w-3xl text-4xl font-black leading-[1.02] tracking-tight text-white sm:text-5xl md:text-6xl">
-              The marketplace built to help shoppers buy faster
+              A smarter way to shop from trusted local sellers
               <span className="block bg-[linear-gradient(90deg,#e0f2fe_0%,#5ea4ff_58%,#ffffff_100%)] bg-clip-text text-transparent">
-                and sellers grow with confidence.
+                with payment and delivery made clear.
               </span>
             </h1>
 
             <p className="mt-6 max-w-2xl text-base text-slate-200 md:text-lg">
-              Explore live products, discover branded stores, pay with mobile money, and follow every order from checkout to delivery without the usual guesswork.
+              JAYTRIX brings shoppers, sellers, payments, and delivery into one polished marketplace experience built for confidence, speed, and repeat business.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link to="/account/shop" className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_32px_rgba(6,42,99,0.32)] transition hover:-translate-y-0.5">
-                Explore Marketplace <FiArrowRight />
+                Start shopping <FiArrowRight />
               </Link>
               {!user ? (
                 <Link to="/register" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/15">
-                  Open Your Account
+                  Create your account
                 </Link>
               ) : (
                 <Link to="/account/orders" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/15">
-                  Open My Dashboard
+                  Go to my account
                 </Link>
               )}
             </div>
@@ -162,16 +180,16 @@ export default function Home() {
             ) : null}
 
             <div className="mt-10 grid gap-3 sm:grid-cols-3">
-              <StatPill label="Live products" value={marketplaceStats.products} />
-              <StatPill label="Active stores" value={marketplaceStats.stores} />
-              <StatPill label="Ready to ship" value={marketplaceStats.readyToShip} />
+              <StatPill label="Products listed" value={marketplaceStats.products} />
+              <StatPill label="Seller shelves" value={marketplaceStats.stores} />
+              <StatPill label="Ready now" value={marketplaceStats.readyToShip} />
             </div>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.55, delay: 0.1 }} className="relative">
             <div className="grid gap-4 md:grid-cols-[0.95fr_1.05fr]">
               <div className="rounded-[2rem] border border-white/10 bg-white/10 p-5 backdrop-blur-xl shadow-2xl shadow-slate-950/35">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-100">Marketplace promise</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-100">Why customers choose us</p>
                 <div className="mt-5 space-y-4">
                   {trustPoints.map((item) => {
                     const Icon = item.icon;
@@ -193,20 +211,20 @@ export default function Home() {
               </div>
 
               <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.07)_100%)] p-5 backdrop-blur-xl shadow-2xl shadow-black/35">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-100">Now trending</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-100">Featured today</p>
                 <div className="mt-5 rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
                   <div className="aspect-[4/4.4] overflow-hidden rounded-[1.25rem] bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))]">
                     <img
                       src={featuredProducts[0]?.image || '/images/hero-bag.png'}
-                      alt={featuredProducts[0]?.name || 'Marketplace hero product'}
+                      alt={featuredProducts[0]?.name || 'Featured marketplace product'}
                       className="h-full w-full object-cover"
                     />
                   </div>
                   <div className="mt-4 flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-sm font-semibold text-white">{featuredProducts[0]?.name || 'Seller-ready featured product'}</p>
+                      <p className="text-sm font-semibold text-white">{featuredProducts[0]?.name || 'Featured marketplace pick'}</p>
                       <p className="mt-1 text-sm text-slate-300">
-                        {featuredProducts[0]?.vendor?.storeName || featuredProducts[0]?.vendor?.name || 'Curated marketplace pick'}
+                        {featuredProducts[0]?.vendor?.storeName || featuredProducts[0]?.vendor?.name || 'Selected from trusted sellers'}
                       </p>
                       {featuredProducts[0] ? (
                         <div className="mt-3">
@@ -220,7 +238,7 @@ export default function Home() {
                       ) : null}
                     </div>
                     <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-orange-100">
-                      {featuredProducts[0]?.price ? `TZS ${Number(featuredProducts[0].price).toLocaleString()}` : 'Top pick'}
+                      {featuredProducts[0]?.price ? `TZS ${Number(featuredProducts[0].price).toLocaleString()}` : 'Featured'}
                     </span>
                   </div>
                 </div>
@@ -249,29 +267,29 @@ export default function Home() {
         <div className="overflow-hidden rounded-[34px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#ffffff_0%,#eff6ff_52%,#fff7ed_100%)] p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] md:p-8">
           <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">One customer hub</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Everything in one account</p>
               <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-900 md:text-4xl">
-                Shopping, saved picks, checkout, and tracking now live inside your dashboard.
+                Shop, pay, save favorites, and track orders without moving between different places.
               </h2>
               <p className="mt-3 max-w-2xl text-slate-600">
-                The home page introduces JAYTRIX. Once a customer signs in, the full shopping journey stays in one private workspace with sidebar navigation, cart, payment, updates, and orders together.
+                Once you sign in, your marketplace account becomes your shopping home. Products, cart, payment, order updates, and support stay close so the buying journey feels simple.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link to="/account" className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5">
-                  Open dashboard <FiArrowRight />
+                  Open my account <FiArrowRight />
                 </Link>
                 <Link to="/account/shop" className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-                  Shop inside dashboard
+                  Browse products
                 </Link>
               </div>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">
               {[
-                ["Shop", "Browse products without leaving the customer hub."],
-                ["Cart & payment", "Review the basket and approve mobile money in one place."],
-                ["Saved picks", "Keep products and stores ready for later."],
-                ["Orders", "Track payment, delivery, and support updates together."],
+                ["Discover", "Browse clear product choices from sellers ready to serve."],
+                ["Save", "Keep favorite products and stores for the right buying moment."],
+                ["Pay", "Checkout with mobile money and know exactly what is next."],
+                ["Track", "Follow orders, delivery, and support updates from your account."],
               ].map(([title, text]) => (
                 <div key={title} className="rounded-3xl border border-white/80 bg-white/80 p-5 shadow-sm">
                   <p className="font-black text-slate-900">{title}</p>
@@ -280,6 +298,23 @@ export default function Home() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 pb-14 md:px-6 md:pb-20">
+        <div className="grid gap-4 md:grid-cols-3">
+          {businessHighlights.map((item) => {
+            const Icon = item.icon;
+            return (
+              <div key={item.title} className="rounded-[30px] border border-slate-200 bg-white/85 p-6 shadow-[0_18px_42px_rgba(15,23,42,0.06)]">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#062A63] text-white">
+                  <Icon size={20} />
+                </div>
+                <h3 className="mt-5 text-xl font-black text-slate-900">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{item.desc}</p>
+              </div>
+            );
+          })}
         </div>
       </section>
     </div>
