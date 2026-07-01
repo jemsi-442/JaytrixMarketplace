@@ -133,8 +133,6 @@ Frontend default URL: `http://localhost:5173`
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
-- `POST /api/auth/forgot-password`
-- `POST /api/auth/reset-password`
 - `GET /api/products`
 - `POST /api/orders`
 - `PUT /api/orders/:id/pay`
@@ -325,4 +323,4 @@ npm run smoke:postdeploy
 - Do not commit real secrets in `.env`.
 - Keep `server/.env` ignored in git.
 - Local uploads are stored in `server/uploads/` when Cloudinary is not configured.
-- Forgot-password emails use SMTP in production; without SMTP the reset link is only exposed in local development.
+- Account recovery is currently handled through JAYTRIX support until the secure recovery flow is enabled.

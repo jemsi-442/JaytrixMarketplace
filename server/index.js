@@ -23,7 +23,6 @@ import { riderAutoTimeout } from "./jobs/riderTimeout.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 import { isCloudinaryConfigured } from "./middleware/uploadMiddleware.js";
 import { isUnsafeConfiguredPassword } from "./utils/accountSecurity.js";
-import { isSmtpConfigured } from "./utils/mailer.js";
 import { ensureAdminAccount } from "./utils/createAdmin.js";
 import { isSnippeConfigured, isSnippeWebhookConfigured } from "./utils/snippe.js";
 import { startNotificationEventRelay } from "./utils/notificationStream.js";
@@ -84,10 +83,6 @@ const validateProductionEnv = () => {
 
   if (!isCloudinaryConfigured()) {
     throw new Error("Cloudinary must be configured in production to keep uploads outside the app server");
-  }
-
-  if (!isSmtpConfigured()) {
-    console.warn(" SMTP is not configured. Forgot-password emails will not be delivered in production.");
   }
 
   if (!isSnippeConfigured()) {

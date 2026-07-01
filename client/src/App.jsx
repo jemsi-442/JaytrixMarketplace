@@ -20,8 +20,6 @@ const Checkout = lazy(() => import("./pages/Checkout"));
 const Orders = lazy(() => import("./pages/Orders"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
-const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
-const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Storefront = lazy(() => import("./pages/Storefront"));
 
 const AdminDashboard = lazy(() => import("./admin/pages/AdminDashboard"));
@@ -84,8 +82,6 @@ export default function App() {
           />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="reset-password" element={<ResetPassword />} />
           <Route path="stores/:slug" element={<Storefront />} />
         </Route>
 
