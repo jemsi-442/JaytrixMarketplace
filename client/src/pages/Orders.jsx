@@ -125,6 +125,23 @@ export default function Orders() {
   }, []);
 
   useEffect(() => {
+    const scrollToHashSection = () => {
+      if (typeof window === "undefined" || !window.location.hash) return;
+      const targetId = window.location.hash.replace("#", "");
+      const section = document.getElementById(targetId);
+      section?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    const timeoutId = window.setTimeout(scrollToHashSection, 250);
+    window.addEventListener("hashchange", scrollToHashSection);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      window.removeEventListener("hashchange", scrollToHashSection);
+    };
+  }, []);
+
+  useEffect(() => {
     const deliveredProductIds = Array.from(
       new Set(
         orders
@@ -2101,19 +2118,29 @@ export default function Orders() {
     }
   };
 
+  const jumpToDashboardSection = (targetId) => {
+    const section = document.getElementById(targetId);
+    section?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", `#${targetId}`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.08),transparent_30%),linear-gradient(180deg,#f8fafc_0%,#eff6ff_42%,#ffffff_100%)] px-4 py-8 md:px-6 md:py-12">
       <div className="mx-auto max-w-6xl space-y-6">
         <motion.section
+          id="customer-dashboard"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           className="overflow-hidden rounded-[32px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#ffffff_0%,#eff6ff_58%,#f8fafc_100%)] p-6 shadow-[0_24px_50px_rgba(15,23,42,0.08)]"
         >
           <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Customer account</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">My dashboard</p>
               <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-900 md:text-4xl">Welcome back, {profile.name || user?.name || "shopper"}.</h1>
-              <p className="mt-3 max-w-2xl text-slate-600">Track orders, refresh mobile money payments, manage your contact details, and keep an eye on store updates in one clean account view.</p>
+              <p className="mt-3 max-w-2xl text-slate-600">Your shopping control center: active orders, payments, saved picks, trusted stores, updates, and support in one polished place.</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <SummaryCard label="Orders placed" value={orderStats.totalOrders} />
@@ -2124,31 +2151,36 @@ export default function Orders() {
           </div>
         </motion.section>
 
+        <CustomerDashboardNav
+          stats={{
+            orders: orderStats.totalOrders,
+            saved: savedProducts.length,
+            updates: orderStats.unread,
+            profileReady: profile.phone ? 1 : 0,
+          }}
+          onJump={jumpToDashboardSection}
+        />
+
         <ClientCommandCenter
           bestMove={clientBestMove}
           activeOrder={activeOrderFocus}
           signals={clientShoppingSignals}
-          onJump={(targetId) => {
-            const section = document.getElementById(targetId);
-            section?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }}
+          onJump={jumpToDashboardSection}
         />
 
         <CustomerCarePanel
           supportPhone="+255 683 186 987"
-          onJump={(targetId) => {
-            const section = document.getElementById(targetId);
-            section?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }}
+          onJump={jumpToDashboardSection}
         />
 
         <div className="grid gap-6 xl:grid-cols-[360px_minmax(0,1fr)]">
           <div className="space-y-6">
             <motion.section
+              id="profile-section"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.04 }}
-              className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]"
+              className="scroll-mt-28 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]"
             >
               <div className="flex items-center gap-3">
                 <div className="rounded-2xl bg-slate-100 p-3 text-[#062A63]">
@@ -2239,15 +2271,16 @@ export default function Orders() {
             </motion.section>
 
             <motion.section
+              id="wishlist"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]"
+              className="scroll-mt-28 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]"
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Saved products</p>
-                  <h2 id="wishlist" className="mt-1 text-lg font-black text-slate-900">Your wishlist</h2>
+                  <h2 className="mt-1 text-lg font-black text-slate-900">Your wishlist</h2>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                   <div className="rounded-full bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-700">
@@ -2492,10 +2525,11 @@ export default function Orders() {
 
           <div className="space-y-6">
             <motion.section
+              id="account-updates"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.06 }}
-              className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]"
+              className="scroll-mt-28 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]"
             >
               <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>
@@ -4108,6 +4142,75 @@ export default function Orders() {
   );
 }
 
+function CustomerDashboardNav({ stats, onJump }) {
+  const items = [
+    {
+      label: "Overview",
+      targetId: "account-overview",
+      value: "Home",
+      icon: FiShoppingBag,
+    },
+    {
+      label: "Orders",
+      targetId: "orders-list",
+      value: stats.orders,
+      icon: FiClock,
+    },
+    {
+      label: "Saved",
+      targetId: "wishlist",
+      value: stats.saved,
+      icon: FiHeart,
+    },
+    {
+      label: "Updates",
+      targetId: "account-updates",
+      value: stats.updates,
+      icon: FiBell,
+    },
+    {
+      label: "Profile",
+      targetId: "profile-section",
+      value: stats.profileReady ? "Ready" : "Open",
+      icon: FiUser,
+    },
+    {
+      label: "Support",
+      targetId: "support-center",
+      value: "Help",
+      icon: FiShield,
+    },
+  ];
+
+  return (
+    <nav className="sticky top-20 z-20 rounded-[28px] border border-white/80 bg-white/90 p-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)] backdrop-blur">
+      <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-6">
+        {items.map((item) => {
+          const Icon = item.icon;
+          return (
+            <button
+              key={item.targetId}
+              type="button"
+              onClick={() => onJump?.(item.targetId)}
+              className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-left transition hover:-translate-y-0.5 hover:border-[#062A63]/20 hover:bg-white hover:shadow-sm"
+            >
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white text-[#062A63] shadow-sm transition group-hover:bg-[#062A63] group-hover:text-white">
+                <Icon />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-sm font-black text-slate-900">{item.label}</span>
+                <span className="block truncate text-xs font-semibold text-slate-500">
+                  {typeof item.value === "number" ? Number(item.value || 0).toLocaleString() : item.value}
+                </span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}
+
 function ClientCommandCenter({ bestMove, activeOrder, signals = [], onJump }) {
   const activeOrderId = activeOrder?._id || activeOrder?.id;
   const activeOrderStatus = activeOrder?.status ? String(activeOrder.status).replaceAll("_", " ") : "No active order";
@@ -4131,7 +4234,7 @@ function ClientCommandCenter({ bestMove, activeOrder, signals = [], onJump }) {
   );
 
   return (
-    <section className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+    <section id="account-overview" className="grid scroll-mt-28 gap-4 lg:grid-cols-[1.1fr_0.9fr]">
       <div className="overflow-hidden rounded-[30px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#031326_0%,#0f172a_55%,#111827_100%)] p-5 text-white shadow-[0_24px_60px_rgba(2,6,23,0.18)] md:p-6">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
@@ -4220,7 +4323,7 @@ function CustomerCarePanel({ supportPhone, onJump }) {
   ];
 
   return (
-    <section className="rounded-[30px] border border-slate-200 bg-white/90 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] backdrop-blur md:p-6">
+    <section id="support-center" className="scroll-mt-28 rounded-[30px] border border-slate-200 bg-white/90 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] backdrop-blur md:p-6">
       <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div>
           <div className="inline-flex items-center gap-2 rounded-full border border-[#062A63]/10 bg-blue-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#062A63]">
