@@ -6,6 +6,7 @@ import api from "../utils/axios";
 import { extractList } from "../utils/apiShape";
 import RecommendationShelf from "../components/RecommendationShelf";
 import MarketplaceRating from "../components/MarketplaceRating";
+import CustomerJourneyStrip from "../components/CustomerJourneyStrip";
 import { useCart } from "../hooks/useCart";
 import { useSavedProducts } from "../hooks/useSavedProducts";
 import { PLACEHOLDER_IMAGE, resolveImageUrl } from "../utils/image";
@@ -320,7 +321,9 @@ export default function Shop() {
       </section>
 
       <div className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-10">
-        <section className="rounded-[28px] border border-slate-200 bg-white/90 p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] md:p-6">
+        <CustomerJourneyStrip active="discover" compact />
+
+        <section className="mt-6 rounded-[28px] border border-slate-200 bg-white/90 p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] md:p-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Shopping lanes</p>

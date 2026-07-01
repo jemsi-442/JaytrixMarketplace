@@ -292,7 +292,7 @@ export default function Navbar() {
                     to="/account"
                     className="flex items-center gap-1 text-slate-700 transition hover:text-[#062A63]"
                   >
-                    <FiBell /> Account
+                    <FiBell /> Dashboard
                     {unreadCount > 0 && (
                       <span className="rounded-full bg-[#062A63] px-2 py-0.5 text-xs text-white">
                         {unreadCount}
@@ -393,7 +393,7 @@ export default function Navbar() {
                     className="flex items-center gap-2 text-slate-700"
                   >
                     <FiBell />
-                    Account
+                    Dashboard
                     {unreadCount > 0 && (
                       <span className="rounded-full bg-[#062A63] px-2 py-0.5 text-xs text-white">
                         {unreadCount}

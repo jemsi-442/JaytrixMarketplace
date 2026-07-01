@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiArrowRight, FiCheckCircle, FiHeart, FiMinus, FiPlus, FiShield, FiShoppingCart, FiTrash2, FiTruck } from "react-icons/fi";
 import RecommendationShelf from "../components/RecommendationShelf";
+import CustomerJourneyStrip from "../components/CustomerJourneyStrip";
 import api from "../utils/axios";
 import { extractList } from "../utils/apiShape";
 import { useCart } from "../hooks/useCart";
@@ -161,6 +162,8 @@ export default function Cart() {
           total={totals.total}
           freeDeliveryRemaining={freeDeliveryRemaining}
         />
+
+        <CustomerJourneyStrip active="checkout" compact />
 
         <div className="grid gap-6 md:gap-8 lg:grid-cols-3">
           <section className="lg:col-span-2 space-y-6">

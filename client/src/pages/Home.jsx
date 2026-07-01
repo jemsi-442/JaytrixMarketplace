@@ -388,6 +388,20 @@ export default function Home() {
               )}
             </div>
 
+            {user ? (
+              <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-slate-200">
+                <Link to="/account/wishlist" className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 transition hover:bg-white/15">
+                  Saved picks
+                </Link>
+                <Link to="/cart" className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 transition hover:bg-white/15">
+                  Cart
+                </Link>
+                <Link to="/account/orders" className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 transition hover:bg-white/15">
+                  Track orders
+                </Link>
+              </div>
+            ) : null}
+
             <div className="mt-10 grid gap-3 sm:grid-cols-3">
               <StatPill label="Live products" value={marketplaceStats.products} />
               <StatPill label="Active stores" value={marketplaceStats.stores} />
