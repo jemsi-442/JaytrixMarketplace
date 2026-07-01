@@ -15,7 +15,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useSavedProducts } from "../hooks/useSavedProducts";
 import { useCart } from "../hooks/useCart";
 
-export default function Orders() {
+export default function Orders({ view = "overview" }) {
   const toast = useToast();
   const { addToCart, cart } = useCart();
   const { user, updateUser } = useAuth();
@@ -2127,6 +2127,47 @@ export default function Orders() {
     }
   };
 
+  const isOverviewView = view === "overview";
+  const showProfilePanel = isOverviewView || view === "profile";
+  const showShoppingPanel = isOverviewView || view === "wishlist";
+  const showUpdatesPanel = isOverviewView || view === "updates";
+  const showOrdersPanel = isOverviewView || view === "orders";
+  const showSupportPanel = isOverviewView || view === "support";
+  const showLeftColumn = showProfilePanel || showShoppingPanel;
+  const showRightColumn = showUpdatesPanel || showOrdersPanel;
+  const pageMeta = {
+    overview: {
+      eyebrow: "Dashboard overview",
+      title: `Welcome back, ${profile.name || user?.name || "shopper"}.`,
+      description: "Your shopping control center: active orders, payments, saved picks, trusted stores, updates, and support in one polished place.",
+    },
+    orders: {
+      eyebrow: "Orders",
+      title: "Track every order from payment to delivery.",
+      description: "Review payment status, delivery progress, order history, and the next action needed on each purchase.",
+    },
+    wishlist: {
+      eyebrow: "Saved picks",
+      title: "Your saved products and trusted stores.",
+      description: "Return to products you liked, compare favorite seller shelves, and continue shopping from where you left off.",
+    },
+    updates: {
+      eyebrow: "Updates",
+      title: "Your marketplace notifications.",
+      description: "Payment, order, delivery, and store updates stay in one focused page.",
+    },
+    profile: {
+      eyebrow: "Profile",
+      title: "Manage your shopper details.",
+      description: "Keep your phone, email, and delivery contact information ready for faster checkout.",
+    },
+    support: {
+      eyebrow: "Support",
+      title: "Help and shopper protection.",
+      description: "Reach support, track orders, and understand how checkout and delivery updates are protected.",
+    },
+  }[view] || {};
+
   return (
     <div className="min-h-full px-4 py-5 md:px-6 md:py-6">
       <div className="mx-auto max-w-7xl space-y-6">
@@ -2138,9 +2179,9 @@ export default function Orders() {
         >
           <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Dashboard overview</p>
-              <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-900 md:text-4xl">Welcome back, {profile.name || user?.name || "shopper"}.</h1>
-              <p className="mt-3 max-w-2xl text-slate-600">Your shopping control center: active orders, payments, saved picks, trusted stores, updates, and support in one polished place.</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">{pageMeta.eyebrow}</p>
+              <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-900 md:text-4xl">{pageMeta.title}</h1>
+              <p className="mt-3 max-w-2xl text-slate-600">{pageMeta.description}</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <SummaryCard label="Orders placed" value={orderStats.totalOrders} />
@@ -2151,26 +2192,29 @@ export default function Orders() {
           </div>
         </motion.section>
 
-        <ClientCommandCenter
-          bestMove={clientBestMove}
-          activeOrder={activeOrderFocus}
-          signals={clientShoppingSignals}
-          onJump={jumpToDashboardSection}
-        />
+        {isOverviewView ? (
+          <ClientCommandCenter
+            bestMove={clientBestMove}
+            activeOrder={activeOrderFocus}
+            signals={clientShoppingSignals}
+            onJump={jumpToDashboardSection}
+          />
+        ) : null}
 
-        <CustomerCarePanel
-          supportPhone="+255 683 186 987"
-          onJump={jumpToDashboardSection}
-        />
+        {showSupportPanel ? (
+          <CustomerCarePanel
+            supportPhone="+255 683 186 987"
+          />
+        ) : null}
 
-        <div className="grid gap-6 xl:grid-cols-[360px_minmax(0,1fr)]">
-          <div className="space-y-6">
+        <div className={`grid gap-6 ${showLeftColumn && showRightColumn ? "xl:grid-cols-[360px_minmax(0,1fr)]" : ""}`}>
+          <div className={showLeftColumn ? "space-y-6" : "hidden"}>
             <motion.section
               id="profile-section"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.04 }}
-              className="scroll-mt-28 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]"
+              className={`scroll-mt-28 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] ${showProfilePanel ? "" : "hidden"}`}
             >
               <div className="flex items-center gap-3">
                 <div className="rounded-2xl bg-slate-100 p-3 text-[#062A63]">
@@ -2228,7 +2272,7 @@ export default function Orders() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.08 }}
-              className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]"
+              className={`rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] ${showProfilePanel ? "" : "hidden"}`}
             >
               <div className="flex items-center gap-3">
                 <div className="rounded-2xl bg-orange-50 p-3 text-orange-600">
@@ -2265,7 +2309,7 @@ export default function Orders() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="scroll-mt-28 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]"
+              className={`scroll-mt-28 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] ${showShoppingPanel ? "" : "hidden"}`}
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
@@ -2346,7 +2390,7 @@ export default function Orders() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.12 }}
-              className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]"
+              className={`rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] ${showShoppingPanel ? "" : "hidden"}`}
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
@@ -2403,7 +2447,7 @@ export default function Orders() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.14 }}
-              className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]"
+              className={`rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] ${showShoppingPanel ? "" : "hidden"}`}
             >
               <div className="flex items-center justify-between gap-3">
                 <div>
@@ -2470,7 +2514,7 @@ export default function Orders() {
               </div>
             </motion.section>
 
-            {continueShoppingProducts.length ? (
+            {showShoppingPanel && continueShoppingProducts.length ? (
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -2490,7 +2534,7 @@ export default function Orders() {
               </motion.div>
             ) : null}
 
-            {topRatedAccountProducts.length ? (
+            {showShoppingPanel && topRatedAccountProducts.length ? (
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -2513,13 +2557,13 @@ export default function Orders() {
             ) : null}
           </div>
 
-          <div className="space-y-6">
+          <div className={showRightColumn ? "space-y-6" : "hidden"}>
             <motion.section
               id="account-updates"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.06 }}
-              className="scroll-mt-28 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]"
+              className={`scroll-mt-28 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] ${showUpdatesPanel ? "" : "hidden"}`}
             >
               <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>
@@ -2611,7 +2655,7 @@ export default function Orders() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="space-y-4"
+              className={`space-y-4 ${showOrdersPanel ? "" : "hidden"}`}
             >
               <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -3284,7 +3328,7 @@ export default function Orders() {
                     Keep browsing
                   </Link>
                   <Link
-                    to="/account#wishlist"
+                    to="/account/wishlist"
                     className="inline-flex items-center justify-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
                   >
                     View saved picks
@@ -4227,7 +4271,7 @@ function ClientCommandCenter({ bestMove, activeOrder, signals = [], onJump }) {
   );
 }
 
-function CustomerCarePanel({ supportPhone, onJump }) {
+function CustomerCarePanel({ supportPhone }) {
   const promises = [
     {
       title: "Secure checkout",
@@ -4261,20 +4305,18 @@ function CustomerCarePanel({ supportPhone, onJump }) {
             >
               <FiPhone /> Call support
             </a>
-            <button
-              type="button"
-              onClick={() => onJump?.("orders-list")}
+            <Link
+              to="/account/orders"
               className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white"
             >
               Track orders
-            </button>
-            <button
-              type="button"
-              onClick={() => onJump?.("wishlist")}
+            </Link>
+            <Link
+              to="/account/wishlist"
               className="inline-flex items-center justify-center rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-700 transition hover:bg-orange-100"
             >
               View saved picks
-            </button>
+            </Link>
           </div>
         </div>
 

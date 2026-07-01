@@ -46,7 +46,7 @@ export default function CustomerTopbar({ unreadCount = 0, onOpenSidebar }) {
         </Link>
 
         <Link
-          to="/account#account-updates"
+          to="/account/updates"
           className="relative rounded-full border border-white/80 bg-white/80 p-2.5 text-slate-600 shadow-[0_12px_30px_rgba(15,23,42,0.08)] transition hover:-translate-y-0.5 hover:text-slate-900"
           aria-label="Account updates"
         >

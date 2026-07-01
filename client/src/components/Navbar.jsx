@@ -300,7 +300,7 @@ export default function Navbar() {
                     )}
                   </Link>
                   <Link
-                    to="/account#wishlist"
+                    to="/account/wishlist"
                     className="flex items-center gap-1 text-slate-700 transition hover:text-[#062A63]"
                   >
                     <FiHeart /> Saved
@@ -402,7 +402,7 @@ export default function Navbar() {
                   </Link>
                   <Link
                     onClick={closeMenu}
-                    to="/account#wishlist"
+                    to="/account/wishlist"
                     className="flex items-center gap-2 text-slate-700"
                   >
                     <FiHeart />

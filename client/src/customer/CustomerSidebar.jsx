@@ -4,12 +4,12 @@ import BrandMark from "../components/BrandMark";
 import { useAuth } from "../hooks/useAuth";
 
 const navItems = [
-  { name: "Overview", path: "/account#customer-dashboard", match: "customer-dashboard", icon: FiHome },
-  { name: "Orders", path: "/account#orders-list", match: "orders-list", icon: FiShoppingBag },
-  { name: "Saved Picks", path: "/account#wishlist", match: "wishlist", icon: FiHeart },
-  { name: "Updates", path: "/account#account-updates", match: "account-updates", icon: FiBell },
-  { name: "Profile", path: "/account#profile-section", match: "profile-section", icon: FiUser },
-  { name: "Support", path: "/account#support-center", match: "support-center", icon: FiShield },
+  { name: "Overview", path: "/account", icon: FiHome },
+  { name: "Orders", path: "/account/orders", icon: FiShoppingBag },
+  { name: "Saved Picks", path: "/account/wishlist", icon: FiHeart },
+  { name: "Updates", path: "/account/updates", icon: FiBell },
+  { name: "Profile", path: "/account/profile", icon: FiUser },
+  { name: "Support", path: "/account/support", icon: FiShield },
 ];
 
 export default function CustomerSidebar({
@@ -24,7 +24,6 @@ export default function CustomerSidebar({
   const { logout, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const activeHash = location.hash.replace("#", "") || "customer-dashboard";
 
   const handleLogout = () => {
     logout();
@@ -82,7 +81,9 @@ export default function CustomerSidebar({
       <nav className={`flex-1 space-y-1.5 py-6 ${collapsed && !mobile ? "px-3" : "px-4"}`}>
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = activeHash === item.match;
+          const isActive = item.path === "/account"
+            ? location.pathname === "/account"
+            : location.pathname === item.path;
           return (
             <Link
               key={item.name}
@@ -97,7 +98,7 @@ export default function CustomerSidebar({
             >
               <Icon size={collapsed && !mobile ? 25 : 21} />
               {collapsed && !mobile ? null : <span>{item.name}</span>}
-              {item.match === "account-updates" && unreadCount > 0 ? (
+              {item.path === "/account/updates" && unreadCount > 0 ? (
                 <span className={`${collapsed && !mobile ? "absolute right-1 top-1" : "ml-auto"} rounded-full bg-[linear-gradient(135deg,#062A63_0%,#0B5FFF_100%)] px-2 py-0.5 text-[10px] font-bold text-white`}>
                   {unreadCount}
                 </span>

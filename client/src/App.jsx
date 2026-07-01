@@ -109,7 +109,12 @@ export default function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Orders />} />
+          <Route index element={<Orders view="overview" />} />
+          <Route path="orders" element={<Orders view="orders" />} />
+          <Route path="wishlist" element={<Orders view="wishlist" />} />
+          <Route path="updates" element={<Orders view="updates" />} />
+          <Route path="profile" element={<Orders view="profile" />} />
+          <Route path="support" element={<Orders view="support" />} />
         </Route>
         <Route
           path="orders"
@@ -119,7 +124,7 @@ export default function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Orders />} />
+          <Route index element={<Orders view="orders" />} />
         </Route>
 
         {/* ADMIN */}
