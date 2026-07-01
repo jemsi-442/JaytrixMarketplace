@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">JAYTRIX Systems mark</title>
+  <desc id="desc">Official JAYTRIX Systems monogram mark in navy, electric blue, and graphite.</desc>
+  <defs>
+    <linearGradient id="jaytrixBlue" x1="76" x2="331" y1="101" y2="430" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0B5FFF"/>
+      <stop offset=".42" stop-color="#062A63"/>
+      <stop offset="1" stop-color="#031326"/>
+    </linearGradient>
+    <linearGradient id="jaytrixGraphite" x1="292" x2="454" y1="119" y2="415" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3A424D"/>
+      <stop offset="1" stop-color="#151A21"/>
+    </linearGradient>
+    <filter id="softShadow" x="-18%" y="-14%" width="136%" height="136%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#031326" flood-opacity=".22"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#F8FAFC"/>
+  <g filter="url(#softShadow)">
+    <path fill="url(#jaytrixBlue)" d="M153 116h263l-51 67H284l-38 184c-12 60-54 89-126 89H78l25-67h31c25 0 38-11 44-41l34-165H101l52-67Z"/>
+    <path fill="url(#jaytrixGraphite)" stroke="#F8FAFC" stroke-linejoin="round" stroke-width="18" d="M310 199h142l-53 68h-82l-39 189h-91l74-257h49Z"/>
+    <g fill="#062A63">
+      <rect x="104" y="204" width="16" height="16" rx="3"/>
+      <rect x="138" y="185" width="20" height="20" rx="4"/>
+      <rect x="174" y="214" width="25" height="25" rx="5"/>
+      <rect x="133" y="247" width="18" height="18" rx="4"/>
+      <rect x="168" y="274" width="17" height="17" rx="4"/>
+    </g>
+    <rect x="205" y="244" width="24" height="24" rx="5" fill="#151A21"/>
+  </g>
+</svg>

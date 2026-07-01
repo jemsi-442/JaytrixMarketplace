@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" role="img" aria-labelledby="title desc">
+  <title id="title">JAYTRIX Systems official logo</title>
+  <desc id="desc">JAYTRIX Systems logo with monogram, wordmark, and Technology Innovation Excellence tagline.</desc>
+  <defs>
+    <linearGradient id="jaytrixBlueLogo" x1="250" x2="735" y1="84" y2="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0B5FFF"/>
+      <stop offset=".45" stop-color="#062A63"/>
+      <stop offset="1" stop-color="#031326"/>
+    </linearGradient>
+    <linearGradient id="jaytrixGraphiteLogo" x1="670" x2="936" y1="165" y2="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3A424D"/>
+      <stop offset="1" stop-color="#151A21"/>
+    </linearGradient>
+    <filter id="logoShadow" x="-10%" y="-8%" width="120%" height="120%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#031326" flood-opacity=".18"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="780" fill="#fff"/>
+  <g filter="url(#logoShadow)">
+    <path fill="url(#jaytrixBlueLogo)" d="M512 115h403l-67 82H687l-55 267c-20 94-83 139-192 139H344l33-82h56c43 0 66-19 77-69l52-255H448l64-82Z"/>
+    <path fill="url(#jaytrixGraphiteLogo)" stroke="#fff" stroke-linejoin="round" stroke-width="22" d="M704 219h222l-70 84H739l-58 282H562l97-366h45Z"/>
+    <g fill="#062A63">
+      <rect x="344" y="294" width="16" height="16" rx="3"/>
+      <rect x="386" y="270" width="20" height="20" rx="4"/>
+      <rect x="434" y="306" width="26" height="26" rx="5"/>
+      <rect x="382" y="341" width="20" height="20" rx="4"/>
+      <rect x="427" y="377" width="20" height="20" rx="4"/>
+    </g>
+    <rect x="484" y="344" width="28" height="28" rx="5" fill="#151A21"/>
+  </g>
+  <g font-family="Montserrat, Poppins, Arial, sans-serif" font-weight="900" letter-spacing="8">
+    <text x="95" y="690" fill="#062A63" font-size="96">JAY</text>
+    <text x="468" y="690" fill="#151A21" font-size="96">TRI</text>
+    <text x="884" y="690" fill="#151A21" font-size="96">X</text>
+    <path d="M953 612l62 78M1016 612l-62 78" stroke="#0B5FFF" stroke-width="22" stroke-linecap="square"/>
+  </g>
+  <g fill="#151A21" font-family="Montserrat, Poppins, Arial, sans-serif" font-size="43" font-weight="700" letter-spacing="34">
+    <text x="336" y="745">SYSTEMS</text>
+  </g>
+  <g stroke="#062A63" stroke-width="4">
+    <path d="M94 728h205"/>
+    <path d="M902 728h205"/>
+  </g>
+  <g fill="#031326" font-family="Montserrat, Poppins, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="15">
+    <text x="160" y="772">TECHNOLOGY</text>
+    <text x="510" y="772">INNOVATION</text>
+    <text x="850" y="772">EXCELLENCE</text>
+  </g>
+  <g stroke="#0B5FFF" stroke-width="4">
+    <path d="M454 751v25"/>
+    <path d="M798 751v25"/>
+  </g>
+</svg>

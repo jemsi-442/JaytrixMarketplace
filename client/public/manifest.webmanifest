@@ -1,0 +1,42 @@
+{
+  "name": "JAYTRIX Systems Marketplace",
+  "short_name": "JAYTRIX",
+  "description": "A multi-vendor marketplace and delivery platform for shoppers, vendors, riders, and modern retail operations.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F6F9FD",
+  "theme_color": "#031326",
+  "categories": ["shopping", "business", "productivity"],
+  "icons": [
+    {
+      "src": "/brand/jaytrix-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/jaytrix-icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Shop",
+      "short_name": "Shop",
+      "description": "Browse marketplace products.",
+      "url": "/shop",
+      "icons": [{ "src": "/brand/jaytrix-mark.svg", "sizes": "any", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Orders",
+      "short_name": "Orders",
+      "description": "Track your orders.",
+      "url": "/orders",
+      "icons": [{ "src": "/brand/jaytrix-mark.svg", "sizes": "any", "type": "image/svg+xml" }]
+    }
+  ]
+}
