@@ -33,10 +33,10 @@ function FullFooter() {
             <Link to="/" className="transition hover:text-white">
               Home
             </Link>
-            <Link to="/shop" className="transition hover:text-white">
+            <Link to="/account/shop" className="transition hover:text-white">
               Shop
             </Link>
-            <Link to="/cart" className="transition hover:text-white">
+            <Link to="/account/cart" className="transition hover:text-white">
               Cart
             </Link>
             <Link to="/account/wishlist" className="transition hover:text-white">

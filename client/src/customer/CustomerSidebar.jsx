@@ -1,10 +1,12 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FiBell, FiChevronLeft, FiChevronRight, FiHeart, FiHome, FiLogOut, FiShoppingBag, FiShield, FiUser, FiX } from "react-icons/fi";
+import { FiBell, FiChevronLeft, FiChevronRight, FiCreditCard, FiHeart, FiHome, FiLogOut, FiShoppingBag, FiShield, FiUser, FiX } from "react-icons/fi";
 import BrandMark from "../components/BrandMark";
 import { useAuth } from "../hooks/useAuth";
 
 const navItems = [
   { name: "Overview", path: "/account", icon: FiHome },
+  { name: "Shop", path: "/account/shop", icon: FiShoppingBag },
+  { name: "Cart & Payment", path: "/account/cart", icon: FiCreditCard },
   { name: "Orders", path: "/account/orders", icon: FiShoppingBag },
   { name: "Saved Picks", path: "/account/wishlist", icon: FiHeart },
   { name: "Updates", path: "/account/updates", icon: FiBell },
@@ -83,7 +85,11 @@ export default function CustomerSidebar({
           const Icon = item.icon;
           const isActive = item.path === "/account"
             ? location.pathname === "/account"
-            : location.pathname === item.path;
+            : item.path === "/account/shop"
+              ? location.pathname === item.path || location.pathname.startsWith("/account/product") || location.pathname.startsWith("/account/stores")
+              : item.path === "/account/cart"
+                ? location.pathname === item.path || location.pathname === "/account/checkout"
+                : location.pathname === item.path;
           return (
             <Link
               key={item.name}

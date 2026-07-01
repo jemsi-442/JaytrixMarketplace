@@ -237,7 +237,7 @@ export default function Storefront() {
                   <FiHeart /> {isFavoriteStore(store.storeSlug) ? "Saved store" : "Save store"}
                 </button>
                 <Link
-                  to="/shop"
+                  to="/account/shop"
                   className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/15"
                 >
                   Keep browsing <FiArrowRight />
@@ -264,7 +264,7 @@ export default function Storefront() {
             <h2 className="mt-1 text-2xl font-black text-slate-900">Everything shoppers can buy from this seller today</h2>
             <p className="mt-2 max-w-2xl text-slate-600">Explore the full seller shelf, save stronger picks, and add ready items straight into your cart without leaving the storefront.</p>
           </div>
-          <Link to="/shop" className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+          <Link to="/account/shop" className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
             Back to marketplace <FiArrowRight />
           </Link>
         </div>
@@ -347,7 +347,7 @@ export default function Storefront() {
 
                   <div className="mt-5 flex flex-wrap gap-2">
                     <Link
-                      to={`/product/${product._id}`}
+                      to={`/account/product/${product._id}`}
                       className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                     >
                       <FiPackage /> View product

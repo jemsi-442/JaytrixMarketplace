@@ -282,7 +282,7 @@ export default function Navbar() {
 
           {user && (
             <>
-              <Link to="/shop" className="text-slate-700 transition hover:text-[#062A63]">
+              <Link to="/account/shop" className="text-slate-700 transition hover:text-[#062A63]">
                 Shop
               </Link>
 
@@ -314,7 +314,7 @@ export default function Navbar() {
               )}
 
               <Link
-                to="/cart"
+                to="/account/cart"
                 className="flex items-center gap-1 text-slate-700 transition hover:text-[#062A63]"
               >
                 <FiShoppingBag /> Cart
@@ -382,7 +382,7 @@ export default function Navbar() {
 
           {user && (
             <>
-              <Link onClick={closeMenu} to="/shop" className="block text-slate-700">
+              <Link onClick={closeMenu} to="/account/shop" className="block text-slate-700">
                 Shop
               </Link>
               {(user?.role === "user" || user?.role === "customer") && (
@@ -415,7 +415,7 @@ export default function Navbar() {
                   </Link>
                 </>
               )}
-              <Link onClick={closeMenu} to="/cart" className="flex items-center gap-2 text-slate-700">
+              <Link onClick={closeMenu} to="/account/cart" className="flex items-center gap-2 text-slate-700">
                 <FiShoppingBag />
                 Cart
                 {cartCount > 0 && (

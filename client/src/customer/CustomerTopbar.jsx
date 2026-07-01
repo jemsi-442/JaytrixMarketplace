@@ -44,7 +44,7 @@ export default function CustomerTopbar({ unreadCount = 0, onOpenSidebar }) {
       <div className="flex items-center gap-3 md:gap-5">
         <div className="hidden items-center gap-2 rounded-full border border-white/80 bg-white/72 p-1 shadow-[0_12px_30px_rgba(15,23,42,0.08)] sm:flex">
           <Link
-            to="/shop"
+            to="/account/shop"
             className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white hover:text-[#062A63]"
           >
             <FiShoppingBag /> Shop
@@ -59,7 +59,7 @@ export default function CustomerTopbar({ unreadCount = 0, onOpenSidebar }) {
             ) : null}
           </Link>
           <Link
-            to="/cart"
+            to="/account/cart"
             className="relative inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white hover:text-[#062A63]"
           >
             <FiShoppingCart /> Cart

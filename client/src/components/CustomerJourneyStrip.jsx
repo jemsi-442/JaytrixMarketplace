@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 import { FiCheckCircle, FiCreditCard, FiHeart, FiShoppingBag, FiTruck } from "react-icons/fi";
 
 const journeySteps = [
-  { label: "Discover", detail: "Find trusted products", href: "/shop", icon: FiShoppingBag },
+  { label: "Discover", detail: "Find trusted products", href: "/account/shop", icon: FiShoppingBag },
   { label: "Save or cart", detail: "Keep strong picks", href: "/account/wishlist", icon: FiHeart },
-  { label: "Checkout", detail: "Approve on phone", href: "/cart", icon: FiCreditCard },
+  { label: "Checkout", detail: "Approve on phone", href: "/account/cart", icon: FiCreditCard },
   { label: "Track", detail: "Follow in dashboard", href: "/account/orders", icon: FiTruck },
 ];
 

@@ -49,7 +49,7 @@ export default function Login() {
           navigate("/vendor", { replace: true });
           break;
         default:
-          navigate("/shop", { replace: true });
+          navigate("/account", { replace: true });
       }
     } catch (err) {
       setError(err.response?.data?.message || "Incorrect email or password.");

@@ -136,7 +136,7 @@ export default function Cart() {
               Start from trusted marketplace picks, reopen saved products, or return to your dashboard to continue the journey.
             </p>
             <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-              <Link to="/shop" className="btn-primary inline-flex items-center justify-center gap-2">
+              <Link to="/account/shop" className="btn-primary inline-flex items-center justify-center gap-2">
                 Continue shopping <FiArrowRight />
               </Link>
               <Link to="/account/wishlist" className="btn-secondary inline-flex items-center justify-center gap-2">
@@ -265,7 +265,7 @@ export default function Cart() {
                             <FiHeart /> {saved ? 'Saved' : 'Save for later'}
                           </button>
                           <Link
-                            to={`/product/${item.productId}`}
+                            to={`/account/product/${item.productId}`}
                             className="inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                           >
                             View product
@@ -341,7 +341,7 @@ export default function Cart() {
                 </div>
               </div>
 
-              <Link to="/checkout" className="btn-primary inline-flex w-full items-center justify-center gap-2">
+              <Link to="/account/checkout" className="btn-primary inline-flex w-full items-center justify-center gap-2">
                 Continue to checkout <FiArrowRight />
               </Link>
 

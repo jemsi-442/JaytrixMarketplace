@@ -427,7 +427,7 @@ export default function ProductDetails() {
               <div className="mt-5 rounded-2xl border border-orange-100 bg-orange-50/70 p-4 text-sm">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-orange-500">Sold By</p>
                 <Link
-                  to={`/stores/${product.vendor.storeSlug}`}
+                  to={`/account/stores/${product.vendor.storeSlug}`}
                   className="mt-2 inline-flex items-center gap-2 text-base font-bold text-slate-900 hover:text-orange-700"
                 >
                   {product.vendor.storeName || product.vendor.name}
@@ -703,6 +703,7 @@ export default function ProductDetails() {
           isSavedProduct={isSavedProduct}
           getCartQuantity={getCartQuantity}
           getReasonLabel={(recommendedProduct) => getRecommendationReason({ product: recommendedProduct, anchors: [product] })}
+          productBasePath="/account/product"
           emptyMessage="More related products will appear here as the marketplace grows."
         />
 
@@ -716,6 +717,7 @@ export default function ProductDetails() {
             isSavedProduct={isSavedProduct}
             getCartQuantity={getCartQuantity}
             getReasonLabel={() => "From the same store as the item you are viewing"}
+            productBasePath="/account/product"
             emptyMessage="More products from this store will appear here as the seller catalog grows."
           />
         ) : null}

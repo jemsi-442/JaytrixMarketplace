@@ -1105,7 +1105,7 @@ export default function Orders({ view = "overview" }) {
       title: "Discover your next strong pick",
       description: "Browse trusted stores, top-rated products, and fresh marketplace recommendations.",
       label: "Go shopping",
-      href: "/shop",
+      href: "/account/shop",
       tone: "blue",
     };
   }, [nextReviewTarget, orders, savedProducts]);
@@ -2106,10 +2106,10 @@ export default function Orders({ view = "overview" }) {
   };
 
   const getProductPath = (value) => {
-    if (!value) return '/shop';
+    if (!value) return '/account/shop';
 
     if (typeof value === 'string' || typeof value === 'number') {
-      return `/product/${value}`;
+      return `/account/product/${value}`;
     }
 
     const resolvedId =
@@ -2119,7 +2119,7 @@ export default function Orders({ view = "overview" }) {
       value?.product ||
       '';
 
-    return resolvedId ? `/product/${resolvedId}` : '/shop';
+    return resolvedId ? `/account/product/${resolvedId}` : '/account/shop';
   };
 
   const refreshReviewInsight = async (productId) => {
@@ -2501,7 +2501,7 @@ export default function Orders({ view = "overview" }) {
                       </span>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      <Link to={`/product/${product._id}`} className="inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white">
+                      <Link to={`/account/product/${product._id}`} className="inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white">
                         View product
                       </Link>
                       <button
@@ -2532,7 +2532,7 @@ export default function Orders({ view = "overview" }) {
                     </p>
                     <div className="mt-5 flex flex-wrap justify-center gap-2">
                       <Link
-                        to="/shop"
+                        to="/account/shop"
                         className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5"
                       >
                         <FiShoppingBag /> Browse products
@@ -2586,7 +2586,7 @@ export default function Orders({ view = "overview" }) {
                       </div>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      <Link to={`/stores/${store.slug}`} className="inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white">
+                      <Link to={`/account/stores/${store.slug}`} className="inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white">
                         Visit store
                       </Link>
                       <button
@@ -2633,11 +2633,11 @@ export default function Orders({ view = "overview" }) {
                   return (
                     <div key={product._id} className="rounded-2xl border border-slate-200 bg-slate-50 p-3 transition hover:border-[#062A63]/15 hover:bg-white">
                       <div className="flex items-center gap-3">
-                        <Link to={`/product/${product._id}`} className="block shrink-0">
+                        <Link to={`/account/product/${product._id}`} className="block shrink-0">
                           <img src={product.image} alt={product.name} className="h-16 w-16 rounded-2xl object-cover" />
                         </Link>
                         <div className="min-w-0 flex-1">
-                          <Link to={`/product/${product._id}`} className="block truncate font-semibold text-slate-900 hover:text-[#062A63]">
+                          <Link to={`/account/product/${product._id}`} className="block truncate font-semibold text-slate-900 hover:text-[#062A63]">
                             {product.name}
                           </Link>
                           <p className="mt-1 text-sm text-slate-500">{product.vendor?.name || "Marketplace seller"}</p>
@@ -2652,7 +2652,7 @@ export default function Orders({ view = "overview" }) {
                         </div>
                       </div>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <Link to={`/product/${product._id}`} className="inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white">
+                        <Link to={`/account/product/${product._id}`} className="inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white">
                           View product
                         </Link>
                         <button
@@ -2692,6 +2692,7 @@ export default function Orders({ view = "overview" }) {
                   isSavedProduct={isSavedProduct}
                   getCartQuantity={getCartQuantity}
                   getReasonLabel={(product) => getRecommendationReason({ product, anchors: accountRecommendationAnchors })}
+                  productBasePath="/account/product"
                   emptyMessage="More personalized picks will appear here as your account activity grows."
                 />
               </motion.div>
@@ -2714,6 +2715,7 @@ export default function Orders({ view = "overview" }) {
                   getReasonLabel={(product) =>
                     `${Number(product.averageRating || 0).toFixed(1)} stars from ${Number(product.reviewCount || 0)} shopper review${Number(product.reviewCount || 0) === 1 ? "" : "s"}`
                   }
+                  productBasePath="/account/product"
                   emptyMessage="Top-rated products will appear here once shopper reviews build up."
                 />
               </motion.div>
@@ -2886,10 +2888,10 @@ export default function Orders({ view = "overview" }) {
                       <p className="mt-2 text-sm text-slate-600">{recentReorder.addedLines} item {recentReorder.addedLines === 1 ? "line" : "lines"} added back to your cart{recentReorder.skippedLines ? `, while ${recentReorder.skippedLines} ${recentReorder.skippedLines === 1 ? "line is" : "lines are"} unavailable right now.` : "."}</p>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      <Link to="/cart" className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5">
+                      <Link to="/account/cart" className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5">
                         <FiShoppingBag /> Review cart
                       </Link>
-                      <Link to="/shop" className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                      <Link to="/account/shop" className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
                         Keep shopping
                       </Link>
                     </div>
@@ -2915,6 +2917,7 @@ export default function Orders({ view = "overview" }) {
                   isSavedProduct={isSavedProduct}
                   getCartQuantity={getCartQuantity}
                   getReasonLabel={(product) => getRecommendationReason({ product, anchors: reorderRecommendationAnchors })}
+                  productBasePath="/account/product"
                   emptyMessage=""
                 />
               ) : null}
@@ -2955,7 +2958,7 @@ export default function Orders({ view = "overview" }) {
                   </Link>
                   {reviewCelebration.storeSlug ? (
                     <Link
-                      to={`/stores/${reviewCelebration.storeSlug}`}
+                      to={`/account/stores/${reviewCelebration.storeSlug}`}
                       className="inline-flex items-center justify-center rounded-full border border-transparent bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
                     >
                       Visit {reviewCelebration.storeName || 'store'}
@@ -3017,7 +3020,7 @@ export default function Orders({ view = "overview" }) {
                   ) : null}
 
                   <Link
-                    to="/shop"
+                    to="/account/shop"
                     className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
                   >
                     Continue shopping
@@ -3109,7 +3112,7 @@ export default function Orders({ view = "overview" }) {
 
                   {bestShoppingLane.cta === 'store' && reviewLedStores[0] ? (
                     <Link
-                      to={`/stores/${reviewLedStores[0].storeSlug}`}
+                      to={`/account/stores/${reviewLedStores[0].storeSlug}`}
                       className="inline-flex items-center justify-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
                     >
                       {bestShoppingLane.label}
@@ -3203,7 +3206,7 @@ export default function Orders({ view = "overview" }) {
 
                         {lane.key === 'store' && reviewLedStores[0] ? (
                           <Link
-                            to={`/stores/${reviewLedStores[0].storeSlug}`}
+                            to={`/account/stores/${reviewLedStores[0].storeSlug}`}
                             className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
                           >
                             {lane.label}
@@ -3456,7 +3459,7 @@ export default function Orders({ view = "overview" }) {
 
                       {move.key === 'store' ? (
                         <Link
-                          to={`/stores/${move.storeSlug}`}
+                          to={`/account/stores/${move.storeSlug}`}
                           className="inline-flex items-center justify-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
                         >
                           Visit store
@@ -3485,7 +3488,7 @@ export default function Orders({ view = "overview" }) {
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <Link
-                    to="/shop"
+                    to="/account/shop"
                     className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
                   >
                     Keep browsing
@@ -3784,7 +3787,7 @@ export default function Orders({ view = "overview" }) {
                     ) : null}
                     {reviewComebackNudge.action === 'shop' ? (
                       <Link
-                        to="/shop"
+                        to="/account/shop"
                         className="inline-flex items-center justify-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
                       >
                         {reviewComebackNudge.label}
@@ -3922,7 +3925,7 @@ export default function Orders({ view = "overview" }) {
                   </p>
                 </div>
                 <Link
-                  to="/shop"
+                  to="/account/shop"
                   className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
                 >
                   Explore more in shop
@@ -4001,7 +4004,7 @@ export default function Orders({ view = "overview" }) {
                   </p>
                 </div>
                 <Link
-                  to="/shop"
+                  to="/account/shop"
                   className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
                 >
                   Browse all categories
@@ -4064,7 +4067,7 @@ export default function Orders({ view = "overview" }) {
                   </p>
                 </div>
                 <Link
-                  to="/shop"
+                  to="/account/shop"
                   className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
                 >
                   Explore more in shop
@@ -4190,7 +4193,7 @@ export default function Orders({ view = "overview" }) {
 
                     <div className="mt-5 flex flex-wrap gap-3">
                       <Link
-                        to={`/stores/${store.storeSlug}`}
+                        to={`/account/stores/${store.storeSlug}`}
                         className="inline-flex items-center justify-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
                       >
                         Visit store
@@ -4225,7 +4228,7 @@ export default function Orders({ view = "overview" }) {
                   </p>
                 </div>
                 <Link
-                  to="/shop"
+                  to="/account/shop"
                   className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
                 >
                   Continue shopping
@@ -4374,7 +4377,7 @@ function CustomerWelcomeSetup({ show, profile, onDismiss }) {
           </p>
           <div className="mt-5 flex flex-wrap gap-2">
             <Link
-              to="/shop"
+              to="/account/shop"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#062A63] transition hover:-translate-y-0.5"
             >
               Explore marketplace <FiArrowRight />
@@ -4623,7 +4626,7 @@ function ClientCommandCenter({ bestMove, activeOrder, signals = [] }) {
             <FiHeart /> Saved picks
           </Link>
           <Link
-            to="/shop"
+            to="/account/shop"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5"
           >
             <FiShoppingBag /> Shop
@@ -4798,7 +4801,7 @@ function QuickReviewModal({ activeReview, setActiveReview, submitting, onClose, 
                     </p>
                     <div className="mt-4 flex flex-wrap gap-3">
                       <Link
-                        to={`/stores/${storeSlug}`}
+                        to={`/account/stores/${storeSlug}`}
                         className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
                       >
                         Visit store

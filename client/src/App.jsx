@@ -1,5 +1,5 @@
 import { Suspense, lazy } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Navigate, Routes, Route, useParams } from "react-router-dom";
 
 /* Layouts */
 import UserLayout from "./components/UserLayout";
@@ -46,6 +46,11 @@ const VendorRiders = lazy(() => import("./vendor/VendorRiders"));
 
 const NotFound = lazy(() => import("./pages/NotFound"));
 
+function AccountProductRedirect() {
+  const { id } = useParams();
+  return <Navigate to={id ? `/account/product/${id}` : "/account/shop"} replace />;
+}
+
 export default function App() {
   return (
     <Suspense
@@ -63,35 +68,19 @@ export default function App() {
           {/* Shopping area requires login */}
           <Route
             path="shop"
-            element={
-              <ProtectedRoute>
-                <Shop />
-              </ProtectedRoute>
-            }
+            element={<Navigate to="/account/shop" replace />}
           />
           <Route
             path="product/:id"
-            element={
-              <ProtectedRoute>
-                <ProductDetails />
-              </ProtectedRoute>
-            }
+            element={<AccountProductRedirect />}
           />
           <Route
             path="cart"
-            element={
-              <ProtectedRoute>
-                <Cart />
-              </ProtectedRoute>
-            }
+            element={<Navigate to="/account/cart" replace />}
           />
           <Route
             path="checkout"
-            element={
-              <ProtectedRoute>
-                <Checkout />
-              </ProtectedRoute>
-            }
+            element={<Navigate to="/account/checkout" replace />}
           />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
@@ -110,6 +99,11 @@ export default function App() {
           }
         >
           <Route index element={<Orders view="overview" />} />
+          <Route path="shop" element={<Shop />} />
+          <Route path="product/:id" element={<ProductDetails />} />
+          <Route path="stores/:slug" element={<Storefront />} />
+          <Route path="cart" element={<Cart />} />
+          <Route path="checkout" element={<Checkout />} />
           <Route path="orders" element={<Orders view="orders" />} />
           <Route path="wishlist" element={<Orders view="wishlist" />} />
           <Route path="updates" element={<Orders view="updates" />} />
@@ -181,8 +175,8 @@ export default function App() {
 
         {/* 404 */}
         <Route path="*" element={<NotFound />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/product/:id" element={<AccountProductRedirect />} />
+        <Route path="/products/:id" element={<AccountProductRedirect />} />
       </Routes>
     </Suspense>
   );

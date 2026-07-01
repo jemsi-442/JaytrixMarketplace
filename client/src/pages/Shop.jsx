@@ -438,7 +438,7 @@ export default function Shop() {
                     const storeBadges = getStoreBadges(store);
 
                     return (
-                      <Link key={store.slug} to={`/stores/${store.slug}`} className="overflow-hidden rounded-[24px] border border-white bg-white transition hover:-translate-y-0.5 hover:shadow-lg">
+                      <Link key={store.slug} to={`/account/stores/${store.slug}`} className="overflow-hidden rounded-[24px] border border-white bg-white transition hover:-translate-y-0.5 hover:shadow-lg">
                         <div className="aspect-[4/2.7] bg-slate-100">
                           {store.sampleImage ? (
                             <img src={store.sampleImage} alt={store.name} className="h-full w-full object-cover" />
@@ -501,6 +501,7 @@ export default function Shop() {
                   getReasonLabel={(product) =>
                     `${Number(product.averageRating || 0).toFixed(1)} stars from ${Number(product.reviewCount || 0)} shopper review${Number(product.reviewCount || 0) === 1 ? "" : "s"}`
                   }
+                  productBasePath="/account/product"
                   emptyMessage="Top-rated products will appear here when the current view includes reviewed items."
                 />
               </div>
@@ -578,7 +579,7 @@ export default function Shop() {
                         <div>
                           <h3 className="line-clamp-1 text-lg font-black text-slate-900">{product.name}</h3>
                           {product.vendor?.storeSlug ? (
-                            <Link to={`/stores/${product.vendor.storeSlug}`} className="mt-1 inline-flex text-sm font-medium text-[#062A63] hover:text-[#031326]">
+                            <Link to={`/account/stores/${product.vendor.storeSlug}`} className="mt-1 inline-flex text-sm font-medium text-[#062A63] hover:text-[#031326]">
                               {product.vendor.storeName || product.vendor.name}
                             </Link>
                           ) : (
@@ -620,7 +621,7 @@ export default function Shop() {
                           {product.countInStock > 0 ? `${product.countInStock} in stock` : "Currently unavailable"}
                         </span>
                         {product.vendor?.storeSlug ? (
-                          <Link to={`/stores/${product.vendor.storeSlug}`} className="inline-flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900">
+                          <Link to={`/account/stores/${product.vendor.storeSlug}`} className="inline-flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900">
                             Store <FiArrowRight size={14} />
                           </Link>
                         ) : null}
@@ -628,7 +629,7 @@ export default function Shop() {
 
                       <div className="mt-5 grid grid-cols-2 gap-2">
                         <Link
-                          to={`/product/${product._id}`}
+                          to={`/account/product/${product._id}`}
                           className="inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
                         >
                           View details

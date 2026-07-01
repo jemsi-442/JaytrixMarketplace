@@ -374,7 +374,7 @@ export default function Home() {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link to="/shop" className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_32px_rgba(6,42,99,0.32)] transition hover:-translate-y-0.5">
+              <Link to="/account/shop" className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_32px_rgba(6,42,99,0.32)] transition hover:-translate-y-0.5">
                 Explore Marketplace <FiArrowRight />
               </Link>
               {!user ? (
@@ -393,7 +393,7 @@ export default function Home() {
                 <Link to="/account/wishlist" className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 transition hover:bg-white/15">
                   Saved picks
                 </Link>
-                <Link to="/cart" className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 transition hover:bg-white/15">
+                <Link to="/account/cart" className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 transition hover:bg-white/15">
                   Cart
                 </Link>
                 <Link to="/account/orders" className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 transition hover:bg-white/15">
@@ -470,7 +470,7 @@ export default function Home() {
                   {quickCollections.slice(0, 2).map((item) => (
                     <Link
                       key={item.title}
-                      to={`/shop?${item.price ? `price=${item.price}` : `search=${encodeURIComponent(item.search)}`}`}
+                      to={`/account/shop?${item.price ? `price=${item.price}` : `search=${encodeURIComponent(item.search)}`}`}
                       className={`rounded-2xl bg-gradient-to-br ${item.color} p-[1px] transition hover:-translate-y-0.5`}
                     >
                       <div className="rounded-[calc(1rem-1px)] bg-slate-950/80 px-4 py-4 text-white">
@@ -486,355 +486,41 @@ export default function Home() {
         </div>
       </section>
 
-      {isSignedInShopper && (favoriteStoreCards.length || personalizedProducts.length || familiarStoreProducts.length) ? (
-        <section className="mx-auto max-w-7xl space-y-6 px-4 py-12 md:px-6 md:py-16">
-          {favoriteStoreCards.length ? (
-            <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
-              <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Favorite stores</p>
-                  <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-900">Your seller shortcuts are ready</h2>
-                  <p className="mt-2 max-w-2xl text-slate-600">Jump back into the storefronts you trust most, then keep building your basket from sellers already matching your style.</p>
-                </div>
-                <div className="rounded-full bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-700">
-                  {favoriteStoreCount} saved store{favoriteStoreCount === 1 ? "" : "s"}
-                </div>
-              </div>
-
-              <div className="mt-6 grid gap-5 lg:grid-cols-3">
-                {favoriteStoreCards.slice(0, 3).map((store) => (
-                  <article key={store.slug} className="overflow-hidden rounded-[28px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] shadow-[0_12px_30px_rgba(15,23,42,0.05)]">
-                    <div className="grid grid-cols-[1.05fr_0.95fr] gap-0">
-                      <div className="aspect-[4/4] bg-slate-100">
-                        <img src={store.sampleImage || PLACEHOLDER_IMAGE} alt={store.name} className="h-full w-full object-cover" />
-                      </div>
-                      <div className="flex flex-col justify-between p-5">
-                        <div>
-                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Saved storefront</p>
-                          <h3 className="mt-2 text-lg font-black text-slate-900">{store.name}</h3>
-                          {getStoreBadges(store).length ? (
-                            <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                              {getStoreBadges(store).slice(0, 2).map((badge) => (
-                                <span
-                                  key={badge.label}
-                                  className={`rounded-full px-3 py-1 font-semibold ${getStoreSignalToneClasses(badge.tone)}`}
-                                >
-                                  {badge.label}
-                                </span>
-                              ))}
-                            </div>
-                          ) : null}
-                          <p className="mt-2 text-sm text-slate-600">{store.inStockCount || 0} ready now across {store.itemCount || 0} live product{Number(store.itemCount || 0) === 1 ? "" : "s"}.</p>
-                          <p className="mt-2 text-sm font-medium text-slate-500">{getStoreNudge(store)}</p>
-                          {Number(store.startingPrice || 0) > 0 ? (
-                            <p className="mt-2 text-sm font-semibold text-[#062A63]">Starts from {formatCurrency(store.startingPrice)}</p>
-                          ) : null}
-                        </div>
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          <Link to={`/stores/${store.slug}`} className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5">
-                            Visit store <FiArrowRight />
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() => handleToggleFavoriteStore(store)}
-                            className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-700 transition hover:bg-orange-100"
-                          >
-                            <FiHeart /> Saved
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-          ) : null}
-
-          {personalizedProducts.length ? (
-            <RecommendationShelf
-              title="Picked for you"
-              subtitle="Products shaped by what you saved and what you explored most recently."
-              products={personalizedProducts}
-              onAddToCart={handleRecommendationAddToCart}
-              onToggleSaved={handleRecommendationToggleSaved}
-              isSavedProduct={isSavedProduct}
-              getCartQuantity={getCartQuantity}
-              getReasonLabel={(product) => getRecommendationReason({ product, anchors: personalizedAnchors })}
-              emptyMessage="Your personalized picks will appear here as you keep exploring the marketplace."
-            />
-          ) : null}
-
-          {familiarStoreProducts.length ? (
-            <RecommendationShelf
-              title="From stores you keep exploring"
-              subtitle="Fresh picks from seller shelves that already match your shopping pattern."
-              products={familiarStoreProducts}
-              onAddToCart={handleRecommendationAddToCart}
-              onToggleSaved={handleRecommendationToggleSaved}
-              isSavedProduct={isSavedProduct}
-              getCartQuantity={getCartQuantity}
-              getReasonLabel={(product) => getRecommendationReason({ product, anchors: personalizedAnchors })}
-              emptyMessage="Store-led recommendations will appear here once you explore more seller pages."
-            />
-          ) : null}
-        </section>
-      ) : null}
-
-      {topRatedProducts.length ? (
-        <section className="mx-auto max-w-7xl px-4 py-2 md:px-6 md:py-4">
-          <RecommendationShelf
-            title="Top rated by shoppers"
-            subtitle="See the marketplace picks buyers are rating most highly right now."
-            products={topRatedProducts}
-            onAddToCart={handleRecommendationAddToCart}
-            onToggleSaved={handleRecommendationToggleSaved}
-            isSavedProduct={isSavedProduct}
-            getCartQuantity={getCartQuantity}
-            getReasonLabel={(product) =>
-              `${Number(product.averageRating || 0).toFixed(1)} stars from ${Number(product.reviewCount || 0)} shopper review${Number(product.reviewCount || 0) === 1 ? "" : "s"}`
-            }
-            emptyMessage="Top-rated products will appear here once shoppers start leaving reviews."
-          />
-        </section>
-      ) : null}
-
       <section className="mx-auto max-w-7xl px-4 py-14 md:px-6 md:py-20">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Featured shelves</p>
-            <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-900">Products shoppers can move on quickly</h2>
-            <p className="mt-2 max-w-2xl text-slate-600">A stronger front page helps buyers decide faster. These are the products already carrying the right marketplace energy.</p>
-          </div>
-          <Link to="/shop" className="inline-flex items-center gap-2 text-sm font-semibold text-[#062A63] hover:text-[#031326]">
-            View full catalog <FiArrowRight />
-          </Link>
-        </div>
-
-        <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {(loading ? Array.from({ length: 4 }) : featuredProducts).map((product, index) => {
-            const saved = !loading && product ? isSavedProduct(product._id) : false;
-            const cartQty = !loading && product ? getCartQuantity(product._id) : 0;
-            const badges = !loading && product ? getProductBadges(product, { index }) : [];
-            const nudge = !loading && product ? getProductNudge(product, { index }) : "";
-
-            return (
-              <article key={product?._id || index} className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
-                <div className="relative aspect-[4/4.4] bg-slate-100">
-                  {loading ? (
-                    <div className="h-full w-full animate-pulse bg-slate-200" />
-                  ) : (
-                    <>
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="h-full w-full object-cover"
-                        onError={(event) => {
-                          event.currentTarget.src = PLACEHOLDER_IMAGE;
-                        }}
-                      />
-                      <div className="pointer-events-none absolute inset-x-4 top-4 flex flex-wrap gap-2 text-xs">
-                        <span className={`rounded-full px-3 py-1 font-semibold ${Number(product.countInStock || 0) > 0 ? "bg-white/90 text-[#062A63]" : "bg-slate-900/75 text-white"}`}>
-                          {Number(product.countInStock || 0) > 0 ? `${Number(product.countInStock || 0)} ready now` : "Currently unavailable"}
-                        </span>
-                        {cartQty > 0 ? (
-                          <span className="rounded-full bg-orange-50/95 px-3 py-1 font-semibold text-orange-700">
-                            In cart x{cartQty}
-                          </span>
-                        ) : null}
-                        {saved ? (
-                          <span className="rounded-full bg-orange-50/95 px-3 py-1 font-semibold text-orange-700">
-                            Saved by you
-                          </span>
-                        ) : null}
-                        {badges.slice(0, 2).map((badge) => (
-                          <span key={badge.label} className={`rounded-full px-3 py-1 font-semibold ${getSignalToneClasses(badge.tone)}`}>
-                            {badge.label}
-                          </span>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-                <div className="p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-                        {loading ? 'Loading' : 'Featured marketplace pick'}
-                      </p>
-                      <h3 className="mt-2 text-lg font-black text-slate-900">{loading ? 'Loading product' : product.name}</h3>
-                      <p className="mt-1 text-sm text-slate-500">
-                        {loading ? 'Preparing shelf details...' : product.vendor?.storeSlug ? `From ${product.vendor.storeName || product.vendor.name}` : 'Marketplace seller'}
-                      </p>
-                      {!loading ? (
-                        <div className="mt-2">
-                          <MarketplaceRating
-                            averageRating={product.averageRating}
-                            reviewCount={product.reviewCount}
-                            compact
-                          />
-                        </div>
-                      ) : null}
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm text-slate-500">Price</p>
-                      <p className="text-xl font-black text-[#062A63]">{loading ? '...' : `TZS ${Number(product.price || 0).toLocaleString()}`}</p>
-                    </div>
-                  </div>
-
-                  {loading ? (
-                    <div className="mt-4 h-12 animate-pulse rounded-2xl bg-slate-100" />
-                  ) : (
-                    <>
-                      {badges.length > 2 ? (
-                        <div className="mt-4 flex flex-wrap gap-2 text-xs">
-                          {badges.slice(2, 4).map((badge) => (
-                            <span key={badge.label} className={`rounded-full px-3 py-1 font-semibold ${getSignalToneClasses(badge.tone)}`}>
-                              {badge.label}
-                            </span>
-                          ))}
-                        </div>
-                      ) : null}
-                      <p className="mt-4 text-sm font-medium leading-6 text-slate-600">{nudge}</p>
-                    </>
-                  )}
-
-                  {!loading ? (
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      <Link to={`/product/${product._id}`} className="inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-                        View product
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => handleRecommendationToggleSaved(product)}
-                        className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${
-                          saved
-                            ? 'border border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100'
-                            : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-                        }`}
-                      >
-                        <FiHeart /> {saved ? 'Saved' : 'Save'}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleRecommendationAddToCart(product)}
-                        disabled={Number(product.countInStock || 0) <= 0}
-                        className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
-                      >
-                        <FiShoppingBag /> {cartQty > 0 ? 'Add another' : 'Add to cart'}
-                      </button>
-                    </div>
-                  ) : null}
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="border-y border-slate-200 bg-white/80">
-        <div className="mx-auto max-w-7xl px-4 py-14 md:px-6 md:py-18">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="overflow-hidden rounded-[34px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#ffffff_0%,#eff6ff_52%,#fff7ed_100%)] p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] md:p-8">
+          <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Storefronts to watch</p>
-              <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-900">Let strong sellers become part of the shopping story</h2>
-              <p className="mt-2 max-w-2xl text-slate-600">Marketplace growth looks better when shoppers can discover trusted stores, not just individual items.</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">One customer hub</p>
+              <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-900 md:text-4xl">
+                Shopping, saved picks, checkout, and tracking now live inside your dashboard.
+              </h2>
+              <p className="mt-3 max-w-2xl text-slate-600">
+                The home page introduces JAYTRIX. Once a customer signs in, the full shopping journey stays in one private workspace with sidebar navigation, cart, payment, updates, and orders together.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link to="/account" className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5">
+                  Open dashboard <FiArrowRight />
+                </Link>
+                <Link to="/account/shop" className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                  Shop inside dashboard
+                </Link>
+              </div>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                ["Shop", "Browse products without leaving the customer hub."],
+                ["Cart & payment", "Review the basket and approve mobile money in one place."],
+                ["Saved picks", "Keep products and stores ready for later."],
+                ["Orders", "Track payment, delivery, and support updates together."],
+              ].map(([title, text]) => (
+                <div key={title} className="rounded-3xl border border-white/80 bg-white/80 p-5 shadow-sm">
+                  <p className="font-black text-slate-900">{title}</p>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+                </div>
+              ))}
             </div>
           </div>
-
-          <div className="mt-8 grid gap-5 lg:grid-cols-3">
-            {(featuredStores.length ? featuredStores : Array.from({ length: 3 })).map((store, index) => (
-              <article key={store?.slug || index} className="overflow-hidden rounded-[28px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] shadow-[0_18px_40px_rgba(15,23,42,0.05)]">
-                  <div className="flex items-center gap-3 border-b border-slate-100 px-5 py-4">
-                    <div className="rounded-2xl bg-slate-100 p-3 text-[#062A63]">
-                      <FiPackage size={20} />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slate-900">{store?.name || 'Marketplace store'}</p>
-                      <p className="text-sm text-slate-500">{store ? `${store.itemCount} live products` : 'Seller shelf loading...'}</p>
-                      {store ? (
-                        <div className="mt-2">
-                          <MarketplaceRating
-                            averageRating={store.averageRating}
-                            reviewCount={store.reviewCount}
-                            compact
-                          />
-                        </div>
-                      ) : null}
-                      {store && getStoreBadges(store).length ? (
-                        <div className="mt-2 flex flex-wrap gap-2 text-xs">
-                          {getStoreBadges(store).slice(0, 2).map((badge) => (
-                            <span
-                              key={badge.label}
-                              className={`rounded-full px-3 py-1 font-semibold ${getStoreSignalToneClasses(badge.tone)}`}
-                            >
-                              {badge.label}
-                            </span>
-                          ))}
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                <div className="grid grid-cols-[1.1fr_0.9fr] gap-0">
-                  <div className="aspect-[4/4] bg-slate-100">
-                    {store?.sampleImage ? <img src={store.sampleImage} alt={store.name} className="h-full w-full object-cover" /> : <div className="h-full w-full animate-pulse bg-slate-200" />}
-                  </div>
-                  <div className="flex flex-col justify-between p-5">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Seller shelf</p>
-                      <p className="mt-3 text-sm text-slate-600">{store ? `${store.inStockCount} products ready for shoppers now.` : 'Preparing seller view...'}</p>
-                      {store ? (
-                        <p className="mt-2 text-sm font-medium text-slate-500">{getStoreNudge(store)}</p>
-                      ) : null}
-                    </div>
-                    {store?.slug ? (
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        <Link to={`/stores/${store.slug}`} className="inline-flex items-center gap-2 text-sm font-semibold text-[#062A63] hover:text-[#031326]">
-                          Visit store <FiArrowRight />
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => handleToggleFavoriteStore(store)}
-                          className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold transition ${
-                            isFavoriteStore(store.slug)
-                              ? "border border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100"
-                              : "border border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
-                          }`}
-                        >
-                          <FiHeart /> {isFavoriteStore(store.slug) ? "Saved" : "Save store"}
-                        </button>
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-14 md:px-6 md:py-20">
-        <div className="grid gap-5 lg:grid-cols-3">
-          {quickCollections.map((item) => (
-            <Link
-              key={item.title}
-              to={`/shop?${item.price ? `price=${item.price}` : `search=${encodeURIComponent(item.search)}`}`}
-              className={`rounded-[28px] bg-gradient-to-br ${item.color} p-[1px] shadow-[0_20px_40px_rgba(15,23,42,0.08)] transition hover:-translate-y-1`}
-            >
-              <div className="h-full rounded-[27px] bg-white/95 p-6">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="rounded-2xl bg-slate-950/5 p-3 text-slate-700">
-                    <FiBox size={20} />
-                  </div>
-                  <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Marketplace lane</span>
-                </div>
-                <h3 className="mt-6 text-2xl font-black text-slate-900">{item.title}</h3>
-                <p className="mt-2 text-slate-600">{item.subtitle}</p>
-                <span className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-slate-900">
-                  Shop this lane <FiArrowRight />
-                </span>
-              </div>
-            </Link>
-          ))}
         </div>
       </section>
     </div>

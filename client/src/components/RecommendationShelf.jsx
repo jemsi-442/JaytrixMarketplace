@@ -13,6 +13,7 @@ export default function RecommendationShelf({
   getCartQuantity,
   getReasonLabel,
   emptyMessage = "No recommendations available right now.",
+  productBasePath = "/product",
 }) {
   return (
     <section className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] md:p-6">
@@ -37,13 +38,13 @@ export default function RecommendationShelf({
             const nudge = getProductNudge(product, { index });
             return (
               <article key={product._id} className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50">
-                <Link to={`/product/${product._id}`} className="block aspect-[4/4.1] overflow-hidden bg-slate-100">
+                <Link to={`${productBasePath}/${product._id}`} className="block aspect-[4/4.1] overflow-hidden bg-slate-100">
                   <img src={product.image} alt={product.name} className="h-full w-full object-cover transition duration-300 hover:scale-105" />
                 </Link>
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <Link to={`/product/${product._id}`} className="line-clamp-1 text-base font-black text-slate-900 hover:text-[#062A63]">
+                      <Link to={`${productBasePath}/${product._id}`} className="line-clamp-1 text-base font-black text-slate-900 hover:text-[#062A63]">
                         {product.name}
                       </Link>
                       <p className="mt-1 text-sm text-slate-500">{product.vendor?.storeName || product.vendor?.name || "Marketplace seller"}</p>

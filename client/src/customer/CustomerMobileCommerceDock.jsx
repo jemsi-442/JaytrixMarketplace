@@ -5,9 +5,9 @@ import { useSavedProducts } from "../hooks/useSavedProducts";
 
 const dockItems = [
   { label: "Home", path: "/account", icon: FiHome },
-  { label: "Shop", path: "/shop", icon: FiShoppingBag },
+  { label: "Shop", path: "/account/shop", icon: FiShoppingBag },
   { label: "Saved", path: "/account/wishlist", icon: FiHeart, countKey: "saved" },
-  { label: "Cart", path: "/cart", icon: FiShoppingCart, countKey: "cart" },
+  { label: "Cart", path: "/account/cart", icon: FiShoppingCart, countKey: "cart" },
 ];
 
 export default function CustomerMobileCommerceDock() {
