@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { FiBell, FiCheck, FiClock, FiEdit3, FiHeart, FiMapPin, FiPhone, FiRefreshCw, FiShoppingBag, FiUser } from "react-icons/fi";
+import { FiArrowRight, FiBell, FiCheck, FiClock, FiEdit3, FiHeart, FiMapPin, FiPhone, FiRefreshCw, FiShield, FiShoppingBag, FiUser } from "react-icons/fi";
 import MarketplaceRating from "../components/MarketplaceRating";
 import RecommendationShelf from "../components/RecommendationShelf";
 import api from "../utils/axios";
@@ -1042,6 +1042,65 @@ export default function Orders() {
     return null;
   }, [reviewReminderItems, nextReviewTarget, reviewReadyToBuyAgain, trustedCategories]);
 
+  const activeOrderFocus = useMemo(() => {
+    return orders.find((order) => !["delivered", "cancelled", "refunded"].includes(order.status)) || null;
+  }, [orders]);
+
+  const clientBestMove = useMemo(() => {
+    const paymentOrder = orders.find((order) => order.status === "pending" && !(order.payment?.isPaid || order.isPaid));
+
+    if (paymentOrder) {
+      return {
+        eyebrow: "Payment action",
+        title: "Complete your pending payment",
+        description: `Order #${String(paymentOrder._id || paymentOrder.id || "").slice(-6)} is waiting for mobile money confirmation.`,
+        label: "Open order",
+        targetId: "orders-list",
+        tone: "blue",
+      };
+    }
+
+    if (nextReviewTarget) {
+      return {
+        eyebrow: "Trust action",
+        title: "Review your delivered item",
+        description: `${nextReviewTarget.item?.name || "A delivered item"} is ready for feedback so future shoppers can buy with confidence.`,
+        label: "Review now",
+        targetId: "review-reminders",
+        tone: "blue",
+      };
+    }
+
+    if (savedProducts.some((product) => Number(product.countInStock || 0) > 0)) {
+      return {
+        eyebrow: "Wishlist action",
+        title: "Turn saved items into a cart",
+        description: "Some saved products are ready now. Add them to cart when you are ready to checkout.",
+        label: "Open wishlist",
+        targetId: "wishlist",
+        tone: "blue",
+      };
+    }
+
+    return {
+      eyebrow: "Shopping action",
+      title: "Discover your next strong pick",
+      description: "Browse trusted stores, top-rated products, and fresh marketplace recommendations.",
+      label: "Go shopping",
+      href: "/shop",
+      tone: "blue",
+    };
+  }, [nextReviewTarget, orders, savedProducts]);
+
+  const clientShoppingSignals = useMemo(() => {
+    return [
+      { label: "Saved items", value: savedProducts.length },
+      { label: "Favorite stores", value: favoriteStoreCount },
+      { label: "Recently viewed", value: recentProducts.length },
+      { label: "Unread updates", value: orderStats.unread },
+    ];
+  }, [favoriteStoreCount, orderStats.unread, recentProducts.length, savedProducts.length]);
+
   const reviewerSnapshot = useMemo(() => {
     const allReviewedEntries = orders
       .flatMap((order) =>
@@ -2064,6 +2123,24 @@ export default function Orders() {
             </div>
           </div>
         </motion.section>
+
+        <ClientCommandCenter
+          bestMove={clientBestMove}
+          activeOrder={activeOrderFocus}
+          signals={clientShoppingSignals}
+          onJump={(targetId) => {
+            const section = document.getElementById(targetId);
+            section?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+        />
+
+        <CustomerCarePanel
+          supportPhone="+255 683 186 987"
+          onJump={(targetId) => {
+            const section = document.getElementById(targetId);
+            section?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+        />
 
         <div className="grid gap-6 xl:grid-cols-[360px_minmax(0,1fr)]">
           <div className="space-y-6">
@@ -3992,7 +4069,8 @@ export default function Orders() {
             </section>
           ) : null}
 
-          {orders.length === 0 ? (
+          <div id="orders-list" className="scroll-mt-28 space-y-4">
+            {orders.length === 0 ? (
                 <div className="rounded-[28px] border border-slate-200 bg-white p-10 text-center text-slate-500 shadow-sm">
                   <FiClock className="mx-auto mb-3 text-3xl" />
                   You have not placed an order yet.
@@ -4012,6 +4090,7 @@ export default function Orders() {
                   />
                 ))
               )}
+          </div>
             </motion.section>
           </div>
         </div>
@@ -4026,6 +4105,165 @@ export default function Orders() {
         />
       ) : null}
     </div>
+  );
+}
+
+function ClientCommandCenter({ bestMove, activeOrder, signals = [], onJump }) {
+  const activeOrderId = activeOrder?._id || activeOrder?.id;
+  const activeOrderStatus = activeOrder?.status ? String(activeOrder.status).replaceAll("_", " ") : "No active order";
+  const activeOrderTotal = Number(activeOrder?.totalAmount || 0);
+
+  const actionButton = bestMove?.href ? (
+    <Link
+      to={bestMove.href}
+      className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#062A63] shadow-sm transition hover:-translate-y-0.5"
+    >
+      {bestMove.label} <FiArrowRight />
+    </Link>
+  ) : (
+    <button
+      type="button"
+      onClick={() => bestMove?.targetId && onJump?.(bestMove.targetId)}
+      className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#062A63] shadow-sm transition hover:-translate-y-0.5"
+    >
+      {bestMove?.label || "Open"} <FiArrowRight />
+    </button>
+  );
+
+  return (
+    <section className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="overflow-hidden rounded-[30px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#031326_0%,#0f172a_55%,#111827_100%)] p-5 text-white shadow-[0_24px_60px_rgba(2,6,23,0.18)] md:p-6">
+        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-100">
+              <FiShield /> {bestMove?.eyebrow || "Best move"}
+            </div>
+            <h2 className="mt-4 max-w-2xl text-2xl font-black tracking-tight md:text-3xl">
+              {bestMove?.title || "Your shopper hub is ready."}
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
+              {bestMove?.description || "Keep orders, saved items, trusted stores, and recommendations in one place."}
+            </p>
+          </div>
+          {actionButton}
+        </div>
+
+        <div className="mt-5 grid gap-3 sm:grid-cols-4">
+          {signals.map((signal) => (
+            <div key={signal.label} className="rounded-2xl border border-white/10 bg-white/[0.08] px-4 py-3">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">{signal.label}</p>
+              <p className="mt-2 text-2xl font-black text-white">{Number(signal.value || 0).toLocaleString()}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] md:p-6">
+        <div className="flex items-start gap-3">
+          <div className="rounded-2xl bg-blue-50 p-3 text-[#062A63]">
+            <FiRefreshCw />
+          </div>
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Active order</p>
+            <h3 className="mt-1 text-xl font-black text-slate-900">
+              {activeOrder ? `Order #${String(activeOrderId || "").slice(-6)}` : "No active order right now"}
+            </h3>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              {activeOrder
+                ? `Current status: ${activeOrderStatus}. ${activeOrderTotal ? `Total TZS ${activeOrderTotal.toLocaleString()}.` : ""}`
+                : "When you place an order, payment and delivery progress will appear here first."}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-5 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => onJump?.("orders-list")}
+            className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white"
+          >
+            View orders
+          </button>
+          <button
+            type="button"
+            onClick={() => onJump?.("wishlist")}
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-[#062A63]/15 bg-blue-50 px-4 py-2 text-sm font-semibold text-[#062A63] transition hover:bg-blue-100"
+          >
+            <FiHeart /> Saved picks
+          </button>
+          <Link
+            to="/shop"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+          >
+            <FiShoppingBag /> Shop
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CustomerCarePanel({ supportPhone, onJump }) {
+  const promises = [
+    {
+      title: "Secure checkout",
+      description: "Mobile money orders stay visible from payment request to confirmation.",
+    },
+    {
+      title: "Delivery visibility",
+      description: "Active orders show the next step so you know what is happening.",
+    },
+    {
+      title: "Trusted shopping",
+      description: "Reviews, saved picks, and favorite stores help you buy with confidence.",
+    },
+  ];
+
+  return (
+    <section className="rounded-[30px] border border-slate-200 bg-white/90 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] backdrop-blur md:p-6">
+      <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#062A63]/10 bg-blue-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#062A63]">
+            <FiShield /> Shopper care
+          </div>
+          <h2 className="mt-4 text-2xl font-black tracking-tight text-slate-900">Need help? We keep your shopping journey clear.</h2>
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            Reach support, jump back to order progress, or continue from your saved items without searching around the app.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            <a
+              href={`tel:${supportPhone.replace(/\s/g, "")}`}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+            >
+              <FiPhone /> Call support
+            </a>
+            <button
+              type="button"
+              onClick={() => onJump?.("orders-list")}
+              className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white"
+            >
+              Track orders
+            </button>
+            <button
+              type="button"
+              onClick={() => onJump?.("wishlist")}
+              className="inline-flex items-center justify-center rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-700 transition hover:bg-orange-100"
+            >
+              View saved picks
+            </button>
+          </div>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-3">
+          {promises.map((promise) => (
+            <div key={promise.title} className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+              <p className="text-sm font-black text-slate-900">{promise.title}</p>
+              <p className="mt-2 text-sm leading-5 text-slate-600">{promise.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
