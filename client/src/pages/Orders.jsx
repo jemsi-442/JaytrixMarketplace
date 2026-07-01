@@ -2138,7 +2138,7 @@ export default function Orders() {
         >
           <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">My dashboard</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Dashboard overview</p>
               <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-900 md:text-4xl">Welcome back, {profile.name || user?.name || "shopper"}.</h1>
               <p className="mt-3 max-w-2xl text-slate-600">Your shopping control center: active orders, payments, saved picks, trusted stores, updates, and support in one polished place.</p>
             </div>
@@ -2150,16 +2150,6 @@ export default function Orders() {
             </div>
           </div>
         </motion.section>
-
-        <CustomerDashboardNav
-          stats={{
-            orders: orderStats.totalOrders,
-            saved: savedProducts.length,
-            updates: orderStats.unread,
-            profileReady: profile.phone ? 1 : 0,
-          }}
-          onJump={jumpToDashboardSection}
-        />
 
         <ClientCommandCenter
           bestMove={clientBestMove}
@@ -4139,75 +4129,6 @@ export default function Orders() {
         />
       ) : null}
     </div>
-  );
-}
-
-function CustomerDashboardNav({ stats, onJump }) {
-  const items = [
-    {
-      label: "Overview",
-      targetId: "account-overview",
-      value: "Home",
-      icon: FiShoppingBag,
-    },
-    {
-      label: "Orders",
-      targetId: "orders-list",
-      value: stats.orders,
-      icon: FiClock,
-    },
-    {
-      label: "Saved",
-      targetId: "wishlist",
-      value: stats.saved,
-      icon: FiHeart,
-    },
-    {
-      label: "Updates",
-      targetId: "account-updates",
-      value: stats.updates,
-      icon: FiBell,
-    },
-    {
-      label: "Profile",
-      targetId: "profile-section",
-      value: stats.profileReady ? "Ready" : "Open",
-      icon: FiUser,
-    },
-    {
-      label: "Support",
-      targetId: "support-center",
-      value: "Help",
-      icon: FiShield,
-    },
-  ];
-
-  return (
-    <nav className="sticky top-4 z-20 rounded-[28px] border border-white/80 bg-white/90 p-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)] backdrop-blur">
-      <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-6">
-        {items.map((item) => {
-          const Icon = item.icon;
-          return (
-            <button
-              key={item.targetId}
-              type="button"
-              onClick={() => onJump?.(item.targetId)}
-              className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-left transition hover:-translate-y-0.5 hover:border-[#062A63]/20 hover:bg-white hover:shadow-sm"
-            >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white text-[#062A63] shadow-sm transition group-hover:bg-[#062A63] group-hover:text-white">
-                <Icon />
-              </span>
-              <span className="min-w-0">
-                <span className="block text-sm font-black text-slate-900">{item.label}</span>
-                <span className="block truncate text-xs font-semibold text-slate-500">
-                  {typeof item.value === "number" ? Number(item.value || 0).toLocaleString() : item.value}
-                </span>
-              </span>
-            </button>
-          );
-        })}
-      </div>
-    </nav>
   );
 }
 
