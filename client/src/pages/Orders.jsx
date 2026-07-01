@@ -2252,6 +2252,45 @@ export default function Orders({ view = "overview" }) {
     },
   }[view] || {};
 
+  const pageSummaryCards = {
+    overview: [
+      { label: "Orders placed", value: orderStats.totalOrders },
+      { label: "Awaiting payment", value: orderStats.awaitingPayment },
+      { label: "Payments confirmed", value: orderStats.paidOrders },
+      { label: "Delivered", value: orderStats.deliveredOrders },
+    ],
+    orders: [
+      { label: "Orders placed", value: orderStats.totalOrders },
+      { label: "Awaiting payment", value: orderStats.awaitingPayment },
+      { label: "In progress", value: orderStats.movingOrders },
+      { label: "Delivered", value: orderStats.deliveredOrders },
+    ],
+    wishlist: [
+      { label: "Saved picks", value: savedProducts.length },
+      { label: "Ready now", value: savedProducts.filter((product) => Number(product.countInStock || 0) > 0).length },
+      { label: "Favorite stores", value: favoriteStoreCount },
+      { label: "Recently viewed", value: recentProducts.length },
+    ],
+    updates: [
+      { label: "Unread updates", value: orderStats.unread },
+      { label: "Orders placed", value: orderStats.totalOrders },
+      { label: "Awaiting payment", value: orderStats.awaitingPayment },
+      { label: "Delivered", value: orderStats.deliveredOrders },
+    ],
+    profile: [
+      { label: "Saved picks", value: savedProducts.length },
+      { label: "Favorite stores", value: favoriteStoreCount },
+      { label: "Phone saved", value: profile.phone ? "Yes" : "No" },
+      { label: "Member since", value: profile.createdAt ? new Date(profile.createdAt).getFullYear() : "New" },
+    ],
+    support: [
+      { label: "Unread updates", value: orderStats.unread },
+      { label: "Active orders", value: orderStats.movingOrders },
+      { label: "Awaiting payment", value: orderStats.awaitingPayment },
+      { label: "Delivered orders", value: orderStats.deliveredOrders },
+    ],
+  }[view] || [];
+
   return (
     <div className="min-h-full px-4 py-5 md:px-6 md:py-6">
       <div className="mx-auto max-w-7xl space-y-6">
@@ -2268,10 +2307,9 @@ export default function Orders({ view = "overview" }) {
               <p className="mt-3 max-w-2xl text-slate-600">{pageMeta.description}</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              <SummaryCard label="Orders placed" value={orderStats.totalOrders} />
-              <SummaryCard label="Awaiting payment" value={orderStats.awaitingPayment} />
-              <SummaryCard label="Payments confirmed" value={orderStats.paidOrders} />
-              <SummaryCard label="Delivered" value={orderStats.deliveredOrders} />
+              {pageSummaryCards.map((card) => (
+                <SummaryCard key={card.label} label={card.label} value={card.value} />
+              ))}
             </div>
           </div>
         </motion.section>
@@ -2484,8 +2522,28 @@ export default function Orders({ view = "overview" }) {
                     </div>
                   </div>
                 )) : (
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-10 text-center text-slate-500">
-                    Products you save for later will appear here.
+                  <div className="rounded-2xl border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_58%,#fff7ed_100%)] px-4 py-10 text-center">
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#062A63] text-white shadow-[0_18px_35px_rgba(6,42,99,0.2)]">
+                      <FiHeart size={24} />
+                    </div>
+                    <h3 className="mt-4 text-xl font-black text-slate-900">Build your shortlist</h3>
+                    <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600">
+                      Save products while browsing so you can compare them later, add ready items to cart, and keep trusted sellers close.
+                    </p>
+                    <div className="mt-5 flex flex-wrap justify-center gap-2">
+                      <Link
+                        to="/shop"
+                        className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                      >
+                        <FiShoppingBag /> Browse products
+                      </Link>
+                      <Link
+                        to="/account"
+                        className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                      >
+                        Dashboard overview
+                      </Link>
+                    </div>
                   </div>
                 )}
               </div>
@@ -4639,10 +4697,12 @@ function CustomerCarePanel({ supportPhone }) {
 }
 
 function SummaryCard({ label, value }) {
+  const displayValue = typeof value === "number" ? Number(value || 0).toLocaleString() : value;
+
   return (
     <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-4 shadow-sm">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">{label}</p>
-      <p className="mt-2 text-2xl font-black text-slate-900">{Number(value || 0).toLocaleString()}</p>
+      <p className="mt-2 text-2xl font-black text-slate-900">{displayValue || 0}</p>
     </div>
   );
 }
