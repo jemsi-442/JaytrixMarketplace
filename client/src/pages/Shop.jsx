@@ -321,7 +321,7 @@ export default function Shop() {
       </section>
 
       <div className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-10">
-        <CustomerJourneyStrip active="discover" compact />
+        <CustomerJourneyStrip active="discover" compact quiet />
 
         <section className="mt-6 rounded-[28px] border border-slate-200 bg-white/90 p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] md:p-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">

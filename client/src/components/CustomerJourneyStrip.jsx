@@ -8,7 +8,45 @@ const journeySteps = [
   { label: "Track", detail: "Follow in dashboard", href: "/account/orders", icon: FiTruck },
 ];
 
-export default function CustomerJourneyStrip({ active = "discover", compact = false }) {
+const stepKey = (label) => label.toLowerCase().replaceAll(" ", "-");
+
+export default function CustomerJourneyStrip({ active = "discover", compact = false, quiet = false }) {
+  if (quiet) {
+    return (
+      <section className="rounded-[24px] border border-[#062A63]/10 bg-white/85 px-3 py-3 shadow-[0_14px_30px_rgba(15,23,42,0.045)] backdrop-blur md:px-4">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full bg-[#062A63]/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-[#062A63]">
+              Buyer flow
+            </span>
+            {journeySteps.map((step) => {
+              const Icon = step.icon;
+              const selected = active === stepKey(step.label);
+              return (
+                <Link
+                  key={step.label}
+                  to={step.href}
+                  className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-bold transition hover:-translate-y-0.5 ${
+                    selected ? "border-[#062A63] bg-[#062A63] text-white" : "border-slate-200 bg-white text-slate-600 hover:border-[#062A63]/30 hover:text-[#062A63]"
+                  }`}
+                >
+                  <Icon className="text-sm" />
+                  {step.label}
+                </Link>
+              );
+            })}
+          </div>
+          <Link
+            to="/account"
+            className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-slate-900 px-3 py-1.5 text-xs font-black text-white transition hover:-translate-y-0.5"
+          >
+            <FiCheckCircle /> Dashboard
+          </Link>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className={`rounded-[28px] border border-[#062A63]/10 bg-white/90 shadow-[0_18px_45px_rgba(15,23,42,0.06)] backdrop-blur ${compact ? "p-4" : "p-5 md:p-6"}`}>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -30,7 +68,7 @@ export default function CustomerJourneyStrip({ active = "discover", compact = fa
       <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {journeySteps.map((step) => {
           const Icon = step.icon;
-          const selected = active === step.label.toLowerCase().replaceAll(" ", "-");
+          const selected = active === stepKey(step.label);
           return (
             <Link
               key={step.label}
