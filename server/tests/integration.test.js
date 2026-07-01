@@ -342,6 +342,52 @@ test("auth, order creation, and Snippe webhook flow stays healthy", async (t) =>
     assert.ok(loginResponse.body.token);
     token = loginResponse.body.token;
 
+    const wrongPasswordChangeResponse = await api("/api/users/me/password", {
+      method: "PATCH",
+      token,
+      body: {
+        currentPassword: "WrongPassword123!",
+        newPassword: "NewPassword123!",
+        confirmPassword: "NewPassword123!",
+      },
+    });
+
+    assert.equal(wrongPasswordChangeResponse.status, 401);
+
+    const passwordChangeResponse = await api("/api/users/me/password", {
+      method: "PATCH",
+      token,
+      body: {
+        currentPassword: "Password123!",
+        newPassword: "NewPassword123!",
+        confirmPassword: "NewPassword123!",
+      },
+    });
+
+    assert.equal(passwordChangeResponse.status, 200);
+    assert.equal(passwordChangeResponse.body.message, "Password updated successfully");
+
+    const oldPasswordLoginResponse = await api("/api/auth/login", {
+      method: "POST",
+      body: {
+        email: testEmail,
+        password: "Password123!",
+      },
+    });
+
+    assert.equal(oldPasswordLoginResponse.status, 401);
+
+    const newPasswordLoginResponse = await api("/api/auth/login", {
+      method: "POST",
+      body: {
+        email: testEmail,
+        password: "NewPassword123!",
+      },
+    });
+
+    assert.equal(newPasswordLoginResponse.status, 200);
+    token = newPasswordLoginResponse.body.token;
+
     const adminLoginResponse = await api("/api/auth/login", {
       method: "POST",
       body: {

@@ -17,6 +17,7 @@ import {
 } from "recharts";
 import { FiArrowRight, FiBell, FiCheck, FiClock, FiEdit3, FiHeart, FiMapPin, FiPhone, FiRefreshCw, FiShield, FiShoppingBag, FiUser } from "react-icons/fi";
 import MarketplaceRating from "../components/MarketplaceRating";
+import ChangePasswordCard from "../components/ChangePasswordCard";
 import RecommendationShelf from "../components/RecommendationShelf";
 import api from "../utils/axios";
 import OrderCard from "../components/OrderCard";
@@ -2410,6 +2411,15 @@ export default function Orders({ view = "overview" }) {
                 </button>
               </form>
             </motion.section>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.07 }}
+              className={showProfilePanel ? "" : "hidden"}
+            >
+              <ChangePasswordCard />
+            </motion.div>
 
             <motion.section
               initial={{ opacity: 0, y: 16 }}

@@ -3,6 +3,7 @@ import { FiClock, FiSave, FiToggleLeft, FiToggleRight, FiTruck, FiUser } from "r
 import axios from "../utils/axios";
 import { extractOne } from "../utils/apiShape";
 import PageState from "../components/PageState";
+import ChangePasswordCard from "../components/ChangePasswordCard";
 import { useAuth } from "../hooks/useAuth";
 import useToast from "../hooks/useToast";
 
@@ -216,6 +217,8 @@ export default function RiderProfile() {
               <InfoRow label="Last assignment" value={formatDateTime(profile?.lastAssignedAt)} />
             </div>
           </section>
+
+          <ChangePasswordCard />
         </div>
       </section>
     </div>

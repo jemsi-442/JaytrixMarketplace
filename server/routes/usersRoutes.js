@@ -3,15 +3,22 @@ import { Op } from "sequelize";
 import { Product, Rider, User } from "../models/index.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
 import { adminMiddleware } from "../middleware/roleMiddleware.js";
+import { rateLimit } from "../middleware/rateLimiter.js";
 import { serializeProduct, serializeUser } from "../utils/serializers.js";
 
 const router = express.Router();
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MIN_PASSWORD_LENGTH = 6;
 const ALLOWED_MANAGED_ROLES = ["customer", "vendor", "admin"];
 
 const normalizeEmail = (value = "") => String(value).trim().toLowerCase();
 const normalizeName = (value = "") => String(value).trim().replace(/\s+/g, " ");
 const normalizePhone = (value = "") => String(value).trim();
+const changePasswordRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 8,
+  keyGenerator: (req) => `${req.ip}:change-password:${req.user?._id || "anonymous"}`,
+});
 const normalizeSavedProductIds = (value) => {
   const input = Array.isArray(value) ? value : [];
   const uniqueIds = [];
@@ -338,6 +345,48 @@ router.patch("/me", verifyToken, async (req, res) => {
       message: "Profile updated successfully",
       data: serializeUser(user),
     });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.patch("/me/password", verifyToken, changePasswordRateLimiter, async (req, res) => {
+  const currentPassword = String(req.body?.currentPassword || "");
+  const newPassword = String(req.body?.newPassword || "");
+  const confirmPassword = String(req.body?.confirmPassword || "");
+
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    return res.status(400).json({ message: "Current password, new password, and confirmation are required" });
+  }
+
+  if (newPassword.length < MIN_PASSWORD_LENGTH) {
+    return res.status(400).json({ message: `New password must be at least ${MIN_PASSWORD_LENGTH} characters` });
+  }
+
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({ message: "New password and confirmation do not match" });
+  }
+
+  if (currentPassword === newPassword) {
+    return res.status(400).json({ message: "New password must be different from the current password" });
+  }
+
+  try {
+    const user = await User.findByPk(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const currentPasswordMatches = await user.matchPassword(currentPassword);
+    if (!currentPasswordMatches) {
+      return res.status(401).json({ message: "Current password is incorrect" });
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    return res.json({ message: "Password updated successfully" });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server error" });

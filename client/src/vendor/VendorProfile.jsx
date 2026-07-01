@@ -5,6 +5,7 @@ import axios from "../utils/axios";
 import { extractOne } from "../utils/apiShape";
 import { useToast } from "../hooks/useToast";
 import { useAuth } from "../hooks/useAuth";
+import ChangePasswordCard from "../components/ChangePasswordCard";
 
 const defaultForm = {
   storeName: "",
@@ -232,6 +233,8 @@ export default function VendorProfile() {
           </div>
         </aside>
       </section>
+
+      <ChangePasswordCard />
 
       <form onSubmit={handleSubmit} className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
         <section className="surface-panel-lg p-5 md:p-6">
