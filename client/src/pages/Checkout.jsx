@@ -122,7 +122,7 @@ const Checkout = () => {
       }
       clearCart();
       setStep(0);
-      navigate("/orders");
+      navigate("/account#orders-list");
     } catch (err) {
       console.error(err);
       toast.error(err.response?.data?.message || "Failed to place order");
