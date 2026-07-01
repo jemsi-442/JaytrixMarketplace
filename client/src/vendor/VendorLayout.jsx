@@ -9,6 +9,7 @@ import useDeliveryIssueSummary from "../hooks/useDeliveryIssueSummary";
 export default function VendorLayout() {
   const { user } = useAuth();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [desktopSidebarCollapsed, setDesktopSidebarCollapsed] = useState(() => localStorage.getItem("jaytrix:vendor-sidebar-collapsed") === "true");
   const deliveryIssueSummary = useDeliveryIssueSummary({
     enabled: user?.role === "vendor",
     mode: "vendor",
@@ -27,11 +28,20 @@ export default function VendorLayout() {
     };
   }, [mobileSidebarOpen]);
 
+  useEffect(() => {
+    localStorage.setItem("jaytrix:vendor-sidebar-collapsed", String(desktopSidebarCollapsed));
+  }, [desktopSidebarCollapsed]);
+
   if (!user) return <Navigate to="/login" replace />;
 
   return (
     <div className="flex h-screen min-h-screen overflow-hidden bg-[linear-gradient(180deg,#f8fafc_0%,#eff6ff_38%,#fff7ed_100%)]">
-      <VendorSidebar className="hidden lg:flex" activeIssueCount={deliveryIssueSummary.activeCount} />
+      <VendorSidebar
+        className="hidden lg:flex"
+        activeIssueCount={deliveryIssueSummary.activeCount}
+        collapsed={desktopSidebarCollapsed}
+        onToggleCollapse={() => setDesktopSidebarCollapsed((value) => !value)}
+      />
 
       {mobileSidebarOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden">

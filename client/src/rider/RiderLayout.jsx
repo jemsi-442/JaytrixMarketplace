@@ -8,6 +8,7 @@ import RiderTopbar from "./RiderTopbar";
 export default function RiderLayout() {
   const { user } = useAuth();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [desktopSidebarCollapsed, setDesktopSidebarCollapsed] = useState(() => localStorage.getItem("jaytrix:rider-sidebar-collapsed") === "true");
 
   useEffect(() => {
     if (!mobileSidebarOpen) {
@@ -22,11 +23,19 @@ export default function RiderLayout() {
     };
   }, [mobileSidebarOpen]);
 
+  useEffect(() => {
+    localStorage.setItem("jaytrix:rider-sidebar-collapsed", String(desktopSidebarCollapsed));
+  }, [desktopSidebarCollapsed]);
+
   if (!user) return <Navigate to="/login" replace />;
 
   return (
     <div className="flex h-screen min-h-screen overflow-hidden bg-[linear-gradient(180deg,#f8fafc_0%,#eff6ff_36%,#fff7ed_100%)]">
-      <RiderSidebar className="hidden lg:flex" />
+      <RiderSidebar
+        className="hidden lg:flex"
+        collapsed={desktopSidebarCollapsed}
+        onToggleCollapse={() => setDesktopSidebarCollapsed((value) => !value)}
+      />
 
       {mobileSidebarOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden">

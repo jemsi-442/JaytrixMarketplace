@@ -12,6 +12,7 @@ import useDeliveryIssueSummary from "../../hooks/useDeliveryIssueSummary";
 export default function AdminLayout() {
   const { user } = useAuth();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [desktopSidebarCollapsed, setDesktopSidebarCollapsed] = useState(() => localStorage.getItem("jaytrix:admin-sidebar-collapsed") === "true");
   const notificationPreferences = useNotificationPreferences("admin");
   const notificationSummary = useNotificationSummary({
     enabled: user?.role === "admin",
@@ -43,11 +44,21 @@ export default function AdminLayout() {
     };
   }, [mobileSidebarOpen]);
 
+  useEffect(() => {
+    localStorage.setItem("jaytrix:admin-sidebar-collapsed", String(desktopSidebarCollapsed));
+  }, [desktopSidebarCollapsed]);
+
   if (!user) return <Navigate to="/login" replace />;
 
   return (
     <div className="flex h-screen min-h-screen overflow-hidden bg-[linear-gradient(180deg,#f8fafc_0%,#eff6ff_36%,#fff7ed_100%)]">
-      <AdminSidebar className="hidden lg:flex" unreadCount={unreadCount} activeIssueCount={deliveryIssueSummary.activeCount} />
+      <AdminSidebar
+        className="hidden lg:flex"
+        unreadCount={unreadCount}
+        activeIssueCount={deliveryIssueSummary.activeCount}
+        collapsed={desktopSidebarCollapsed}
+        onToggleCollapse={() => setDesktopSidebarCollapsed((value) => !value)}
+      />
 
       {mobileSidebarOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden">
