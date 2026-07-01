@@ -15,24 +15,24 @@ import { motion } from "framer-motion";
 
 const PALETTE = {
   emerald: {
-    primary: "#102A43",
-    secondary: "#F28C28",
+    primary: "#062A63",
+    secondary: "#0B5FFF",
     tertiary: "#DC2626",
-    panel: "from-[#0b1525] via-[#102A43] to-[#111827]",
-    glow: "rgba(242,140,40,0.18)",
+    panel: "from-[#0b1525] via-[#062A63] to-[#111827]",
+    glow: "rgba(11,95,255,0.18)",
     chip: "text-orange-200",
   },
   amber: {
-    primary: "#F28C28",
-    secondary: "#102A43",
+    primary: "#0B5FFF",
+    secondary: "#062A63",
     tertiary: "#DC2626",
-    panel: "from-[#1f2937] via-[#102A43] to-[#0f172a]",
-    glow: "rgba(242,140,40,0.22)",
+    panel: "from-[#1f2937] via-[#062A63] to-[#0f172a]",
+    glow: "rgba(11,95,255,0.22)",
     chip: "text-orange-200",
   },
 };
 
-const DONUT_COLORS = ["#102A43", "#F28C28", "#DC2626", "#1C4268", "#94A3B8"];
+const DONUT_COLORS = ["#062A63", "#0B5FFF", "#DC2626", "#0A3A78", "#94A3B8"];
 
 const money = (value) => `Tsh ${Number(value || 0).toLocaleString()}`;
 
@@ -201,8 +201,8 @@ export default function PayoutTrendCharts({ trendData = [], statusData = [], ton
           <div className="mt-6 rounded-[26px] border border-white/10 bg-white/[0.05] p-4 backdrop-blur-sm">
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
               <div className="flex flex-wrap items-center gap-2">
-                <LegendPill label="Paid Out" swatch="bg-[#102A43]" />
-                <LegendPill label="Pending" swatch="bg-[#F28C28]" />
+                <LegendPill label="Paid Out" swatch="bg-[#062A63]" />
+                <LegendPill label="Pending" swatch="bg-[#0B5FFF]" />
                 <LegendPill label="On Hold" swatch="bg-[#DC2626]" />
                 <LegendPill label="Average" swatch="bg-white/60" />
               </div>
@@ -337,7 +337,7 @@ export default function PayoutTrendCharts({ trendData = [], statusData = [], ton
         whileHover={{ y: -4 }}
         className="relative min-w-0 overflow-hidden rounded-[30px] border border-white/90 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] p-5 shadow-[0_24px_55px_rgba(15,23,42,0.09)] md:p-6"
       >
-        <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(242,140,40,0.12),transparent_68%)]" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(11,95,255,0.12),transparent_68%)]" />
 
         <div className="relative">
           <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">Payout Breakdown</p>
@@ -502,7 +502,7 @@ function LegendPill({ label, swatch }) {
 
 function InfoPill({ label, value, tone = "slate" }) {
   const toneClass = {
-    navy: "border-[#102A43]/20 bg-[#102A43]/18 text-white",
+    navy: "border-[#062A63]/20 bg-[#062A63]/18 text-white",
     orange: "border-orange-300/20 bg-orange-400/10 text-orange-100",
     slate: "border-white/10 bg-white/[0.06] text-slate-200",
   }[tone];
@@ -547,7 +547,7 @@ function PerformanceLane({ label, value, detail, progress, tone = "slate" }) {
   const safeProgress = Math.max(6, Math.min(Number(progress || 0), 100));
   const gradient =
     tone === "orange"
-      ? "linear-gradient(90deg, #F28C28, rgba(255,255,255,0.88))"
+      ? "linear-gradient(90deg, #0B5FFF, rgba(255,255,255,0.88))"
       : tone === "red"
         ? "linear-gradient(90deg, #DC2626, rgba(255,255,255,0.88))"
         : "linear-gradient(90deg, #cbd5e1, rgba(255,255,255,0.9))";

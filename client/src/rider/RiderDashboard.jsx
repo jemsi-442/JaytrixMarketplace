@@ -140,10 +140,10 @@ export default function RiderDashboard() {
 
   return (
     <div className="space-y-5 md:space-y-6">
-      <section className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#dbeafe_0%,#ffffff_44%,#ffedd5_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)] md:p-6">
+      <section className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#dbeafe_0%,#ffffff_44%,#ffedd5_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)] md:p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Rider Command</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Rider Command</p>
             <h1 className="mt-1 text-2xl font-black text-slate-900 md:text-3xl">Delivery Dashboard</h1>
             <p className="mt-2 max-w-2xl text-sm text-slate-600 md:text-base">
               Stay ahead of acceptance timers, keep customers informed, and close deliveries without losing the next assignment window.
@@ -161,7 +161,7 @@ export default function RiderDashboard() {
             </article>
             <article className="rounded-2xl border border-white/80 bg-white/80 px-4 py-3 shadow-sm backdrop-blur">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">Potential Earnings</p>
-              <p className="mt-2 text-xl font-black text-[#102A43]">{formatCurrency(dashboard.potentialEarnings)}</p>
+              <p className="mt-2 text-xl font-black text-[#062A63]">{formatCurrency(dashboard.potentialEarnings)}</p>
             </article>
           </div>
         </div>
@@ -220,7 +220,7 @@ export default function RiderDashboard() {
                   {getRiderSettlementLabel(priority)}
                 </span>
                 {prioritySecondsLeft !== null && !priority.delivery?.acceptedAt ? (
-                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${prioritySecondsLeft <= 30 ? "bg-red-100 text-red-700" : "bg-slate-100 text-[#102A43]"}`}>
+                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${prioritySecondsLeft <= 30 ? "bg-red-100 text-red-700" : "bg-slate-100 text-[#062A63]"}`}>
                     {prioritySecondsLeft}s left
                   </span>
                 ) : null}
@@ -329,7 +329,7 @@ export default function RiderDashboard() {
                           {accepted ? "Accepted" : "Waiting"}
                         </span>
                         {secondsLeft !== null && !accepted ? (
-                          <span className={`rounded-full px-3 py-1 text-xs font-semibold ${secondsLeft <= 30 ? "bg-red-100 text-red-700" : "bg-slate-100 text-[#102A43]"}`}>
+                          <span className={`rounded-full px-3 py-1 text-xs font-semibold ${secondsLeft <= 30 ? "bg-red-100 text-red-700" : "bg-slate-100 text-[#062A63]"}`}>
                             {secondsLeft}s left
                           </span>
                         ) : null}
@@ -375,7 +375,7 @@ export default function RiderDashboard() {
 
 function MetricCard({ icon: Icon, label, value, description, tone = "slate" }) {
   const toneMap = {
-    navy: "bg-[#102A43]/5 text-[#102A43]",
+    navy: "bg-[#062A63]/5 text-[#062A63]",
     orange: "bg-orange-50 text-orange-700",
     red: "bg-red-50 text-red-700",
     slate: "bg-slate-100 text-slate-700",
@@ -408,7 +408,7 @@ function InfoRow({ icon: Icon, label, value, subvalue }) {
 
 function InsightStrip({ label, value, description, tone = "slate" }) {
   const toneMap = {
-    navy: "border-[#102A43]/10 bg-[#102A43]/5",
+    navy: "border-[#062A63]/10 bg-[#062A63]/5",
     orange: "border-orange-200 bg-orange-50",
     red: "border-red-200 bg-red-50",
     slate: "border-slate-200 bg-slate-50",

@@ -240,8 +240,8 @@ export default function VendorOrders() {
 
   return (
     <div className="space-y-5 md:space-y-6">
-      <section className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Sales Orders</p>
+      <section className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Sales Orders</p>
         <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Orders for your products</h1>
         <p className="mt-2 text-slate-500">Track your sales, see order-line totals, and understand what is ready to become vendor payout.</p>
       </section>
@@ -249,7 +249,7 @@ export default function VendorOrders() {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         {[
           { label: "Orders", value: summary.totalOrders, icon: FiShoppingBag, tone: "text-slate-900", accent: "bg-slate-100 text-slate-700" },
-          { label: "Gross Sales", value: formatCurrency(summary.totalRevenue), icon: FiCreditCard, tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
+          { label: "Gross Sales", value: formatCurrency(summary.totalRevenue), icon: FiCreditCard, tone: "text-[#062A63]", accent: "bg-slate-100 text-[#062A63]" },
           { label: "Projected Payout", value: formatCurrency(summary.projectedPayout), icon: FiCheckCircle, tone: "text-orange-700", accent: "bg-orange-100 text-orange-600" },
           { label: "Awaiting Payment", value: summary.awaitingPayment, icon: FiClock, tone: "text-amber-700", accent: "bg-amber-100 text-amber-600" },
           { label: "Ready for Payout", value: summary.readyForPayoutOrders, icon: FiTruck, tone: "text-orange-700", accent: "bg-orange-100 text-orange-600" },
@@ -326,7 +326,7 @@ export default function VendorOrders() {
         {paginatedOrders.map((order) => (
           <article
             key={order._id}
-            className="rounded-[26px] border border-white/80 bg-white/92 p-5 shadow-[0_18px_38px_rgba(15,23,42,0.06)]"
+            className="rounded-[26px] border border-white/80 bg-white/[0.92] p-5 shadow-[0_18px_38px_rgba(15,23,42,0.06)]"
           >
             <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
               <div>
@@ -367,9 +367,9 @@ export default function VendorOrders() {
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2 xl:min-w-[360px]">
-                <div className="rounded-[24px] border border-[#102A43]/10 bg-slate-100/70 px-4 py-3 text-sm shadow-sm">
+                <div className="rounded-[24px] border border-[#062A63]/10 bg-slate-100/70 px-4 py-3 text-sm shadow-sm">
                   <p className="font-semibold text-slate-900">Gross sales</p>
-                  <p className="mt-1 text-2xl font-black text-[#102A43]">
+                  <p className="mt-1 text-2xl font-black text-[#062A63]">
                     {formatCurrency(order.vendorSummary?.subtotal)}
                   </p>
                   <p className="text-slate-500">{order.vendorSummary?.itemCount || 0} item(s)</p>

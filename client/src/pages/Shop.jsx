@@ -27,7 +27,7 @@ const SHOPPING_LANES = [
     title: "Ready now",
     subtitle: "Focus on items shoppers can move to checkout immediately.",
     icon: FiTruck,
-    style: "from-[#102A43] via-[#163A5F] to-[#28507A]",
+    style: "from-[#062A63] via-[#07306B] to-[#0B5FFF]",
     apply: ({ setSearch, setPrice, setInStockOnly }) => {
       setSearch("");
       setPrice("all");
@@ -39,7 +39,7 @@ const SHOPPING_LANES = [
     title: "Value picks",
     subtitle: "Pull in sharp prices without losing marketplace quality.",
     icon: FiShoppingBag,
-    style: "from-[#F28C28] via-[#F59E0B] to-[#FDBA74]",
+    style: "from-[#0B5FFF] via-[#1273FF] to-[#5EA4FF]",
     apply: ({ setSearch, setPrice, setInStockOnly }) => {
       setSearch("");
       setPrice("0-50000");
@@ -51,7 +51,7 @@ const SHOPPING_LANES = [
     title: "Seller highlights",
     subtitle: "Browse products from stores already standing out in the catalog.",
     icon: FiStar,
-    style: "from-[#102A43] via-[#1C4268] to-[#F28C28]",
+    style: "from-[#062A63] via-[#0A3A78] to-[#0B5FFF]",
     apply: ({ setSearch, setPrice, setInStockOnly }) => {
       setSearch("seller");
       setPrice("all");
@@ -297,8 +297,8 @@ export default function Shop() {
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#f0fdf4_28%,#fff7ed_100%)]">
-      <section className="relative overflow-hidden bg-[linear-gradient(135deg,#081B2E_0%,#102A43_46%,#1C4268_100%)] text-white">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(242,140,40,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(148,163,184,0.18),transparent_26%)]" />
+      <section className="relative overflow-hidden bg-[linear-gradient(135deg,#031326_0%,#062A63_46%,#0A3A78_100%)] text-white">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(148,163,184,0.18),transparent_26%)]" />
         <div className="relative mx-auto max-w-7xl px-4 py-12 md:px-6 md:py-16">
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
@@ -323,7 +323,7 @@ export default function Shop() {
         <section className="rounded-[28px] border border-slate-200 bg-white/90 p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] md:p-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#102A43]">Shopping lanes</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Shopping lanes</p>
               <h2 className="mt-1 text-2xl font-black text-slate-900">Open the marketplace through stronger entry points</h2>
               <p className="mt-2 max-w-2xl text-slate-600">Pick a shopping lane to shape the shelf around speed, value, or seller discovery before you start comparing products.</p>
             </div>
@@ -387,7 +387,7 @@ export default function Shop() {
                   >
                     <FiSliders /> Filters
                   </button>
-                  <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-[#102A43]">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-[#062A63]">
                     <FiFilter /> Curated marketplace view
                   </div>
                 </div>
@@ -459,7 +459,7 @@ export default function Shop() {
                             </div>
                           </div>
                           <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                            <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-[#102A43]">{store.readyNowCount} ready now</span>
+                            <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-[#062A63]">{store.readyNowCount} ready now</span>
                             {store.startingPrice > 0 ? (
                               <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-slate-700">Starts from TZS {Number(store.startingPrice).toLocaleString()}</span>
                             ) : null}
@@ -499,7 +499,7 @@ export default function Shop() {
               <div className="mt-10 rounded-[28px] border border-slate-200 bg-white p-10 text-center text-slate-500 shadow-sm">
                 <p className="text-lg font-semibold text-slate-900">Nothing matches this view yet.</p>
                 <p className="mt-2">Try another search term, widen your price range, or open the full catalog again.</p>
-                <button onClick={resetFilters} className="mt-5 rounded-full bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-110">
+                <button onClick={resetFilters} className="mt-5 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-110">
                   Reset filters
                 </button>
               </div>
@@ -536,7 +536,7 @@ export default function Shop() {
                           {product.countInStock > 0 ? "Ready to buy" : "Out of stock"}
                         </span>
                         {cartQty > 0 ? (
-                          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-[#102A43] shadow-sm">In cart x{cartQty}</span>
+                          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-[#062A63] shadow-sm">In cart x{cartQty}</span>
                         ) : null}
                         {heroBadges.map((badge) => (
                           <span key={badge.label} className={`rounded-full px-3 py-1 text-xs font-semibold ${getSignalToneClasses(badge.tone)}`}>
@@ -577,7 +577,7 @@ export default function Shop() {
                             />
                           </div>
                         </div>
-                        <span className="text-right text-lg font-black text-[#102A43]">TZS {Number(product.price).toLocaleString()}</span>
+                        <span className="text-right text-lg font-black text-[#062A63]">TZS {Number(product.price).toLocaleString()}</span>
                       </div>
 
                       <p className="mt-3 line-clamp-2 text-sm text-slate-500">
@@ -601,7 +601,7 @@ export default function Shop() {
                       </div>
 
                       <div className="mt-4 flex items-center justify-between gap-3 text-sm">
-                        <span className={`rounded-full px-3 py-1 font-semibold ${product.countInStock > 0 ? "bg-slate-100 text-[#102A43]" : "bg-slate-100 text-slate-500"}`}>
+                        <span className={`rounded-full px-3 py-1 font-semibold ${product.countInStock > 0 ? "bg-slate-100 text-[#062A63]" : "bg-slate-100 text-slate-500"}`}>
                           {product.countInStock > 0 ? `${product.countInStock} in stock` : "Currently unavailable"}
                         </span>
                         {product.vendor?.storeSlug ? (
@@ -621,7 +621,7 @@ export default function Shop() {
                         <button
                           onClick={() => handleAddToCart(product)}
                           disabled={product.countInStock === 0}
-                          className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-4 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+                          className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           <FiShoppingBag /> {cartQty > 0 ? "Add another" : "Add to cart"}
                         </button>
@@ -643,7 +643,7 @@ function FilterPanel({ search, setSearch, price, setPrice, inStockOnly, setInSto
     <div className={`rounded-[28px] border border-slate-200 bg-white/90 p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] ${compact ? "" : "sticky top-24"}`}>
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#102A43]">Refine view</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Refine view</p>
           <h2 className="mt-1 text-lg font-black text-slate-900">Shape the shelf</h2>
         </div>
         <button onClick={resetFilters} className="text-sm font-semibold text-slate-500 hover:text-slate-900">
@@ -661,7 +661,7 @@ function FilterPanel({ search, setSearch, price, setPrice, inStockOnly, setInSto
               placeholder="Search products or stores"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="w-full rounded-2xl border border-slate-300 py-3 pl-10 pr-4 outline-none transition focus:border-[#102A43] focus:ring-2 focus:ring-[#102A43]/10"
+              className="w-full rounded-2xl border border-slate-300 py-3 pl-10 pr-4 outline-none transition focus:border-[#062A63] focus:ring-2 focus:ring-[#062A63]/10"
             />
           </div>
         </div>
@@ -671,7 +671,7 @@ function FilterPanel({ search, setSearch, price, setPrice, inStockOnly, setInSto
           <select
             value={price}
             onChange={(event) => setPrice(event.target.value)}
-            className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-[#102A43] focus:ring-2 focus:ring-[#102A43]/10"
+            className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-[#062A63] focus:ring-2 focus:ring-[#062A63]/10"
           >
             {PRICE_RANGES.map((range) => (
               <option key={range.value} value={range.value}>
@@ -686,7 +686,7 @@ function FilterPanel({ search, setSearch, price, setPrice, inStockOnly, setInSto
             type="checkbox"
             checked={inStockOnly}
             onChange={() => setInStockOnly((value) => !value)}
-            className="accent-[#102A43]"
+            className="accent-[#062A63]"
           />
           Show only products ready right now
         </label>

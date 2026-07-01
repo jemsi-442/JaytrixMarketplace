@@ -16,7 +16,7 @@ export const getRiderSettlementTone = (order) => {
   const status = order?.delivery?.earningEstimate?.settlement?.status;
   if (status === "paid") return "bg-emerald-100 text-emerald-700";
   if (status === "awaiting_vendor_payment") return "bg-orange-100 text-orange-700";
-  return "bg-slate-100 text-[#102A43]";
+  return "bg-slate-100 text-[#062A63]";
 };
 
 export const formatRiderEarningBreakdown = (order, fallback = "Estimated after delivery completion") => {

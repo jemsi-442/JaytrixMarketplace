@@ -347,7 +347,7 @@ export default function ProductDetails() {
 
           <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-7">
             <h1 className="text-3xl font-black text-slate-900">{product.name}</h1>
-            <p className="mt-2 text-2xl font-black text-[#102A43]">TZS {Number(selectedVariant?.price || product.price).toLocaleString()}</p>
+            <p className="mt-2 text-2xl font-black text-[#062A63]">TZS {Number(selectedVariant?.price || product.price).toLocaleString()}</p>
             <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-600">
               <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 px-3 py-1.5 text-orange-700">
                 <RatingStars value={Number(ratingSummary.averageRating || 0)} />
@@ -381,7 +381,7 @@ export default function ProductDetails() {
                     <button
                       key={variant._id}
                       onClick={() => setSelectedVariant(variant)}
-                      className={`rounded-xl border px-4 py-2 text-sm font-medium ${selectedVariant?._id === variant._id ? 'border-[#102A43] bg-[#102A43] text-white' : 'border-slate-300 bg-white text-slate-700 hover:border-[#102A43]/35'}`}
+                      className={`rounded-xl border px-4 py-2 text-sm font-medium ${selectedVariant?._id === variant._id ? 'border-[#062A63] bg-[#062A63] text-white' : 'border-slate-300 bg-white text-slate-700 hover:border-[#062A63]/35'}`}
                     >
                       {variant.name}
                     </button>
@@ -393,8 +393,8 @@ export default function ProductDetails() {
             <div className="mt-6 inline-flex items-center gap-2 text-sm">
               {availableStock > 0 ? (
                 <>
-                  <FiCheckCircle className="text-[#102A43]" />
-                  <span className="text-[#102A43]">{availableStock} in stock</span>
+                  <FiCheckCircle className="text-[#062A63]" />
+                  <span className="text-[#062A63]">{availableStock} in stock</span>
                 </>
               ) : (
                 <>
@@ -452,7 +452,7 @@ export default function ProductDetails() {
               <button
                 onClick={handleAddToCart}
                 disabled={availableStock === 0}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
               >
                 <FiShoppingBag /> {currentCartQty > 0 ? "Add another" : "Add to Cart"}
               </button>
@@ -491,7 +491,7 @@ export default function ProductDetails() {
                     <span className="font-semibold text-slate-700">{row.rating} star</span>
                     <div className="h-2 overflow-hidden rounded-full bg-slate-100">
                       <div
-                        className="h-full rounded-full bg-[linear-gradient(90deg,#f28c28_0%,#ea580c_100%)]"
+                        className="h-full rounded-full bg-[linear-gradient(90deg,#0b5fff_0%,#ea580c_100%)]"
                         style={{ width: `${share}%` }}
                       />
                     </div>
@@ -554,7 +554,7 @@ export default function ProductDetails() {
                       value={reviewForm.title}
                       onChange={(event) => setReviewForm((current) => ({ ...current, title: event.target.value }))}
                       placeholder="What stood out most?"
-                      className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#102A43]/35"
+                      className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#062A63]/35"
                     />
                   </div>
 
@@ -568,14 +568,14 @@ export default function ProductDetails() {
                       onChange={(event) => setReviewForm((current) => ({ ...current, comment: event.target.value }))}
                       placeholder="Tell other shoppers how delivery, quality, and value felt."
                       rows={4}
-                      className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#102A43]/35"
+                      className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#062A63]/35"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={reviewSubmitting}
-                    className="inline-flex items-center justify-center rounded-full bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center justify-center rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {reviewSubmitting ? "Saving review..." : userReview ? "Update your review" : "Share your review"}
                   </button>

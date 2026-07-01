@@ -127,8 +127,8 @@ export default function AdminDeliveryIssues() {
 
   return (
     <div className="space-y-5 md:space-y-6">
-      <section className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_42%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Support Queue</p>
+      <section className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_42%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Support Queue</p>
         <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Delivery Issues</h1>
         <p className="mt-2 text-sm text-slate-500">Review reported delivery issues, move cases through investigation, and close them with clear notes for the customer.</p>
       </section>
@@ -288,7 +288,7 @@ export default function AdminDeliveryIssues() {
                           type="button"
                           disabled={updatingId === order._id}
                           onClick={() => updateIssueStatus(order._id)}
-                          className="inline-flex items-center gap-2 rounded-2xl border border-[#102A43]/15 bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 disabled:opacity-60"
+                          className="inline-flex items-center gap-2 rounded-2xl border border-[#062A63]/15 bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 disabled:opacity-60"
                         >
                           {draft.status === "resolved" ? <FiCheckCircle /> : <FiClock />}
                           {updatingId === order._id ? "Saving..." : "Save issue update"}

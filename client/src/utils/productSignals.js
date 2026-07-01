@@ -7,9 +7,9 @@ export const getSignalToneClasses = (tone) => {
     case "orange":
       return "bg-orange-500/90 text-white shadow-sm";
     case "navy":
-      return "bg-[#102A43] text-white shadow-sm";
+      return "bg-[#062A63] text-white shadow-sm";
     case "navy-soft":
-      return "bg-slate-100 text-[#102A43]";
+      return "bg-slate-100 text-[#062A63]";
     case "orange-soft":
       return "bg-orange-50 text-orange-700";
     case "slate":

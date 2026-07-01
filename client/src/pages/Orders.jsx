@@ -2048,11 +2048,11 @@ export default function Orders() {
         <motion.section
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="overflow-hidden rounded-[32px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#ffffff_0%,#eff6ff_48%,#fff7ed_100%)] p-6 shadow-[0_24px_50px_rgba(15,23,42,0.08)]"
+          className="overflow-hidden rounded-[32px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#ffffff_0%,#eff6ff_48%,#fff7ed_100%)] p-6 shadow-[0_24px_50px_rgba(15,23,42,0.08)]"
         >
           <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Customer account</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Customer account</p>
               <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-900 md:text-4xl">Welcome back, {profile.name || user?.name || "shopper"}.</h1>
               <p className="mt-3 max-w-2xl text-slate-600">Track orders, refresh mobile money payments, manage your contact details, and keep an eye on store updates in one clean account view.</p>
             </div>
@@ -2074,7 +2074,7 @@ export default function Orders() {
               className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)]"
             >
               <div className="flex items-center gap-3">
-                <div className="rounded-2xl bg-slate-100 p-3 text-[#102A43]">
+                <div className="rounded-2xl bg-slate-100 p-3 text-[#062A63]">
                   <FiUser size={18} />
                 </div>
                 <div>
@@ -2090,7 +2090,7 @@ export default function Orders() {
                     type="text"
                     value={profile.name}
                     onChange={(event) => setProfile((current) => ({ ...current, name: event.target.value }))}
-                    className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#102A43]/35 focus:ring-2 focus:ring-orange-100"
+                    className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#062A63]/35 focus:ring-2 focus:ring-orange-100"
                   />
                 </label>
 
@@ -2100,7 +2100,7 @@ export default function Orders() {
                     type="email"
                     value={profile.email}
                     onChange={(event) => setProfile((current) => ({ ...current, email: event.target.value }))}
-                    className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#102A43]/35 focus:ring-2 focus:ring-orange-100"
+                    className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#062A63]/35 focus:ring-2 focus:ring-orange-100"
                   />
                 </label>
 
@@ -2111,7 +2111,7 @@ export default function Orders() {
                     value={profile.phone}
                     onChange={(event) => setProfile((current) => ({ ...current, phone: event.target.value }))}
                     placeholder="07xxxxxxxx"
-                    className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#102A43]/35 focus:ring-2 focus:ring-orange-100"
+                    className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#062A63]/35 focus:ring-2 focus:ring-orange-100"
                   />
                 </label>
 
@@ -2156,7 +2156,7 @@ export default function Orders() {
                 </div>
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Total spend</p>
-                  <p className="mt-2 text-xl font-black text-[#102A43]">TZS {Number(orderStats.spent || 0).toLocaleString()}</p>
+                  <p className="mt-2 text-xl font-black text-[#062A63]">TZS {Number(orderStats.spent || 0).toLocaleString()}</p>
                 </div>
               </div>
             </motion.section>
@@ -2205,11 +2205,11 @@ export default function Orders() {
                             compact
                           />
                         </div>
-                        <p className="mt-1 text-sm font-bold text-[#102A43]">TZS {Number(product.price || 0).toLocaleString()}</p>
+                        <p className="mt-1 text-sm font-bold text-[#062A63]">TZS {Number(product.price || 0).toLocaleString()}</p>
                       </div>
                     </div>
                     <div className="mt-2 flex items-center justify-between gap-3 text-xs">
-                      <span className={`rounded-full px-3 py-1 font-semibold ${Number(product.countInStock || 0) > 0 ? "bg-slate-100 text-[#102A43]" : "bg-slate-200 text-slate-500"}`}>
+                      <span className={`rounded-full px-3 py-1 font-semibold ${Number(product.countInStock || 0) > 0 ? "bg-slate-100 text-[#062A63]" : "bg-slate-200 text-slate-500"}`}>
                         {Number(product.countInStock || 0) > 0 ? `${Number(product.countInStock || 0)} ready now` : "Currently unavailable"}
                       </span>
                     </div>
@@ -2274,7 +2274,7 @@ export default function Orders() {
                           />
                         </div>
                         {Number(store.startingPrice || 0) > 0 ? (
-                          <p className="mt-1 text-sm font-bold text-[#102A43]">Starts from TZS {Number(store.startingPrice || 0).toLocaleString()}</p>
+                          <p className="mt-1 text-sm font-bold text-[#062A63]">Starts from TZS {Number(store.startingPrice || 0).toLocaleString()}</p>
                         ) : null}
                       </div>
                     </div>
@@ -2324,13 +2324,13 @@ export default function Orders() {
                   const saved = isSavedProduct(product._id);
 
                   return (
-                    <div key={product._id} className="rounded-2xl border border-slate-200 bg-slate-50 p-3 transition hover:border-[#102A43]/15 hover:bg-white">
+                    <div key={product._id} className="rounded-2xl border border-slate-200 bg-slate-50 p-3 transition hover:border-[#062A63]/15 hover:bg-white">
                       <div className="flex items-center gap-3">
                         <Link to={`/product/${product._id}`} className="block shrink-0">
                           <img src={product.image} alt={product.name} className="h-16 w-16 rounded-2xl object-cover" />
                         </Link>
                         <div className="min-w-0 flex-1">
-                          <Link to={`/product/${product._id}`} className="block truncate font-semibold text-slate-900 hover:text-[#102A43]">
+                          <Link to={`/product/${product._id}`} className="block truncate font-semibold text-slate-900 hover:text-[#062A63]">
                             {product.name}
                           </Link>
                           <p className="mt-1 text-sm text-slate-500">{product.vendor?.name || "Marketplace seller"}</p>
@@ -2341,7 +2341,7 @@ export default function Orders() {
                               compact
                             />
                           </div>
-                          <p className="mt-1 text-sm font-bold text-[#102A43]">TZS {Number(product.price || 0).toLocaleString()}</p>
+                          <p className="mt-1 text-sm font-bold text-[#062A63]">TZS {Number(product.price || 0).toLocaleString()}</p>
                         </div>
                       </div>
                       <div className="mt-3 flex flex-wrap gap-2">
@@ -2523,10 +2523,10 @@ export default function Orders() {
                     <span className="rounded-full bg-amber-50 px-3 py-1 font-semibold text-amber-700">
                       {orderStats.awaitingPayment} awaiting payment
                     </span>
-                    <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-[#102A43]">
+                    <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-[#062A63]">
                       {orderStats.movingOrders} moving through fulfillment
                     </span>
-                    <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-[#102A43]">
+                    <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-[#062A63]">
                       {orderStats.deliveredOrders} delivered
                     </span>
                   </div>
@@ -2536,12 +2536,12 @@ export default function Orders() {
                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Before payment clears</p>
                     <p className="mt-2">Approve the mobile money prompt on your phone, then use the card action to refresh the result if needed.</p>
                   </div>
-                  <div className="rounded-[24px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#f8fafc_100%)] px-4 py-4 text-sm text-slate-600">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#102A43]">While we prepare delivery</p>
+                  <div className="rounded-[24px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#f8fafc_100%)] px-4 py-4 text-sm text-slate-600">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#062A63]">While we prepare delivery</p>
                     <p className="mt-2">Once payment is confirmed, keep an eye on the journey row for packing and delivery progress.</p>
                   </div>
-                  <div className="rounded-[24px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#fff7ed_100%)] px-4 py-4 text-sm text-slate-600">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#102A43]">While your order is active</p>
+                  <div className="rounded-[24px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#fff7ed_100%)] px-4 py-4 text-sm text-slate-600">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#062A63]">While your order is active</p>
                     <p className="mt-2">Pending mobile money orders still refresh automatically every 15 seconds while a payment or delivery update is in motion.</p>
                   </div>
                 </div>
@@ -2561,7 +2561,7 @@ export default function Orders() {
                       <span className="rounded-full bg-amber-50 px-3 py-1 font-semibold text-amber-700">
                         {reviewPromptSummary.pending} waiting for your review
                       </span>
-                      <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-[#102A43]">
+                      <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-[#062A63]">
                         {reviewPromptSummary.completed} already reviewed
                       </span>
                     </div>
@@ -2570,15 +2570,15 @@ export default function Orders() {
               ) : null}
 
               {recentReorder ? (
-                <div className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#fff7ed_100%)] p-5 shadow-[0_16px_30px_rgba(15,23,42,0.10)]">
+                <div className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#fff7ed_100%)] p-5 shadow-[0_16px_30px_rgba(15,23,42,0.10)]">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#102A43]">Ready to check out again</p>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#062A63]">Ready to check out again</p>
                       <h3 className="mt-1 text-lg font-black text-slate-900">Items from order #{String(recentReorder.orderId || "").slice(-6)} are now in your cart</h3>
                       <p className="mt-2 text-sm text-slate-600">{recentReorder.addedLines} item {recentReorder.addedLines === 1 ? "line" : "lines"} added back to your cart{recentReorder.skippedLines ? `, while ${recentReorder.skippedLines} ${recentReorder.skippedLines === 1 ? "line is" : "lines are"} unavailable right now.` : "."}</p>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      <Link to="/cart" className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5">
+                      <Link to="/cart" className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5">
                         <FiShoppingBag /> Review cart
                       </Link>
                       <Link to="/shop" className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
@@ -2612,10 +2612,10 @@ export default function Orders() {
               ) : null}
 
           {reviewCelebration ? (
-            <section className="mb-6 overflow-hidden rounded-[2rem] border border-[#102A43]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.10)]">
+            <section className="mb-6 overflow-hidden rounded-[2rem] border border-[#062A63]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.10)]">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div className="max-w-2xl">
-                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#102A43]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#062A63]">
                     Review saved
                   </p>
                   <h3 className="mt-2 text-xl font-semibold text-slate-900">
@@ -2656,7 +2656,7 @@ export default function Orders() {
                   <button
                     type="button"
                     onClick={() => setReviewCelebration(null)}
-                    className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-100 px-4 py-2 text-sm font-semibold text-[#102A43] transition hover:border-slate-300 hover:bg-slate-200"
+                    className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-100 px-4 py-2 text-sm font-semibold text-[#062A63] transition hover:border-slate-300 hover:bg-slate-200"
                   >
                     Dismiss
                   </button>
@@ -2666,7 +2666,7 @@ export default function Orders() {
           ) : null}
 
           {reviewHomecoming ? (
-            <section className="mb-6 overflow-hidden rounded-[2rem] border border-[#102A43]/10 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.95),_rgba(239,246,255,0.92),_rgba(255,247,237,0.92))] px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+            <section className="mb-6 overflow-hidden rounded-[2rem] border border-[#062A63]/10 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.95),_rgba(239,246,255,0.92),_rgba(255,247,237,0.92))] px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div className="max-w-2xl">
                   <p className="text-xs font-semibold uppercase tracking-[0.26em] text-slate-500">
@@ -2723,7 +2723,7 @@ export default function Orders() {
             <section
               className={`mb-6 overflow-hidden rounded-[2rem] border px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)] ${
                 bestShoppingLane.tone === 'navy'
-                  ? 'border-[#102A43]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50'
+                  ? 'border-[#062A63]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50'
                   : 'border-amber-200 bg-gradient-to-r from-amber-50 via-white to-orange-50'
               }`}
             >
@@ -2747,7 +2747,7 @@ export default function Orders() {
                       </div>
                       <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/80">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-[#102A43] via-[#1C4268] to-orange-400 transition-all duration-500"
+                          className="h-full rounded-full bg-gradient-to-r from-[#062A63] via-[#0A3A78] to-orange-400 transition-all duration-500"
                           style={{ width: `${bestShoppingLaneConfidence.score}%` }}
                         />
                       </div>
@@ -2960,7 +2960,7 @@ export default function Orders() {
               className={`sticky top-20 z-20 mb-6 overflow-hidden rounded-[2rem] border px-5 py-4 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur ${
                 shopperActionBar.tone === 'amber'
                   ? 'border-orange-200 bg-orange-50/95'
-                  : 'border-[#102A43]/10 bg-slate-100/95'
+                  : 'border-[#062A63]/10 bg-slate-100/95'
               }`}
             >
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -3020,7 +3020,7 @@ export default function Orders() {
           ) : null}
 
           {reviewReminderItems.length ? (
-            <section id="review-reminders" className="mb-6 overflow-hidden rounded-[2rem] border border-orange-200 bg-gradient-to-r from-orange-50 via-white to-orange-100 px-5 py-5 shadow-[0_18px_50px_rgba(242,140,40,0.12)]">
+            <section id="review-reminders" className="mb-6 overflow-hidden rounded-[2rem] border border-orange-200 bg-gradient-to-r from-orange-50 via-white to-orange-100 px-5 py-5 shadow-[0_18px_50px_rgba(11,95,255,0.12)]">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div className="max-w-2xl">
                   <p className="text-xs font-semibold uppercase tracking-[0.26em] text-orange-600">
@@ -3048,7 +3048,7 @@ export default function Orders() {
                       </div>
                       <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/80">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-orange-400 via-orange-500 to-[#102A43] transition-all duration-500"
+                          className="h-full rounded-full bg-gradient-to-r from-orange-400 via-orange-500 to-[#062A63] transition-all duration-500"
                           style={{ width: `${reviewCompletionRate}%` }}
                         />
                       </div>
@@ -3084,7 +3084,7 @@ export default function Orders() {
           ) : null}
 
           {nextBestShoppingMoves.length ? (
-            <section className="mb-6 overflow-hidden rounded-[2rem] border border-[#102A43]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+            <section className="mb-6 overflow-hidden rounded-[2rem] border border-[#062A63]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
               <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-2xl">
                   <p className="text-xs font-semibold uppercase tracking-[0.26em] text-slate-500">
@@ -3162,10 +3162,10 @@ export default function Orders() {
           ) : null}
 
           {!reviewReminderItems.length && reviewCompletedCount > 0 ? (
-            <section className="mb-6 overflow-hidden rounded-[2rem] border border-[#102A43]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+            <section className="mb-6 overflow-hidden rounded-[2rem] border border-[#062A63]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div className="max-w-2xl">
-                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#102A43]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#062A63]">
                     You&apos;re caught up
                   </p>
                   <h3 className="mt-2 text-xl font-semibold text-slate-900">
@@ -3194,10 +3194,10 @@ export default function Orders() {
           ) : null}
 
           {reviewerSnapshot.totalReviews > 0 ? (
-            <section id="shopper-trust-profile" className="mb-6 overflow-hidden rounded-[2rem] border border-[#102A43]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+            <section id="shopper-trust-profile" className="mb-6 overflow-hidden rounded-[2rem] border border-[#062A63]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
               <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-2xl">
-                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#102A43]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#062A63]">
                     Your shopper trust profile
                   </p>
                   <h3 className="mt-2 text-xl font-semibold text-slate-900">
@@ -3206,8 +3206,8 @@ export default function Orders() {
                   <p className="mt-2 text-sm text-slate-600">
                     Every review you leave makes it easier for the next shopper to choose with confidence.
                   </p>
-                  <div className="mt-4 rounded-[1.5rem] border border-[#102A43]/10 bg-white/80 px-4 py-4 shadow-sm">
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#102A43]">
+                  <div className="mt-4 rounded-[1.5rem] border border-[#062A63]/10 bg-white/80 px-4 py-4 shadow-sm">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#062A63]">
                       Personal shopper summary
                     </p>
                     <div className="mt-3">
@@ -3221,7 +3221,7 @@ export default function Orders() {
                     <div className="mt-3 space-y-2">
                       {shopperStrengths.map((strength) => (
                         <div key={strength} className="flex items-start gap-2 text-sm text-slate-600">
-                          <span className="mt-1 h-2 w-2 rounded-full bg-[#102A43]" />
+                          <span className="mt-1 h-2 w-2 rounded-full bg-[#062A63]" />
                           <span>{strength}</span>
                         </div>
                       ))}
@@ -3248,7 +3248,7 @@ export default function Orders() {
                   <div className="mt-4 rounded-[1.5rem] border border-white/90 bg-white/80 px-4 py-4 shadow-sm">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#102A43]">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#062A63]">
                           Current milestone
                         </p>
                         <p className="mt-2 text-lg font-semibold text-slate-900">{reviewerMilestone.title}</p>
@@ -3260,11 +3260,11 @@ export default function Orders() {
                     </div>
                     <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-200">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-[#102A43] via-[#1C4268] to-orange-400 transition-all duration-500"
+                        className="h-full rounded-full bg-gradient-to-r from-[#062A63] via-[#0A3A78] to-orange-400 transition-all duration-500"
                         style={{ width: `${reviewerMilestoneProgress}%` }}
                       />
                     </div>
-                    <div className="mt-4 rounded-[1.25rem] border border-[#102A43]/10 bg-slate-50 px-4 py-3">
+                    <div className="mt-4 rounded-[1.25rem] border border-[#062A63]/10 bg-slate-50 px-4 py-3">
                       <p className="text-sm font-semibold text-slate-900">{reviewerMilestoneNudge.headline}</p>
                       <p className="mt-1 text-sm text-slate-500">{reviewerMilestoneNudge.detail}</p>
                     </div>
@@ -3273,14 +3273,14 @@ export default function Orders() {
               </div>
 
               <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                <div className="rounded-[1.5rem] border border-[#102A43]/10 bg-gradient-to-br from-slate-100 via-white to-orange-50 p-4 shadow-sm md:col-span-2 xl:col-span-1">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#102A43]">Trust score</p>
+                <div className="rounded-[1.5rem] border border-[#062A63]/10 bg-gradient-to-br from-slate-100 via-white to-orange-50 p-4 shadow-sm md:col-span-2 xl:col-span-1">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#062A63]">Trust score</p>
                   <p className="mt-3 text-4xl font-semibold text-slate-900">{reviewerTrustScore.score}</p>
                   <p className="mt-2 text-sm font-semibold text-slate-900">{reviewerTrustScore.label}</p>
                   <p className="mt-2 text-sm text-slate-500">{reviewerTrustScore.description}</p>
                   <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/90">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-[#102A43] via-[#1C4268] to-orange-400 transition-all duration-500"
+                      className="h-full rounded-full bg-gradient-to-r from-[#062A63] via-[#0A3A78] to-orange-400 transition-all duration-500"
                       style={{ width: `${reviewerTrustScore.progressInTier}%` }}
                     />
                   </div>
@@ -3300,7 +3300,7 @@ export default function Orders() {
                           </div>
                           <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/90">
                             <div
-                              className="h-full rounded-full bg-gradient-to-r from-[#102A43] via-[#1C4268] to-orange-400 transition-all duration-500"
+                              className="h-full rounded-full bg-gradient-to-r from-[#062A63] via-[#0A3A78] to-orange-400 transition-all duration-500"
                               style={{ width: `${width}%` }}
                             />
                           </div>
@@ -3359,7 +3359,7 @@ export default function Orders() {
                           </div>
                           <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
                             <div
-                              className="h-full rounded-full bg-gradient-to-r from-[#102A43] via-[#1C4268] to-orange-400 transition-all duration-500"
+                              className="h-full rounded-full bg-gradient-to-r from-[#062A63] via-[#0A3A78] to-orange-400 transition-all duration-500"
                               style={{ width: `${width}%` }}
                             />
                           </div>
@@ -3424,7 +3424,7 @@ export default function Orders() {
                     {reviewerAchievements.map((achievement) => (
                       <div
                         key={achievement.key}
-                        className="rounded-[1.25rem] border border-[#102A43]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-4 py-4"
+                        className="rounded-[1.25rem] border border-[#062A63]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-4 py-4"
                       >
                         <p className="text-sm font-semibold text-slate-900">{achievement.title}</p>
                         <p className="mt-1 text-sm text-slate-500">{achievement.description}</p>
@@ -3489,7 +3489,7 @@ export default function Orders() {
           ) : null}
 
           {reviewImpactItems.length ? (
-            <section id="review-impact" className="mb-6 overflow-hidden rounded-[2rem] border border-orange-200 bg-gradient-to-r from-orange-50 via-white to-slate-100 px-5 py-5 shadow-[0_18px_50px_rgba(242,140,40,0.1)]">
+            <section id="review-impact" className="mb-6 overflow-hidden rounded-[2rem] border border-orange-200 bg-gradient-to-r from-orange-50 via-white to-slate-100 px-5 py-5 shadow-[0_18px_50px_rgba(11,95,255,0.1)]">
               <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-2xl">
                   <p className="text-xs font-semibold uppercase tracking-[0.26em] text-orange-700">
@@ -3533,7 +3533,7 @@ export default function Orders() {
                       </div>
 
                       <div>
-                        <Link to={getProductPath(item.productId)} className="text-base font-semibold text-slate-900 transition hover:text-[#102A43]">
+                        <Link to={getProductPath(item.productId)} className="text-base font-semibold text-slate-900 transition hover:text-[#062A63]">
                           {item.name}
                         </Link>
                         <p className="mt-1 text-sm text-slate-500">
@@ -3600,10 +3600,10 @@ export default function Orders() {
           ) : null}
 
           {reviewReadyToBuyAgain.length ? (
-            <section id="ready-to-order-again" className="mb-6 overflow-hidden rounded-[2rem] border border-[#102A43]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+            <section id="ready-to-order-again" className="mb-6 overflow-hidden rounded-[2rem] border border-[#062A63]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
               <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-2xl">
-                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#102A43]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#062A63]">
                     Ready to order again
                   </p>
                   <h3 className="mt-2 text-xl font-semibold text-slate-900">
@@ -3650,7 +3650,7 @@ export default function Orders() {
                       </div>
 
                       <div>
-                        <Link to={getProductPath(item.productId)} className="text-base font-semibold text-slate-900 transition hover:text-[#102A43]">
+                        <Link to={getProductPath(item.productId)} className="text-base font-semibold text-slate-900 transition hover:text-[#062A63]">
                           {item.name}
                         </Link>
                         <p className="mt-1 text-sm text-slate-500">
@@ -3679,10 +3679,10 @@ export default function Orders() {
           ) : null}
 
           {trustedCategories.length ? (
-            <section id="trusted-categories" className="mb-6 overflow-hidden rounded-[2rem] border border-[#102A43]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+            <section id="trusted-categories" className="mb-6 overflow-hidden rounded-[2rem] border border-[#062A63]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
               <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-2xl">
-                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#102A43]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#062A63]">
                     Trusted categories
                   </p>
                   <h3 className="mt-2 text-xl font-semibold text-slate-900">
@@ -3722,7 +3722,7 @@ export default function Orders() {
 
                     <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-100">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-[#102A43] via-[#1C4268] to-orange-400"
+                        className="h-full rounded-full bg-gradient-to-r from-[#062A63] via-[#0A3A78] to-orange-400"
                         style={{ width: `${Math.max(12, Math.min(100, Math.round((category.averageRatingGiven / 5) * 100)))}%` }}
                       />
                     </div>
@@ -3742,10 +3742,10 @@ export default function Orders() {
           ) : null}
 
           {topReviewHighlights.length ? (
-            <section className="mb-6 overflow-hidden rounded-[2rem] border border-[#102A43]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+            <section className="mb-6 overflow-hidden rounded-[2rem] border border-[#062A63]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
               <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-2xl">
-                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#102A43]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#062A63]">
                     Top review highlights
                   </p>
                   <h3 className="mt-2 text-xl font-semibold text-slate-900">
@@ -3792,7 +3792,7 @@ export default function Orders() {
                       </div>
 
                       <div>
-                          <Link to={getProductPath(product)} className="text-base font-semibold text-slate-900 transition hover:text-[#102A43]">
+                          <Link to={getProductPath(product)} className="text-base font-semibold text-slate-900 transition hover:text-[#062A63]">
                           {product.name}
                         </Link>
                         <p className="mt-1 text-sm text-slate-500">
@@ -3821,10 +3821,10 @@ export default function Orders() {
           ) : null}
 
           {reviewLedStores.length ? (
-            <section id="trusted-stores" className="mb-6 overflow-hidden rounded-[2rem] border border-[#102A43]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+            <section id="trusted-stores" className="mb-6 overflow-hidden rounded-[2rem] border border-[#062A63]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
               <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-2xl">
-                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#102A43]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#062A63]">
                     Trusted stores
                   </p>
                   <h3 className="mt-2 text-xl font-semibold text-slate-900">
@@ -3903,10 +3903,10 @@ export default function Orders() {
           ) : null}
 
           {reviewedStoreFinds.length ? (
-            <section className="mb-6 overflow-hidden rounded-[2rem] border border-[#102A43]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+            <section className="mb-6 overflow-hidden rounded-[2rem] border border-[#062A63]/10 bg-gradient-to-r from-slate-100 via-white to-orange-50 px-5 py-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
               <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-2xl">
-                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#102A43]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#062A63]">
                     More from stores you reviewed
                   </p>
                   <h3 className="mt-2 text-xl font-semibold text-slate-900">
@@ -3960,7 +3960,7 @@ export default function Orders() {
                         </div>
 
                         <div>
-                          <Link to={getProductPath(product)} className="text-base font-semibold text-slate-900 transition hover:text-[#102A43]">
+                          <Link to={getProductPath(product)} className="text-base font-semibold text-slate-900 transition hover:text-[#062A63]">
                             {product.name}
                           </Link>
                           <p className="mt-1 text-sm text-slate-500">
@@ -4062,7 +4062,7 @@ function QuickReviewModal({ activeReview, setActiveReview, submitting, onClose, 
       <div className="w-full max-w-2xl overflow-hidden rounded-[2rem] border border-white/15 bg-white shadow-[0_30px_120px_rgba(15,23,42,0.3)]">
         <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-6 py-5">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#102A43]">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#062A63]">
               Shopper review
             </p>
             <h3 className="mt-2 text-2xl font-semibold text-slate-900">{productName}</h3>
@@ -4109,9 +4109,9 @@ function QuickReviewModal({ activeReview, setActiveReview, submitting, onClose, 
           <form className="space-y-5" onSubmit={onSubmit}>
             {activeReview?.justSubmitted ? (
               <div className="space-y-3">
-                <div className="rounded-[1.5rem] border border-[#102A43]/10 bg-slate-100 px-4 py-4 text-sm text-[#102A43]">
+                <div className="rounded-[1.5rem] border border-[#062A63]/10 bg-slate-100 px-4 py-4 text-sm text-[#062A63]">
                   <p className="font-semibold">Your review is now live for shoppers.</p>
-                  <p className="mt-1 text-[#102A43]">
+                  <p className="mt-1 text-[#062A63]">
                     Thank you for sharing helpful buying feedback for {productName}.
                   </p>
                 </div>
@@ -4200,7 +4200,7 @@ function QuickReviewModal({ activeReview, setActiveReview, submitting, onClose, 
                   )
                 }
                 placeholder="What should shoppers notice first?"
-                className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#102A43]/35 focus:ring-4 focus:ring-orange-100"
+                className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#062A63]/35 focus:ring-4 focus:ring-orange-100"
               />
             </div>
 
@@ -4224,7 +4224,7 @@ function QuickReviewModal({ activeReview, setActiveReview, submitting, onClose, 
                   )
                 }
                 placeholder="Tell shoppers about quality, fit, delivery, or anything that helped you decide."
-                className="mt-2 w-full rounded-[1.5rem] border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#102A43]/35 focus:ring-4 focus:ring-orange-100"
+                className="mt-2 w-full rounded-[1.5rem] border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#062A63]/35 focus:ring-4 focus:ring-orange-100"
               />
               <p className="mt-2 text-xs text-slate-400">
                 Keep it clear and helpful. Your review can still be updated later.

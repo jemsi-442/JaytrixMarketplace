@@ -1,10 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
+import BrandMark from "./BrandMark";
 
 function CompactFooter() {
   return (
     <footer className="mt-12 border-t border-slate-200 bg-white/90 px-4 py-5 text-center">
       <p className="text-xs font-medium tracking-[0.14em] text-slate-500">
-        © 2026 Ecommerce. All rights reserved.
+        © 2026 JAYTRIX Systems. All rights reserved.
       </p>
     </footer>
   );
@@ -15,11 +16,11 @@ function FullFooter() {
     <footer className="mt-16 border-t border-slate-800 bg-slate-950 text-white">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-[1.3fr_0.8fr_1fr]">
         <div className="max-w-md">
-          <Link to="/" className="text-2xl font-black tracking-tight text-white">
-            Ecom<span className="text-rose-500">merce</span>
+          <Link to="/" aria-label="JAYTRIX home">
+            <BrandMark context="Technology | Innovation | Excellence" light />
           </Link>
           <p className="mt-4 text-sm leading-7 text-slate-300">
-            A modern shopping experience with quality products, secure checkout, and reliable delivery.
+            A sharper marketplace experience for trusted stores, secure mobile money checkout, and reliable delivery.
           </p>
         </div>
 
@@ -48,7 +49,7 @@ function FullFooter() {
             Contact
           </p>
           <div className="mt-4 space-y-3 text-sm text-slate-300">
-            <p>support@ecommerce.com</p>
+            <p>support@jaytrix.co.tz</p>
             <p>+255 713 551 801</p>
             <p>Dar es Salaam, Tanzania</p>
           </div>
@@ -57,7 +58,7 @@ function FullFooter() {
 
       <div className="border-t border-slate-800 px-6 py-4 text-center">
         <p className="text-xs font-medium tracking-[0.14em] text-slate-400">
-          © 2026 Ecommerce. All rights reserved.
+          © 2026 JAYTRIX Systems. All rights reserved.
         </p>
       </div>
     </footer>

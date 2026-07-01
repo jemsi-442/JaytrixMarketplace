@@ -7,7 +7,7 @@ export default function VendorTopbar({ activeIssueCount = 0, onOpenSidebar }) {
 
   return (
     <header className="sticky top-0 z-30 relative flex h-16 items-center justify-between overflow-hidden border-b border-white/70 bg-[linear-gradient(135deg,rgba(248,250,252,0.96)_0%,rgba(239,246,255,0.95)_48%,rgba(255,247,237,0.95)_100%)] px-4 shadow-[0_16px_40px_rgba(15,23,42,0.06)] backdrop-blur md:px-6">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(30,58,95,0)_0%,rgba(30,58,95,0.75)_38%,rgba(242,140,40,0.6)_78%,rgba(242,140,40,0)_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(6,42,99,0)_0%,rgba(6,42,99,0.75)_38%,rgba(11,95,255,0.6)_78%,rgba(11,95,255,0)_100%)]" />
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -18,7 +18,7 @@ export default function VendorTopbar({ activeIssueCount = 0, onOpenSidebar }) {
           <FiMenu size={18} />
         </button>
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">
             Vendor Space
           </p>
           <p className="text-base font-black text-slate-900 md:text-lg">Store Operations</p>

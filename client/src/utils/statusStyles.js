@@ -3,7 +3,7 @@ export const getOrderStatusTone = (status) => {
     case "pending":
       return "bg-slate-200 text-slate-800";
     case "paid":
-      return "bg-slate-100 text-[#102A43]";
+      return "bg-slate-100 text-[#062A63]";
     case "out_for_delivery":
       return "bg-orange-100 text-orange-800";
     case "delivered":
@@ -23,7 +23,7 @@ export const getPayoutStatusTone = (status) => {
     case "pending":
       return "bg-orange-100 text-orange-700";
     case "processing":
-      return "bg-slate-100 text-[#102A43]";
+      return "bg-slate-100 text-[#062A63]";
     case "ready_for_payout":
       return "bg-orange-100 text-orange-700";
     case "paid":

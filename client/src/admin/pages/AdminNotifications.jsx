@@ -10,7 +10,7 @@ const externalStatusClass = (status) => {
   if (status === "sent") return "bg-emerald-100 text-emerald-700";
   if (status === "failed") return "bg-red-100 text-red-700";
   if (status === "skipped") return "bg-slate-100 text-slate-600";
-  return "bg-blue-100 text-[#102A43]";
+  return "bg-blue-100 text-[#062A63]";
 };
 
 const formatExternalChannel = (channel) => {
@@ -165,8 +165,8 @@ export default function AdminNotifications() {
 
   return (
     <div className="space-y-4 md:space-y-6">
-      <div className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_44%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Operations Signals</p>
+      <div className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_44%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Operations Signals</p>
         <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Notifications</h1>
       </div>
       {error ? (
@@ -203,7 +203,7 @@ export default function AdminNotifications() {
         </button>
       </div>
 
-      <section className="rounded-[26px] border border-white/80 bg-white/92 p-4 shadow-[0_18px_36px_rgba(15,23,42,0.06)]">
+      <section className="rounded-[26px] border border-white/80 bg-white/[0.92] p-4 shadow-[0_18px_36px_rgba(15,23,42,0.06)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">External Messaging</p>
@@ -221,7 +221,7 @@ export default function AdminNotifications() {
               <span className={`rounded-full px-3 py-1 ${settings?.providers?.mesejiSms?.configured ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>
                 {settings?.providers?.mesejiSms?.configured ? "Meseji SMS configured" : "SMS API key or sender missing"}
               </span>
-              <span className={`rounded-full px-3 py-1 ${settingsDraft.mesejiSmsEnabled ? "bg-blue-100 text-[#102A43]" : "bg-slate-100 text-slate-600"}`}>
+              <span className={`rounded-full px-3 py-1 ${settingsDraft.mesejiSmsEnabled ? "bg-blue-100 text-[#062A63]" : "bg-slate-100 text-slate-600"}`}>
                 {settingsDraft.mesejiSmsEnabled ? "SMS enabled" : "SMS disabled"}
               </span>
             </div>
@@ -252,7 +252,7 @@ export default function AdminNotifications() {
               <button
                 type="button"
                 onClick={() => setSettingsDraft((current) => ({ ...current, mesejiSmsEnabled: !current.mesejiSmsEnabled }))}
-                className={`rounded-full border px-4 py-2 text-sm font-semibold ${settingsDraft.mesejiSmsEnabled ? "border-[#102A43]/20 bg-blue-50 text-[#102A43]" : "border-slate-200 bg-white text-slate-600"}`}
+                className={`rounded-full border px-4 py-2 text-sm font-semibold ${settingsDraft.mesejiSmsEnabled ? "border-[#062A63]/20 bg-blue-50 text-[#062A63]" : "border-slate-200 bg-white text-slate-600"}`}
               >
                 Meseji SMS {settingsDraft.mesejiSmsEnabled ? "On" : "Off"}
               </button>
@@ -281,23 +281,23 @@ export default function AdminNotifications() {
                   type="button"
                   onClick={sendTestMessage}
                   disabled={sendingTest || !testPhone.trim()}
-                  className="rounded-2xl border border-[#102A43]/15 bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
+                  className="rounded-2xl border border-[#062A63]/15 bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
                 >
                   {sendingTest ? "Sending..." : "Send test"}
                 </button>
               </div>
               <p className="mt-2 text-xs text-slate-500">Use this after adding the Meseji SMS API key or WhatsApp credentials in server env.</p>
             </div>
-            <div className="rounded-3xl border border-[#102A43]/10 bg-blue-50/60 p-3">
+            <div className="rounded-3xl border border-[#062A63]/10 bg-blue-50/60 p-3">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">SMS account health</p>
               {smsStats?.skipped ? (
                 <p className="mt-2 text-sm font-semibold text-slate-600">{smsStats.reason || "SMS stats unavailable"}</p>
               ) : (
                 <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-                  <span className="rounded-2xl bg-white px-3 py-2 font-semibold text-[#102A43]">
+                  <span className="rounded-2xl bg-white px-3 py-2 font-semibold text-[#062A63]">
                     Balance: {smsStats?.stats?.balance ?? "N/A"}
                   </span>
-                  <span className="rounded-2xl bg-white px-3 py-2 font-semibold text-[#102A43]">
+                  <span className="rounded-2xl bg-white px-3 py-2 font-semibold text-[#062A63]">
                     Success: {smsStats?.stats?.successRate ?? "N/A"}
                   </span>
                   <span className="rounded-2xl bg-white px-3 py-2 text-xs font-semibold text-slate-600">
@@ -370,7 +370,7 @@ export default function AdminNotifications() {
                       <button
                         onClick={() => sendNotification(n.orderId)}
                         disabled={sendingId === n.orderId}
-                        className="flex items-center space-x-1 rounded-full bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-3 py-1 text-xs text-white hover:brightness-110"
+                        className="flex items-center space-x-1 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-3 py-1 text-xs text-white hover:brightness-110"
                       >
                         <FaPaperPlane />
                         <span>Send</span>
@@ -393,7 +393,7 @@ export default function AdminNotifications() {
                       <button
                         onClick={() => retryExternal(n._id)}
                         disabled={retryingId === n._id}
-                        className="rounded-full border border-[#102A43]/20 bg-white px-3 py-1 text-xs font-medium text-[#102A43] hover:bg-blue-50 disabled:opacity-60"
+                        className="rounded-full border border-[#062A63]/20 bg-white px-3 py-1 text-xs font-medium text-[#062A63] hover:bg-blue-50 disabled:opacity-60"
                       >
                         {retryingId === n._id ? "Retrying..." : "Retry external"}
                       </button>

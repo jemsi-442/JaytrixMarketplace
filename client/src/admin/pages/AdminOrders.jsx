@@ -192,8 +192,8 @@ export default function AdminOrders() {
 
   return (
     <div className="space-y-4 md:space-y-6">
-      <div className="overflow-hidden rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_42%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Order Center</p>
+      <div className="overflow-hidden rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_42%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Order Center</p>
         <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">
           Order Management
         </h1>
@@ -218,7 +218,7 @@ export default function AdminOrders() {
         </div>
         <div className="surface-panel-lg p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Revenue</p>
-          <p className="mt-2 text-2xl font-black text-[#102A43]">TZS {summary.totalRevenue.toLocaleString()}</p>
+          <p className="mt-2 text-2xl font-black text-[#062A63]">TZS {summary.totalRevenue.toLocaleString()}</p>
         </div>
         <div className="surface-panel-lg p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Issues</p>

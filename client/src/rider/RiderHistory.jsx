@@ -144,10 +144,10 @@ export default function RiderHistory() {
 
   return (
     <div className="space-y-5 md:space-y-6">
-      <section className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#ffedd5_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)] md:p-6">
+      <section className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#ffedd5_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)] md:p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Completed Deliveries</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Completed Deliveries</p>
             <h1 className="mt-1 text-2xl font-black text-slate-900 md:text-3xl">Rider History</h1>
             <p className="mt-2 max-w-2xl text-sm text-slate-600 md:text-base">
               Review completed orders, track how much value you have moved, and see which stores and drop-off routes are filling your delivery day.
@@ -173,7 +173,7 @@ export default function RiderHistory() {
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">Last 7 delivery days</p>
                 <h2 className="mt-1 text-lg font-black text-slate-900">Performance Trend</h2>
               </div>
-              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-[#102A43]">
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-[#062A63]">
                 {summary.deliveries} completed
               </span>
             </div>
@@ -183,7 +183,7 @@ export default function RiderHistory() {
                 <div key={entry.label} className="flex min-h-[220px] flex-col justify-end gap-3">
                   <div className="flex flex-1 items-end">
                     <div
-                      className="w-full rounded-t-[20px] bg-[linear-gradient(180deg,#102A43_0%,#1d4b78_68%,#F28C28_100%)] shadow-[0_18px_34px_rgba(16,42,67,0.16)]"
+                      className="w-full rounded-t-[20px] bg-[linear-gradient(180deg,#062A63_0%,#1d4b78_68%,#0B5FFF_100%)] shadow-[0_18px_34px_rgba(6,42,99,0.16)]"
                       style={{ height: `${Math.max((entry.deliveries / analytics.maxDeliveries) * 100, 16)}%` }}
                     />
                   </div>
@@ -274,7 +274,7 @@ export default function RiderHistory() {
                       <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
                         Delivered
                       </span>
-                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-[#102A43]">
+                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-[#062A63]">
                         {getVendorLabel(order)}
                       </span>
                     </div>
@@ -350,7 +350,7 @@ export default function RiderHistory() {
 
 function HistoryMetric({ label, value, tone = "slate" }) {
   const toneMap = {
-    navy: "bg-[#102A43]/5 text-[#102A43]",
+    navy: "bg-[#062A63]/5 text-[#062A63]",
     orange: "bg-orange-50 text-orange-700",
     slate: "bg-slate-100 text-slate-700",
     emerald: "bg-emerald-50 text-emerald-700",

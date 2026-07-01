@@ -188,8 +188,8 @@ export default function VendorPayouts() {
 
   return (
     <div className="space-y-5 md:space-y-6">
-      <section className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Settlement History</p>
+      <section className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Settlement History</p>
         <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Vendor Payouts</h1>
         <p className="mt-2 text-slate-500">See what has already been paid out, what is being settled, and what is still waiting in the queue.</p>
         <div className="mt-4 flex flex-wrap gap-3">
@@ -204,7 +204,7 @@ export default function VendorPayouts() {
         </div>
       </section>
 
-      <section className="rounded-[26px] border border-white/80 bg-white/92 p-4 shadow-[0_18px_36px_rgba(15,23,42,0.06)]">
+      <section className="rounded-[26px] border border-white/80 bg-white/[0.92] p-4 shadow-[0_18px_36px_rgba(15,23,42,0.06)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Filter Payouts</p>
@@ -225,7 +225,7 @@ export default function VendorPayouts() {
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
               placeholder="Search by order, reference, notes, or status"
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#102A43]/35"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#062A63]/35"
             />
             <p className="text-xs text-slate-500">
               {paginationLabel} and {filteredReadyQueue.length} waiting {filteredReadyQueue.length === 1 ? "entry" : "entries"} match the current filters.
@@ -236,7 +236,7 @@ export default function VendorPayouts() {
             <select
               value={statusFilter}
               onChange={(event) => setStatusFilter(event.target.value)}
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#102A43]/35"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#062A63]/35"
             >
               <option value="all">All payout statuses</option>
               <option value="pending">Pending</option>
@@ -250,7 +250,7 @@ export default function VendorPayouts() {
               type="date"
               value={fromDate}
               onChange={(event) => setFromDate(event.target.value)}
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#102A43]/35"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#062A63]/35"
             />
           </label>
           <label className="space-y-2 text-sm text-slate-600">
@@ -259,7 +259,7 @@ export default function VendorPayouts() {
               type="date"
               value={toDate}
               onChange={(event) => setToDate(event.target.value)}
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#102A43]/35"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#062A63]/35"
             />
           </label>
           <div className="flex items-end">
@@ -272,7 +272,7 @@ export default function VendorPayouts() {
             <select
               value={pageSize}
               onChange={(event) => setPageSize(Number(event.target.value) || 10)}
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#102A43]/35"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#062A63]/35"
             >
               <option value={10}>10 rows</option>
               <option value={20}>20 rows</option>
@@ -320,8 +320,8 @@ export default function VendorPayouts() {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {[
           { label: "Average payout speed", value: performance.averageDays !== null ? `${performance.averageDays} days` : "No data yet", tone: "text-orange-700", accent: "bg-orange-100 text-orange-600" },
-          { label: "Fastest payout", value: performance.fastestDays !== null ? `${performance.fastestDays} days` : "No data yet", tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
-          { label: "Best paid month", value: bestMonth.label, tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
+          { label: "Fastest payout", value: performance.fastestDays !== null ? `${performance.fastestDays} days` : "No data yet", tone: "text-[#062A63]", accent: "bg-slate-100 text-[#062A63]" },
+          { label: "Best paid month", value: bestMonth.label, tone: "text-[#062A63]", accent: "bg-slate-100 text-[#062A63]" },
           { label: "Best month value", value: formatCurrency(bestMonth.amount), tone: "text-slate-700", accent: "bg-slate-100 text-slate-600" },
         ].map((item) => (
           <article key={item.label} className="surface-panel p-5">
@@ -341,8 +341,8 @@ export default function VendorPayouts() {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {[
           { label: "Under Review", value: formatCurrency(summary.readyQueueAmount), icon: FiClock, tone: "text-orange-700", accent: "bg-orange-100 text-orange-600" },
-          { label: "Pending Settlements", value: formatCurrency(summary.pendingAmount), icon: FiPauseCircle, tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
-          { label: "Paid Out", value: formatCurrency(summary.totalPaid), icon: FiCheckCircle, tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
+          { label: "Pending Settlements", value: formatCurrency(summary.pendingAmount), icon: FiPauseCircle, tone: "text-[#062A63]", accent: "bg-slate-100 text-[#062A63]" },
+          { label: "Paid Out", value: formatCurrency(summary.totalPaid), icon: FiCheckCircle, tone: "text-[#062A63]", accent: "bg-slate-100 text-[#062A63]" },
           { label: "Paid Records", value: summary.paidRecords || 0, icon: FiCreditCard, tone: "text-slate-700", accent: "bg-slate-100 text-slate-600" },
         ].map((item) => {
           const Icon = item.icon;
@@ -366,7 +366,7 @@ export default function VendorPayouts() {
         <div className="pointer-events-none absolute right-[-10%] top-[-20%] h-44 w-44 rounded-full bg-orange-200/35 blur-3xl" />
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#102A43]">Awaiting Settlement</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Awaiting Settlement</p>
             <h2 className="mt-1 text-lg font-black text-slate-900">Customer review window</h2>
             <p className="text-sm text-slate-500">Delivered orders wait here briefly so customers can report delivery problems before payout is released.</p>
           </div>
@@ -393,7 +393,7 @@ export default function VendorPayouts() {
       </section>
 
       <section className="relative overflow-hidden rounded-[30px] border border-white/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(248,250,252,0.94)_100%)] shadow-[0_24px_52px_rgba(15,23,42,0.08)]">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top,rgba(242,140,40,0.14)_0%,rgba(242,140,40,0)_72%)]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top,rgba(11,95,255,0.14)_0%,rgba(11,95,255,0)_72%)]" />
         <div className="overflow-x-auto">
           <table className="w-full min-w-[860px] text-sm">
             <thead className="sticky top-0 z-10 bg-[linear-gradient(135deg,rgba(255,247,237,0.98)_0%,rgba(248,250,252,0.98)_100%)] text-left text-slate-600 backdrop-blur">
@@ -472,7 +472,7 @@ export default function VendorPayouts() {
 
 function AnalyticsNote({ label, title, detail, tone = "slate" }) {
   const toneMap = {
-    navy: "border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_100%)]",
+    navy: "border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_100%)]",
     orange: "border-orange-200 bg-[linear-gradient(135deg,#fff7ed_0%,#ffffff_100%)]",
     slate: "border-slate-200 bg-[linear-gradient(135deg,#f8fafc_0%,#ffffff_100%)]",
   };

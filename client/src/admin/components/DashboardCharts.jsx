@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import { motion } from "framer-motion";
 
-const COLORS = ["#102A43", "#F28C28", "#1C4268", "#FDBA74", "#DC2626", "#94A3B8"];
+const COLORS = ["#062A63", "#0B5FFF", "#0A3A78", "#5EA4FF", "#DC2626", "#94A3B8"];
 
 const formatCurrency = (value) => `Tsh ${Number(value || 0).toLocaleString()}`;
 
@@ -143,9 +143,9 @@ export default function DashboardCharts({ revenueByDay = [], pieData = [] }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.55, ease: "easeOut" }}
         whileHover={{ y: -4 }}
-        className="relative min-w-0 overflow-hidden rounded-[30px] border border-[#102A43]/15 bg-[linear-gradient(145deg,#0b1525_0%,#102A43_36%,#111827_100%)] p-5 text-white shadow-[0_28px_65px_rgba(3,7,18,0.34)] md:p-6"
+        className="relative min-w-0 overflow-hidden rounded-[30px] border border-[#062A63]/15 bg-[linear-gradient(145deg,#0b1525_0%,#062A63_36%,#111827_100%)] p-5 text-white shadow-[0_28px_65px_rgba(3,7,18,0.34)] md:p-6"
       >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(242,140,40,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(148,163,184,0.14),transparent_28%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(148,163,184,0.14),transparent_28%)]" />
         <div className="absolute right-0 top-0 h-48 w-48 rounded-full bg-orange-400/10 blur-3xl" />
 
         <div className="relative">
@@ -210,7 +210,7 @@ export default function DashboardCharts({ revenueByDay = [], pieData = [] }) {
           <div className="mt-6 rounded-[26px] border border-white/10 bg-white/[0.05] p-4 backdrop-blur-sm">
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
               <div className="flex flex-wrap items-center gap-2">
-                <LegendPill label="Sales" swatch="bg-[#F28C28]" />
+                <LegendPill label="Sales" swatch="bg-[#0B5FFF]" />
                 <LegendPill label="Orders" swatch="bg-slate-200" />
                 <LegendPill label="Average" swatch="bg-white/60" />
               </div>
@@ -227,13 +227,13 @@ export default function DashboardCharts({ revenueByDay = [], pieData = [] }) {
                   <AreaChart data={chartData} margin={{ top: 12, right: 10, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="dashboardRevenueFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#F28C28" stopOpacity={0.45} />
-                        <stop offset="52%" stopColor="#102A43" stopOpacity={0.18} />
-                        <stop offset="100%" stopColor="#081B2E" stopOpacity={0} />
+                        <stop offset="0%" stopColor="#0B5FFF" stopOpacity={0.45} />
+                        <stop offset="52%" stopColor="#062A63" stopOpacity={0.18} />
+                        <stop offset="100%" stopColor="#031326" stopOpacity={0} />
                       </linearGradient>
                       <linearGradient id="dashboardRevenueStroke" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="#F28C28" />
-                        <stop offset="100%" stopColor="#FDBA74" />
+                        <stop offset="0%" stopColor="#0B5FFF" />
+                        <stop offset="100%" stopColor="#5EA4FF" />
                       </linearGradient>
                     </defs>
                     <CartesianGrid vertical={false} stroke="rgba(148,163,184,0.12)" strokeDasharray="4 8" />
@@ -267,7 +267,7 @@ export default function DashboardCharts({ revenueByDay = [], pieData = [] }) {
                         strokeDasharray="6 6"
                       />
                     ) : null}
-                    <Tooltip content={<SalesTooltip />} cursor={{ stroke: "rgba(242,140,40,0.28)", strokeWidth: 1 }} />
+                    <Tooltip content={<SalesTooltip />} cursor={{ stroke: "rgba(11,95,255,0.28)", strokeWidth: 1 }} />
                     <Area
                       yAxisId="sales"
                       type="monotone"
@@ -275,7 +275,7 @@ export default function DashboardCharts({ revenueByDay = [], pieData = [] }) {
                       stroke="url(#dashboardRevenueStroke)"
                       strokeWidth={3.5}
                       fill="url(#dashboardRevenueFill)"
-                      activeDot={{ r: 6, stroke: "#ffffff", strokeWidth: 2, fill: "#F28C28" }}
+                      activeDot={{ r: 6, stroke: "#ffffff", strokeWidth: 2, fill: "#0B5FFF" }}
                     />
                     <Area
                       yAxisId="orders"
@@ -361,7 +361,7 @@ export default function DashboardCharts({ revenueByDay = [], pieData = [] }) {
         whileHover={{ y: -4 }}
         className="relative min-w-0 overflow-hidden rounded-[30px] border border-white/90 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] p-5 shadow-[0_24px_55px_rgba(15,23,42,0.09)] md:p-6"
       >
-        <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(242,140,40,0.14),transparent_68%)]" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(11,95,255,0.14),transparent_68%)]" />
 
         <div className="relative">
           <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">
@@ -552,7 +552,7 @@ function LegendPill({ label, swatch }) {
 
 function InfoPill({ label, value, tone = "slate" }) {
   const toneClass = {
-    navy: "border-[#102A43]/20 bg-[#102A43]/20 text-white",
+    navy: "border-[#062A63]/20 bg-[#062A63]/20 text-white",
     orange: "border-orange-300/20 bg-orange-400/10 text-orange-100",
     slate: "border-white/10 bg-white/[0.06] text-slate-200",
   }[tone];
@@ -596,7 +596,7 @@ function PerformanceLane({ label, value, detail, progress, tone = "slate" }) {
   const safeProgress = Math.max(6, Math.min(Number(progress || 0), 100));
   const gradient =
     tone === "orange"
-      ? "linear-gradient(90deg, #F28C28, rgba(255,255,255,0.88))"
+      ? "linear-gradient(90deg, #0B5FFF, rgba(255,255,255,0.88))"
       : "linear-gradient(90deg, #cbd5e1, rgba(255,255,255,0.9))";
 
   return (

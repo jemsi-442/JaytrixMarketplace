@@ -3,16 +3,17 @@
 @tailwind utilities;
 
 :root {
-  --brand-primary: #102a43;
-  --brand-primary-deep: #081b2e;
+  --brand-primary: #062a63;
+  --brand-primary-deep: #031326;
   --brand-primary-soft: #dbeafe;
-  --brand-accent: #f28c28;
-  --brand-accent-deep: #d97706;
-  --brand-accent-soft: #ffedd5;
-  --ink: #0f172a;
-  --text: #334155;
+  --brand-accent: #0b5fff;
+  --brand-accent-deep: #053a8c;
+  --brand-accent-soft: #e0f2fe;
+  --brand-graphite: #151a21;
+  --ink: #07111f;
+  --text: #263545;
   --muted: #64748b;
-  --surface-base: #f8fafc;
+  --surface-base: #f6f9fd;
   --surface-card: #ffffff;
   --border-soft: #e2e8f0;
 }
@@ -35,8 +36,8 @@ body {
 }
 
 .btn-primary {
-  @apply btn border text-white shadow-[0_16px_32px_rgba(30,58,95,0.22)];
-  border-color: rgba(30, 58, 95, 0.45);
+  @apply btn border text-white shadow-[0_16px_32px_rgba(11,95,255,0.24)];
+  border-color: rgba(11, 95, 255, 0.35);
   background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-deep) 100%);
 }
 
@@ -47,13 +48,13 @@ body {
 
 .btn-soft {
   @apply btn border text-slate-800 shadow-sm;
-  border-color: rgba(242, 140, 40, 0.18);
-  background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
+  border-color: rgba(11, 95, 255, 0.16);
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
 }
 
 .btn-soft:hover {
-  border-color: rgba(242, 140, 40, 0.28);
-  background: linear-gradient(135deg, #ffedd5 0%, #ffffff 100%);
+  border-color: rgba(11, 95, 255, 0.28);
+  background: linear-gradient(135deg, #dbeafe 0%, #ffffff 100%);
 }
 
 .btn-secondary {
@@ -94,6 +95,6 @@ body {
 }
 
 .input:focus {
-  border-color: rgba(30, 58, 95, 0.42);
-  box-shadow: 0 0 0 4px rgba(242, 140, 40, 0.16);
+  border-color: rgba(11, 95, 255, 0.42);
+  box-shadow: 0 0 0 4px rgba(11, 95, 255, 0.12);
 }

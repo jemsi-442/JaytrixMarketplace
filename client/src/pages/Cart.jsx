@@ -141,10 +141,10 @@ export default function Cart() {
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#fff7ed_45%,#ffffff_100%)] px-4 py-8 md:px-6 md:py-12">
       <div className="mx-auto max-w-7xl space-y-8">
-        <section className="rounded-[32px] border border-white/80 bg-white/92 p-6 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-7">
+        <section className="rounded-[32px] border border-white/80 bg-white/[0.92] p-6 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-7">
           <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Checkout ready</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Checkout ready</p>
               <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-900 md:text-4xl">Your cart is lined up for a smooth checkout.</h1>
               <p className="mt-3 max-w-2xl text-slate-600">Review quantities, keep stronger picks, and move to mobile money checkout with a clearer summary of what happens next.</p>
             </div>
@@ -166,7 +166,7 @@ export default function Cart() {
                 </div>
                 <div className="flex flex-wrap gap-2 text-xs">
                   <span className="rounded-full bg-orange-50 px-3 py-1 font-semibold text-orange-700">Mobile money checkout</span>
-                  <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-[#102A43]">Trackable order updates</span>
+                  <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-[#062A63]">Trackable order updates</span>
                 </div>
               </div>
 
@@ -196,7 +196,7 @@ export default function Cart() {
                             <h3 className="text-lg font-bold text-slate-900">{item.name}</h3>
                             {item.variant ? <p className="text-sm text-slate-500">{item.variant.name}</p> : null}
                             <div className="mt-2 flex flex-wrap gap-2 text-xs">
-                              <span className={`rounded-full px-3 py-1 font-semibold ${ready ? 'bg-slate-100 text-[#102A43]' : 'bg-slate-100 text-slate-500'}`}>
+                              <span className={`rounded-full px-3 py-1 font-semibold ${ready ? 'bg-slate-100 text-[#062A63]' : 'bg-slate-100 text-slate-500'}`}>
                                 {ready ? 'Ready for checkout' : 'Currently unavailable'}
                               </span>
                               {saved ? (
@@ -213,7 +213,7 @@ export default function Cart() {
                           </button>
                         </div>
 
-                        <p className="mt-3 font-extrabold text-[#102A43]">TZS {Number(item.price).toLocaleString()}</p>
+                        <p className="mt-3 font-extrabold text-[#062A63]">TZS {Number(item.price).toLocaleString()}</p>
 
                         <div className="mt-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                           <div className="inline-flex items-center overflow-hidden rounded-xl border border-slate-300">
@@ -278,7 +278,7 @@ export default function Cart() {
                   </div>
                   <div className="flex justify-between border-t border-slate-200 pt-3 text-base font-black text-slate-900">
                     <span>Total</span>
-                    <span className="text-[#102A43]">TZS {totals.total.toLocaleString()}</span>
+                    <span className="text-[#062A63]">TZS {totals.total.toLocaleString()}</span>
                   </div>
                 </div>
 
@@ -293,7 +293,7 @@ export default function Cart() {
 
               <div className="space-y-3 rounded-[24px] border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-600">
                 <div className="flex items-start gap-3">
-                  <div className="rounded-2xl bg-slate-100 p-3 text-[#102A43]">
+                  <div className="rounded-2xl bg-slate-100 p-3 text-[#062A63]">
                     <FiShield />
                   </div>
                   <div>

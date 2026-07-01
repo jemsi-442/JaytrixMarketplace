@@ -116,8 +116,8 @@ export default function RiderProfile() {
 
   return (
     <div className="space-y-5 md:space-y-6">
-      <section className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)] md:p-6">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Rider Profile</p>
+      <section className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)] md:p-6">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Rider Profile</p>
         <h1 className="mt-1 text-2xl font-black text-slate-900 md:text-3xl">Account and Shift Control</h1>
         <p className="mt-2 max-w-2xl text-sm text-slate-600 md:text-base">
           Keep your account details current, switch your delivery availability on or off, and review the vendor/store team you are delivering for.
@@ -136,7 +136,7 @@ export default function RiderProfile() {
       <section className="grid gap-5 xl:grid-cols-[1fr_0.9fr]">
         <form onSubmit={handleAccountSubmit} className="surface-panel-lg p-5 md:p-6">
           <div className="flex items-start gap-3">
-            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#102A43]/10 text-[#102A43]">
+            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#062A63]/10 text-[#062A63]">
               <FiUser />
             </div>
             <div>
@@ -189,7 +189,7 @@ export default function RiderProfile() {
                 className={`inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold text-white transition disabled:opacity-60 ${
                   profile?.available
                     ? "bg-red-600 hover:bg-red-700"
-                    : "bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] hover:brightness-110"
+                    : "bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] hover:brightness-110"
                 }`}
               >
                 {profile?.available ? <FiToggleLeft /> : <FiToggleRight />}
@@ -224,7 +224,7 @@ export default function RiderProfile() {
 
 function MetricCard({ label, value, tone = "slate" }) {
   const toneMap = {
-    navy: "bg-[#102A43]/5 text-[#102A43]",
+    navy: "bg-[#062A63]/5 text-[#062A63]",
     orange: "bg-orange-50 text-orange-700",
     slate: "bg-slate-100 text-slate-700",
   };

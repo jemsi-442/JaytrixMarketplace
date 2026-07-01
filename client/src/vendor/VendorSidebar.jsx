@@ -12,6 +12,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import { useAuth } from "../hooks/useAuth";
+import BrandMark from "../components/BrandMark";
 
 const navItems = [
   { name: "Overview", path: "/vendor", icon: FiGrid },
@@ -35,13 +36,11 @@ export default function VendorSidebar({ className = "", activeIssueCount = 0, mo
 
   return (
     <aside
-      className={`sticky top-0 flex h-screen w-72 shrink-0 flex-col overflow-y-auto border-r border-slate-900/10 bg-[linear-gradient(180deg,#0f172a_0%,#172554_48%,#1e293b_100%)] text-slate-200 ${className}`}
+      className={`sticky top-0 flex h-screen w-72 shrink-0 flex-col overflow-y-auto border-r border-slate-900/10 bg-[linear-gradient(180deg,#031326_0%,#062A63_48%,#151A21_100%)] text-slate-200 ${className}`}
     >
       <div className="flex items-start justify-between border-b border-white/10 px-6 py-6">
         <div>
-          <h1 className="text-xl font-black text-white">
-            Ecommerce <span className="text-orange-300">Vendor</span>
-          </h1>
+          <BrandMark context="Vendor Workspace" light />
           <p className="mt-1 text-xs tracking-wide text-slate-400">
             {user?.storeName || "Seller workspace"}
           </p>
@@ -61,7 +60,7 @@ export default function VendorSidebar({ className = "", activeIssueCount = 0, mo
       <div className="px-4 pt-5">
         <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 shadow-[0_16px_30px_rgba(15,23,42,0.2)]">
           <div className="flex items-center gap-3">
-            <div className="rounded-2xl bg-orange-400/15 p-3 text-orange-300">
+            <div className="rounded-2xl bg-sky-400/15 p-3 text-sky-300">
               <FiHome size={18} />
             </div>
             <div>
@@ -84,7 +83,7 @@ export default function VendorSidebar({ className = "", activeIssueCount = 0, mo
               className={({ isActive }) =>
                 `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition ${
                   isActive
-                    ? "border border-orange-300/20 bg-orange-400/15 text-orange-200"
+                    ? "border border-sky-300/20 bg-sky-400/15 text-sky-200"
                     : "text-slate-300 hover:bg-white/5"
                 }`
               }

@@ -89,8 +89,8 @@ export default function VendorDashboard() {
 
   return (
     <div className="space-y-5 md:space-y-6">
-      <section className="rounded-[30px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#ffffff_0%,#eff6ff_46%,#fff7ed_100%)] p-5 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-6">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Vendor Overview</p>
+      <section className="rounded-[30px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#ffffff_0%,#eff6ff_46%,#fff7ed_100%)] p-5 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-6">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Vendor Overview</p>
         <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h1 className="text-2xl font-black text-slate-900 md:text-3xl">
@@ -138,7 +138,7 @@ export default function VendorDashboard() {
 
       <section className="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
         <div className="surface-panel-lg p-5">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#102A43]">Latest Orders</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Latest Orders</p>
           <h2 className="mt-1 text-lg font-black text-slate-900">Recent sales activity</h2>
 
           <div className="mt-4 space-y-3">
@@ -174,7 +174,7 @@ export default function VendorDashboard() {
         </div>
 
         <div className="surface-panel-lg p-5">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#102A43]">Catalog Snapshot</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Catalog Snapshot</p>
           <h2 className="mt-1 text-lg font-black text-slate-900">Product readiness</h2>
 
           <div className="mt-4 space-y-3">

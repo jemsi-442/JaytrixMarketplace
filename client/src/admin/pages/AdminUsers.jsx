@@ -13,7 +13,7 @@ import { useToast } from "../../hooks/useToast";
 const ROLE_BADGES = {
   customer: "bg-slate-100 text-slate-700",
   vendor: "bg-orange-50 text-orange-700",
-  admin: "bg-slate-100 text-[#102A43]",
+  admin: "bg-slate-100 text-[#062A63]",
   rider: "bg-orange-100 text-orange-700",
 };
 
@@ -34,7 +34,7 @@ const MANAGED_ROLE_OPTIONS = [
     value: "admin",
     label: "Admin",
     icon: FiShield,
-    className: "border-[#102A43]/15 bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] text-white hover:brightness-105",
+    className: "border-[#062A63]/15 bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] text-white hover:brightness-105",
   },
 ];
 
@@ -223,8 +223,8 @@ export default function AdminUsers() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-4 md:space-y-6">
-      <div className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_44%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Customers, Vendors & Team</p>
+      <div className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_44%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Customers, Vendors & Team</p>
         <h2 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">People Management</h2>
       </div>
 
@@ -239,7 +239,7 @@ export default function AdminUsers() {
         </div>
         <div className="surface-panel-lg p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Vendor riders</p>
-          <p className="mt-2 text-2xl font-black text-[#102A43]">{summary.riders}</p>
+          <p className="mt-2 text-2xl font-black text-[#062A63]">{summary.riders}</p>
         </div>
         <div className="surface-panel-lg p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Missing phones</p>
@@ -247,7 +247,7 @@ export default function AdminUsers() {
         </div>
         <div className="surface-panel-lg p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Joined in 7 days</p>
-          <p className="mt-2 text-2xl font-black text-[#102A43]">{summary.recent}</p>
+          <p className="mt-2 text-2xl font-black text-[#062A63]">{summary.recent}</p>
         </div>
       </section>
 

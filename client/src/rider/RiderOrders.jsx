@@ -212,10 +212,10 @@ const RiderOrders = () => {
 
   return (
     <div className="space-y-5 md:space-y-6">
-      <section className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)] md:p-6">
+      <section className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)] md:p-6">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Assigned Queue</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Assigned Queue</p>
             <h1 className="mt-1 text-2xl font-black text-slate-900 md:text-3xl">Rider Orders</h1>
             <p className="mt-2 max-w-2xl text-sm text-slate-600 md:text-base">
               Review every assigned order, respond before the timer runs out, and close deliveries with the customer and store details in one place.
@@ -258,7 +258,7 @@ const RiderOrders = () => {
                 onClick={() => setView(item.key)}
                 className={`rounded-2xl border px-4 py-3 text-sm font-semibold transition ${
                   view === item.key
-                    ? "border-[#102A43]/20 bg-[#102A43] text-white shadow-[0_16px_28px_rgba(16,42,67,0.18)]"
+                    ? "border-[#062A63]/20 bg-[#062A63] text-white shadow-[0_16px_28px_rgba(6,42,99,0.18)]"
                     : "border-slate-200 bg-white text-slate-600 hover:border-orange-200 hover:bg-orange-50/50"
                 }`}
               >
@@ -307,7 +307,7 @@ const RiderOrders = () => {
                       <span className={`rounded-full px-3 py-1 text-xs font-semibold ${accepted ? "bg-emerald-100 text-emerald-700" : "bg-orange-100 text-orange-700"}`}>
                         {accepted ? "Accepted" : "Waiting for response"}
                       </span>
-                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-[#102A43]">
+                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-[#062A63]">
                         {getVendorLabel(order)}
                       </span>
                       <span className={`rounded-full px-3 py-1 text-xs font-semibold ${getRiderSettlementTone(order)}`}>
@@ -347,7 +347,7 @@ const RiderOrders = () => {
                       className={`inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold text-white transition ${
                         remaining === 0
                           ? "cursor-not-allowed bg-slate-400"
-                          : "bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] shadow-[0_16px_30px_rgba(16,42,67,0.2)] hover:brightness-110"
+                          : "bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] shadow-[0_16px_30px_rgba(6,42,99,0.2)] hover:brightness-110"
                       } disabled:opacity-60`}
                     >
                       <FiCheckCircle />
@@ -437,7 +437,7 @@ export default RiderOrders;
 
 const SummaryChip = ({ label, value, tone }) => {
   const toneMap = {
-    navy: "border-[#102A43]/10 bg-white/80 text-[#102A43]",
+    navy: "border-[#062A63]/10 bg-white/80 text-[#062A63]",
     orange: "border-orange-200 bg-orange-50 text-orange-700",
     red: "border-red-200 bg-red-50 text-red-700",
   };
@@ -479,7 +479,7 @@ const RadialTimer = ({ percent, remaining, danger }) => {
           cx="32"
           cy="32"
           r={radius}
-          stroke={danger ? "#dc2626" : "#f28c28"}
+          stroke={danger ? "#dc2626" : "#0b5fff"}
           strokeWidth={stroke}
           fill="none"
           strokeDasharray={circumference}
@@ -487,7 +487,7 @@ const RadialTimer = ({ percent, remaining, danger }) => {
           strokeLinecap="round"
           transform="rotate(-90 32 32)"
         />
-        <text x="32" y="29" textAnchor="middle" fontSize="14" fontWeight="700" fill={danger ? "#dc2626" : "#f28c28"}>
+        <text x="32" y="29" textAnchor="middle" fontSize="14" fontWeight="700" fill={danger ? "#dc2626" : "#0b5fff"}>
           {remaining}
         </text>
         <text x="32" y="43" textAnchor="middle" fontSize="10" fontWeight="600" fill="#64748b">

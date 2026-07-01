@@ -76,9 +76,9 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(165deg,#081B2E_0%,#102A43_40%,#F28C28_100%)] px-4 py-12">
+    <div className="min-h-screen bg-[linear-gradient(165deg,#031326_0%,#062A63_40%,#0B5FFF_100%)] px-4 py-12">
       <div className="max-w-5xl mx-auto grid lg:grid-cols-2 rounded-3xl overflow-hidden border border-white/15 shadow-2xl shadow-black/30">
-        <aside className="hidden lg:flex flex-col justify-between bg-[radial-gradient(circle_at_bottom_left,rgba(242,140,40,0.3),transparent_40%),#111827] p-10 text-white">
+        <aside className="hidden lg:flex flex-col justify-between bg-[radial-gradient(circle_at_bottom_left,rgba(11,95,255,0.3),transparent_40%),#111827] p-10 text-white">
           <div>
             <p className="text-xs uppercase tracking-[0.22em] text-orange-200">Create Account</p>
             <h1 className="mt-4 text-4xl font-black leading-tight">Start Shopping The Right Way</h1>
@@ -199,7 +199,7 @@ export default function Register() {
 
           <p className="text-center mt-5 text-sm text-slate-600">
             Already have an account?{" "}
-            <Link to="/login" className="font-semibold text-[#102A43] hover:text-[#081B2E]">
+            <Link to="/login" className="font-semibold text-[#062A63] hover:text-[#031326]">
               Login
             </Link>
           </p>

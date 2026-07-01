@@ -129,8 +129,8 @@ export default function VendorDeliveryIssues() {
 
   return (
     <div className="space-y-5 md:space-y-6">
-      <section className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Support Queue</p>
+      <section className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Support Queue</p>
         <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Delivery Issues</h1>
         <p className="mt-2 text-slate-500">Review customer delivery complaints, check proof, and send a clear update from one workspace.</p>
       </section>

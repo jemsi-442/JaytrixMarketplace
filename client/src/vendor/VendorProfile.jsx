@@ -150,7 +150,7 @@ export default function VendorProfile() {
       <section className="grid gap-5 xl:grid-cols-[1fr_0.9fr]">
         <form onSubmit={handleAccountSubmit} className="surface-panel-lg p-5 md:p-6">
           <div className="flex items-center gap-3">
-            <span className="rounded-2xl bg-slate-100 p-3 text-[#102A43]">
+            <span className="rounded-2xl bg-slate-100 p-3 text-[#062A63]">
               <FiUser size={18} />
             </span>
             <div>
@@ -208,7 +208,7 @@ export default function VendorProfile() {
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">Account summary</p>
             <div className="mt-5 space-y-4 text-sm text-slate-600">
               <div className="flex items-start gap-3">
-                <span className="rounded-xl bg-slate-100 p-2 text-[#102A43]"><FiMail size={16} /></span>
+                <span className="rounded-xl bg-slate-100 p-2 text-[#062A63]"><FiMail size={16} /></span>
                 <div>
                   <p className="font-semibold text-slate-900">Login email</p>
                   <p>{accountForm.email || "Add your email"}</p>

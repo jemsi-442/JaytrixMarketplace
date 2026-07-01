@@ -134,10 +134,10 @@ const Checkout = () => {
   return (
     <div className="min-h-screen bg-[linear-gradient(160deg,#fffaf5_0%,#f8fafc_45%,#eef2ff_100%)] px-4 py-8 md:px-6 md:py-12">
       <div className="mx-auto max-w-6xl space-y-6">
-        <section className="rounded-[32px] border border-white/80 bg-white/92 p-6 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-7">
+        <section className="rounded-[32px] border border-white/80 bg-white/[0.92] p-6 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-7">
           <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Secure checkout</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Secure checkout</p>
               <h1 className="mt-2 text-3xl font-black text-slate-900 md:text-4xl">Finish your order with clearer steps and one mobile money prompt.</h1>
               <p className="mt-3 max-w-2xl text-slate-600">Confirm delivery details, match the right network to your phone number, and review everything before we send the payment request.</p>
             </div>
@@ -150,14 +150,14 @@ const Checkout = () => {
         </section>
 
         <div className="grid gap-6 md:gap-8 lg:grid-cols-3">
-          <section className="lg:col-span-2 rounded-[32px] border border-white/80 bg-white/92 p-5 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-7">
+          <section className="lg:col-span-2 rounded-[32px] border border-white/80 bg-white/[0.92] p-5 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-7">
             <div className="grid grid-cols-3 gap-2">
               {STEPS.map((item, index) => (
                 <div
                   key={item.key}
                   className={`rounded-2xl border px-3 py-3 text-left text-sm shadow-sm transition ${
                     step === index
-                      ? "border-[#102A43]/15 bg-[linear-gradient(135deg,#eff6ff_0%,#fff7ed_100%)] text-[#102A43]"
+                      ? "border-[#062A63]/15 bg-[linear-gradient(135deg,#eff6ff_0%,#fff7ed_100%)] text-[#062A63]"
                       : "border-slate-200 bg-white text-slate-500"
                   }`}
                 >
@@ -223,7 +223,7 @@ const Checkout = () => {
                     onChange={(e) => setDelivery({ ...delivery, contactPhone: e.target.value })}
                   />
                   {payment.method === "mobile_money" && inferredNetworkLabel ? (
-                    <p className="mt-2 text-sm text-[#102A43]">
+                    <p className="mt-2 text-sm text-[#062A63]">
                       This number appears to belong to {inferredNetworkLabel}.
                     </p>
                   ) : null}
@@ -263,7 +263,7 @@ const Checkout = () => {
                     We will send a payment prompt through Snippe after you place the order.
                   </p>
                   {payment.method === "mobile_money" && inferredNetworkLabel ? (
-                    <p className="mt-2 text-sm text-[#102A43]">
+                    <p className="mt-2 text-sm text-[#062A63]">
                       Your network was selected automatically from your phone number: {inferredNetworkLabel}.
                     </p>
                   ) : null}
@@ -287,7 +287,7 @@ const Checkout = () => {
                             }
                             className={`rounded-[24px] border px-4 py-3 text-left shadow-sm transition ${
                               active
-                                ? "border-[#102A43]/15 bg-[linear-gradient(135deg,#eff6ff_0%,#fff7ed_100%)]"
+                                ? "border-[#062A63]/15 bg-[linear-gradient(135deg,#eff6ff_0%,#fff7ed_100%)]"
                                 : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
                             }`}
                           >
@@ -373,7 +373,7 @@ const Checkout = () => {
             )}
           </section>
 
-          <aside className="sticky top-24 h-fit space-y-4 rounded-[32px] border border-white/80 bg-white/92 p-5 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-6">
+          <aside className="sticky top-24 h-fit space-y-4 rounded-[32px] border border-white/80 bg-white/[0.92] p-5 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-6">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-amber-500">Quick Summary</p>
               <h3 className="mt-1 text-xl font-black text-slate-900">Order Summary</h3>
@@ -390,13 +390,13 @@ const Checkout = () => {
               </div>
               <div className="flex justify-between border-t border-slate-200 pt-3 text-base font-black text-slate-900">
                 <span>Total</span>
-                <span className="text-[#102A43]">TZS {summary.total.toLocaleString()}</span>
+                <span className="text-[#062A63]">TZS {summary.total.toLocaleString()}</span>
               </div>
             </div>
 
             <div className="space-y-3 rounded-[24px] border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-600">
               <div className="flex items-start gap-3">
-                <div className="rounded-2xl bg-slate-100 p-3 text-[#102A43]">
+                <div className="rounded-2xl bg-slate-100 p-3 text-[#062A63]">
                   <FiShield />
                 </div>
                 <div>
@@ -433,7 +433,7 @@ const Checkout = () => {
 function TrustChip({ icon: Icon, title, text }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
-      <div className="w-fit rounded-2xl bg-white p-3 text-[#102A43] shadow-sm">
+      <div className="w-fit rounded-2xl bg-white p-3 text-[#062A63] shadow-sm">
         <Icon />
       </div>
       <p className="mt-3 font-semibold text-slate-900">{title}</p>

@@ -171,8 +171,8 @@ export default function VendorRiders() {
 
   return (
     <div className="space-y-5 md:space-y-6">
-      <section className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Delivery Team</p>
+      <section className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Delivery Team</p>
         <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Vendor Riders</h1>
         <p className="mt-2 text-slate-500">Create riders for your store and keep their delivery status under your control.</p>
       </section>
@@ -184,7 +184,7 @@ export default function VendorRiders() {
         </article>
         <article className="surface-panel p-5">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">Active</p>
-          <p className="mt-3 text-2xl font-black text-[#102A43]">{summary.active}</p>
+          <p className="mt-3 text-2xl font-black text-[#062A63]">{summary.active}</p>
         </article>
         <article className="surface-panel p-5">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">Available</p>
@@ -193,7 +193,7 @@ export default function VendorRiders() {
       </section>
 
       <section className="surface-panel-lg overflow-hidden">
-        <div className="grid gap-4 border-b border-slate-200/70 bg-[linear-gradient(135deg,#102A43_0%,#0B1F34_58%,#F28C28_140%)] p-5 text-white md:grid-cols-[1fr_auto] md:items-center">
+        <div className="grid gap-4 border-b border-slate-200/70 bg-[linear-gradient(135deg,#062A63_0%,#0B1F34_58%,#0B5FFF_140%)] p-5 text-white md:grid-cols-[1fr_auto] md:items-center">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-orange-100">Rider Pay Sheet</p>
             <h2 className="mt-1 text-xl font-black">Vendor-managed rider earnings</h2>
@@ -204,7 +204,7 @@ export default function VendorRiders() {
               type="button"
               onClick={downloadPaySheet}
               disabled={exporting}
-              className="mt-4 inline-flex items-center gap-2 rounded-2xl border border-white/25 bg-white px-4 py-2.5 text-sm font-semibold text-[#102A43] shadow-sm transition hover:bg-orange-50 disabled:opacity-60"
+              className="mt-4 inline-flex items-center gap-2 rounded-2xl border border-white/25 bg-white px-4 py-2.5 text-sm font-semibold text-[#062A63] shadow-sm transition hover:bg-orange-50 disabled:opacity-60"
             >
               {exporting ? <FiLoader className="animate-spin" /> : <FiDownload />}
               {exporting ? "Preparing pay sheet..." : "Download pay sheet"}
@@ -227,7 +227,7 @@ export default function VendorRiders() {
           </article>
           <article className="rounded-3xl border border-slate-200 bg-white p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Pending Trips</p>
-            <p className="mt-2 text-xl font-black text-[#102A43]">{formatRiderCurrency(earningsSummary.pendingTotal)}</p>
+            <p className="mt-2 text-xl font-black text-[#062A63]">{formatRiderCurrency(earningsSummary.pendingTotal)}</p>
           </article>
           <article className="rounded-3xl border border-slate-200 bg-white p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Trip Bonuses</p>
@@ -253,7 +253,7 @@ export default function VendorRiders() {
                       <p className="text-sm text-slate-500">{item.rider?.phone || "No phone number"}</p>
                       <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
                         <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-700">{item.completedDeliveries} completed</span>
-                        <span className="rounded-full bg-blue-100 px-3 py-1 text-[#102A43]">{item.activeDeliveries} active</span>
+                        <span className="rounded-full bg-blue-100 px-3 py-1 text-[#062A63]">{item.activeDeliveries} active</span>
                         <span className="rounded-full bg-orange-100 px-3 py-1 text-orange-700">{formatRiderCurrency(item.bonusTotal)} bonus</span>
                         <span className="rounded-full bg-red-100 px-3 py-1 text-red-700">{formatRiderCurrency(item.unpaidTotal)} unpaid</span>
                       </div>
@@ -268,7 +268,7 @@ export default function VendorRiders() {
                       </div>
                       <div className="rounded-2xl bg-slate-50 p-3">
                         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Paid</p>
-                        <p className="mt-1 font-black text-[#102A43]">{formatRiderCurrency(item.paidTotal)}</p>
+                        <p className="mt-1 font-black text-[#062A63]">{formatRiderCurrency(item.paidTotal)}</p>
                       </div>
                       <div className="rounded-2xl bg-slate-50 p-3">
                         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Unpaid</p>
@@ -302,7 +302,7 @@ export default function VendorRiders() {
                                     className={`inline-flex items-center justify-center gap-2 rounded-2xl px-3 py-2 text-xs font-bold transition disabled:opacity-60 ${
                                       paid
                                         ? "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
-                                        : "bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] text-white shadow-sm"
+                                        : "bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] text-white shadow-sm"
                                     }`}
                                   >
                                     {settlingOrderId === order.id ? (
@@ -388,7 +388,7 @@ export default function VendorRiders() {
                       </span>
                     </td>
                     <td className="p-3">
-                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${rider.available ? "bg-slate-100 text-[#102A43]" : "bg-slate-200 text-slate-700"}`}>
+                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${rider.available ? "bg-slate-100 text-[#062A63]" : "bg-slate-200 text-slate-700"}`}>
                         {rider.available ? "Available" : "Busy"}
                       </span>
                     </td>
@@ -398,7 +398,7 @@ export default function VendorRiders() {
                           type="button"
                           disabled={updatingId === rider.id}
                           onClick={() => resetPassword(rider)}
-                          className="inline-flex items-center gap-1 rounded-xl border border-[#102A43]/15 bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-3 py-1.5 text-white shadow-sm disabled:opacity-60"
+                          className="inline-flex items-center gap-1 rounded-xl border border-[#062A63]/15 bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-3 py-1.5 text-white shadow-sm disabled:opacity-60"
                         >
                           <FiKey />
                           Reset Password
@@ -407,7 +407,7 @@ export default function VendorRiders() {
                           type="button"
                           disabled={updatingId === rider.id}
                           onClick={() => updateStatus(rider, { isActive: !rider.isActive })}
-                          className="inline-flex items-center gap-1 rounded-xl border border-orange-300 bg-[linear-gradient(135deg,#F28C28_0%,#D97706_100%)] px-3 py-1.5 text-white shadow-sm disabled:opacity-60"
+                          className="inline-flex items-center gap-1 rounded-xl border border-orange-300 bg-[linear-gradient(135deg,#0B5FFF_0%,#053A8C_100%)] px-3 py-1.5 text-white shadow-sm disabled:opacity-60"
                         >
                           {rider.isActive ? <FiToggleRight /> : <FiToggleLeft />}
                           {rider.isActive ? "Deactivate" : "Activate"}

@@ -216,8 +216,8 @@ export default function AdminPayouts() {
 
   return (
     <div className="space-y-5 md:space-y-6">
-      <section className="overflow-hidden rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_42%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Vendor Settlements</p>
+      <section className="overflow-hidden rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_42%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Vendor Settlements</p>
         <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Payout Management</h1>
         <p className="mt-1 text-sm text-slate-500">Review auto-created vendor settlements, mark payouts as paid, and track anything on hold.</p>
         <div className="mt-4 flex flex-wrap gap-3">
@@ -234,7 +234,7 @@ export default function AdminPayouts() {
 
       {error ? <PageState tone="error" title="Payouts unavailable" description={error} /> : null}
 
-      <section className="rounded-[26px] border border-white/80 bg-white/92 p-4 shadow-[0_18px_36px_rgba(15,23,42,0.06)]">
+      <section className="rounded-[26px] border border-white/80 bg-white/[0.92] p-4 shadow-[0_18px_36px_rgba(15,23,42,0.06)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Filter Reports</p>
@@ -255,7 +255,7 @@ export default function AdminPayouts() {
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
               placeholder="Search by vendor, store slug, order, notes, or reference"
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#102A43]/35"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#062A63]/35"
             />
             <p className="text-xs text-slate-500">
               {paginationLabel} and {filteredReadyQueue.length} queue {filteredReadyQueue.length === 1 ? "entry" : "entries"} match the current filters.
@@ -266,7 +266,7 @@ export default function AdminPayouts() {
             <select
               value={statusFilter}
               onChange={(event) => setStatusFilter(event.target.value)}
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#102A43]/35"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#062A63]/35"
             >
               <option value="all">All payout statuses</option>
               <option value="pending">Pending</option>
@@ -280,7 +280,7 @@ export default function AdminPayouts() {
               type="date"
               value={fromDate}
               onChange={(event) => setFromDate(event.target.value)}
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#102A43]/35"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#062A63]/35"
             />
           </label>
           <label className="space-y-2 text-sm text-slate-600">
@@ -289,7 +289,7 @@ export default function AdminPayouts() {
               type="date"
               value={toDate}
               onChange={(event) => setToDate(event.target.value)}
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#102A43]/35"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#062A63]/35"
             />
           </label>
           <div className="flex items-end">
@@ -302,7 +302,7 @@ export default function AdminPayouts() {
             <select
               value={pageSize}
               onChange={(event) => setPageSize(Number(event.target.value) || 10)}
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#102A43]/35"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#062A63]/35"
             >
               <option value={10}>10 rows</option>
               <option value={20}>20 rows</option>
@@ -315,8 +315,8 @@ export default function AdminPayouts() {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {[
           { label: "Under Review", value: formatCurrency(summary.readyQueueAmount), icon: FiClock, tone: "text-orange-700", accent: "bg-orange-100 text-orange-600" },
-          { label: "Pending Records", value: summary.pendingRecords || 0, icon: FiPauseCircle, tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
-          { label: "Paid Out", value: formatCurrency(summary.totalPaid), icon: FiCheckCircle, tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
+          { label: "Pending Records", value: summary.pendingRecords || 0, icon: FiPauseCircle, tone: "text-[#062A63]", accent: "bg-slate-100 text-[#062A63]" },
+          { label: "Paid Out", value: formatCurrency(summary.totalPaid), icon: FiCheckCircle, tone: "text-[#062A63]", accent: "bg-slate-100 text-[#062A63]" },
           { label: "Settlement Records", value: summary.totalRecords || 0, icon: FiCreditCard, tone: "text-slate-700", accent: "bg-slate-100 text-slate-600" },
         ].map((item) => {
           const Icon = item.icon;
@@ -383,7 +383,7 @@ export default function AdminPayouts() {
                   <p className="text-xs text-slate-500">/{vendor.storeSlug} • {vendor.records} payout records</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-black text-[#102A43]">{formatCurrency(vendor.total)}</p>
+                  <p className="text-sm font-black text-[#062A63]">{formatCurrency(vendor.total)}</p>
                   <p className="text-xs text-slate-500">Paid {formatCurrency(vendor.paid)}</p>
                 </div>
               </div>
@@ -396,7 +396,7 @@ export default function AdminPayouts() {
           <h2 className="mt-1 text-lg font-black text-slate-900">How fast payouts are being completed</h2>
           <div className="mt-5 grid gap-3">
             {[
-              { label: "Average turnaround", value: performance.averageDays !== null ? `${performance.averageDays} days` : "No data yet", tone: "text-[#102A43]" },
+              { label: "Average turnaround", value: performance.averageDays !== null ? `${performance.averageDays} days` : "No data yet", tone: "text-[#062A63]" },
               { label: "Fastest payout", value: performance.fastestDays !== null ? `${performance.fastestDays} days` : "No data yet", tone: "text-orange-700" },
               { label: "Slowest payout", value: performance.slowestDays !== null ? `${performance.slowestDays} days` : "No data yet", tone: "text-red-700" },
               { label: "Paid settlements", value: performance.settledCount || 0, tone: "text-slate-700" },
@@ -414,7 +414,7 @@ export default function AdminPayouts() {
         <div className="pointer-events-none absolute right-[-10%] top-[-20%] h-44 w-44 rounded-full bg-orange-200/35 blur-3xl" />
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#102A43]">Protected Settlement Queue</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Protected Settlement Queue</p>
             <h2 className="mt-1 text-lg font-black text-slate-900">Customer review window</h2>
             <p className="text-sm text-slate-500">Delivered orders wait here before payout so customers can report delivery problems first.</p>
           </div>
@@ -441,7 +441,7 @@ export default function AdminPayouts() {
       </section>
 
       <section className="relative overflow-hidden rounded-[30px] border border-white/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(248,250,252,0.94)_100%)] shadow-[0_24px_52px_rgba(15,23,42,0.08)]">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top,rgba(242,140,40,0.12)_0%,rgba(242,140,40,0)_72%)]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top,rgba(11,95,255,0.12)_0%,rgba(11,95,255,0)_72%)]" />
         <div className="overflow-x-auto">
           <table className="w-full min-w-[920px] text-sm">
             <thead className="sticky top-0 z-10 bg-[linear-gradient(135deg,rgba(239,246,255,0.96)_0%,rgba(255,247,237,0.98)_100%)] text-left text-slate-600 backdrop-blur">
@@ -466,7 +466,7 @@ export default function AdminPayouts() {
                     <p className="text-xs text-slate-500">{record.order?.status?.replaceAll("_", " ") || "n/a"}</p>
                   </td>
                   <td className="px-4 py-4">
-                    <span className="inline-flex rounded-full border border-[#102A43]/10 bg-slate-100/80 px-3 py-1.5 font-semibold text-[#102A43] shadow-sm">
+                    <span className="inline-flex rounded-full border border-[#062A63]/10 bg-slate-100/80 px-3 py-1.5 font-semibold text-[#062A63] shadow-sm">
                       {formatCurrency(record.amount)}
                     </span>
                   </td>
@@ -504,7 +504,7 @@ export default function AdminPayouts() {
                           type="button"
                           onClick={() => updateStatus(record, "pending")}
                           disabled={submittingId === record._id}
-                          className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-[#102A43] transition hover:bg-slate-100 disabled:opacity-60"
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-[#062A63] transition hover:bg-slate-100 disabled:opacity-60"
                         >
                           Reopen
                         </button>
@@ -556,7 +556,7 @@ export default function AdminPayouts() {
 
 function AnalyticsNote({ label, title, detail, tone = "slate" }) {
   const toneMap = {
-    navy: "border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_100%)]",
+    navy: "border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_100%)]",
     orange: "border-orange-200 bg-[linear-gradient(135deg,#fff7ed_0%,#ffffff_100%)]",
     slate: "border-slate-200 bg-[linear-gradient(135deg,#f8fafc_0%,#ffffff_100%)]",
   };

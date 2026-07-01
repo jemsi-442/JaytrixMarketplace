@@ -1,6 +1,6 @@
-# Ecommerce
+# JAYTRIX Systems
 
-Ecommerce is a multi-vendor marketplace and delivery platform built for shoppers, vendors, riders, and modern retail operations.
+JAYTRIX Systems is a multi-vendor marketplace and delivery platform built for shoppers, vendors, riders, and modern retail operations.
 
 ## Stack
 
@@ -57,8 +57,8 @@ DB_SYNC_ALTER=false
 CLOUDINARY_NAME=replace_with_cloudinary_cloud_name
 CLOUDINARY_API_KEY=replace_with_cloudinary_api_key
 CLOUDINARY_API_SECRET=replace_with_cloudinary_api_secret
-APP_NAME=Ecommerce
-MAIL_FROM=Ecommerce <no-reply@example.com>
+APP_NAME=JAYTRIX Systems
+MAIL_FROM=JAYTRIX Systems <no-reply@example.com>
 SMTP_HOST=smtp.example.com
 SMTP_PORT=587
 SMTP_SECURE=false

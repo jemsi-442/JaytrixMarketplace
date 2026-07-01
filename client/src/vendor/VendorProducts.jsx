@@ -266,8 +266,8 @@ export default function VendorProducts() {
   return (
     <div className="space-y-5 md:space-y-6">
       <section className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Store Catalog</p>
+        <div className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_48%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Store Catalog</p>
           <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Your Products</h1>
           <p className="text-slate-500">Create, update, and keep track of what is live, low on stock, or paused for changes.</p>
         </div>
@@ -280,7 +280,7 @@ export default function VendorProducts() {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         {[
           { label: "Total Products", value: metrics.total, tone: "text-slate-900", icon: FiPackage, accent: "bg-slate-100 text-slate-700" },
-          { label: "Live", value: metrics.approved, tone: "text-[#102A43]", icon: FiCheckCircle, accent: "bg-slate-100 text-[#102A43]" },
+          { label: "Live", value: metrics.approved, tone: "text-[#062A63]", icon: FiCheckCircle, accent: "bg-slate-100 text-[#062A63]" },
           { label: "Not Live", value: metrics.pending, tone: "text-amber-700", icon: FiMessageSquare, accent: "bg-amber-100 text-amber-600" },
           { label: "Needs Changes", value: metrics.rejected, tone: "text-red-700", icon: FiXCircle, accent: "bg-red-100 text-red-600" },
           { label: "Low Stock", value: metrics.lowStock, tone: "text-orange-700", icon: FiAlertTriangle, accent: "bg-orange-100 text-orange-600" },
@@ -455,7 +455,7 @@ export default function VendorProducts() {
                             <button
                               type="button"
                               onClick={() => startEditing(product)}
-                              className="rounded-xl border border-[#102A43]/10 bg-slate-100 p-2 text-[#102A43] transition hover:bg-slate-200"
+                              className="rounded-xl border border-[#062A63]/10 bg-slate-100 p-2 text-[#062A63] transition hover:bg-slate-200"
                               title="Edit product"
                             >
                               <FiEdit />
@@ -519,7 +519,7 @@ export default function VendorProducts() {
           onSubmit={handleSubmit}
           className="surface-panel-lg p-5 md:p-6"
         >
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#102A43]">Product Editor</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Product Editor</p>
           <h2 className="mt-1 text-xl font-black text-slate-900">{editingProduct ? "Update Product" : "Add Product"}</h2>
           <p className="mt-2 text-sm text-slate-500">
             {editingProduct

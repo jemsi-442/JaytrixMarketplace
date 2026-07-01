@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { FiAlertCircle, FiBell, FiCreditCard, FiHome, FiLogOut, FiPackage, FiShoppingBag, FiUsers, FiX } from "react-icons/fi";
 import { useAuth } from "../../hooks/useAuth";
+import BrandMark from "../../components/BrandMark";
 
 const navItems = [
   { name: "Marketplace Home", path: "/admin", icon: FiHome },
@@ -30,15 +31,11 @@ export default function AdminSidebar({
   };
 
   return (
-    <aside className={`sticky top-0 flex h-screen w-72 shrink-0 flex-col overflow-y-auto border-r border-slate-900/10 bg-[linear-gradient(180deg,#0f172a_0%,#172554_48%,#1e293b_100%)] text-slate-200 ${className}`}>
+    <aside className={`sticky top-0 flex h-screen w-72 shrink-0 flex-col overflow-y-auto border-r border-slate-900/10 bg-[linear-gradient(180deg,#031326_0%,#062A63_48%,#151A21_100%)] text-slate-200 ${className}`}>
       <div className="border-b border-white/10 px-6 py-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-orange-200/90">Seller & shopper hub</p>
-            <h1 className="mt-2 text-xl font-black text-white">
-              Ecommerce <span className="text-orange-300">Marketplace</span>
-            </h1>
-            <p className="mt-1 text-xs tracking-wide text-slate-400">Commerce Hub</p>
+            <BrandMark context="Operations Hub" light />
           </div>
           {mobile ? (
             <button
@@ -65,7 +62,7 @@ export default function AdminSidebar({
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition ${
                   isActive
-                    ? "border border-orange-300/25 bg-orange-400/15 text-orange-100 shadow-[0_14px_30px_rgba(242,140,40,0.12)]"
+                    ? "border border-sky-300/25 bg-sky-400/15 text-sky-100 shadow-[0_14px_30px_rgba(11,95,255,0.16)]"
                     : "text-slate-300 hover:bg-white/5 hover:text-white"
                 }`
               }
@@ -79,7 +76,7 @@ export default function AdminSidebar({
                   </span>
                 ) : null}
                 {item.path === "/admin/notifications" && unreadCount > 0 ? (
-                  <span className="rounded-full bg-[linear-gradient(135deg,#f59e0b_0%,#f97316_100%)] px-2 py-0.5 text-[10px] font-bold text-white shadow-lg shadow-amber-500/20">
+                  <span className="rounded-full bg-[linear-gradient(135deg,#1273ff_0%,#f97316_100%)] px-2 py-0.5 text-[10px] font-bold text-white shadow-lg shadow-amber-500/20">
                     {unreadCount}
                   </span>
                 ) : null}

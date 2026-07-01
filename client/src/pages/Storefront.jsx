@@ -304,11 +304,11 @@ export default function Storefront() {
                     className="aspect-[4/4.8] w-full object-cover"
                   />
                   <div className="pointer-events-none absolute inset-x-4 top-4 flex flex-wrap gap-2 text-xs">
-                    <span className={`rounded-full px-3 py-1 font-semibold ${Number(product.countInStock || 0) > 0 ? "bg-white/90 text-[#102A43]" : "bg-slate-900/75 text-white"}`}>
+                    <span className={`rounded-full px-3 py-1 font-semibold ${Number(product.countInStock || 0) > 0 ? "bg-white/90 text-[#062A63]" : "bg-slate-900/75 text-white"}`}>
                       {Number(product.countInStock || 0) > 0 ? `${Number(product.countInStock || 0)} ready now` : "Currently unavailable"}
                     </span>
                     {cartQty > 0 ? (
-                      <span className="rounded-full bg-slate-100/95 px-3 py-1 font-semibold text-[#102A43]">In cart x{cartQty}</span>
+                      <span className="rounded-full bg-slate-100/95 px-3 py-1 font-semibold text-[#062A63]">In cart x{cartQty}</span>
                     ) : null}
                     {saved ? (
                       <span className="rounded-full bg-orange-50/95 px-3 py-1 font-semibold text-orange-700">Saved by you</span>
@@ -327,7 +327,7 @@ export default function Storefront() {
                       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">From this seller</p>
                       <h3 className="mt-2 text-lg font-black text-slate-900">{product.name}</h3>
                     </div>
-                    <p className="text-lg font-black text-[#102A43]">{formatCurrency(product.price)}</p>
+                    <p className="text-lg font-black text-[#062A63]">{formatCurrency(product.price)}</p>
                   </div>
 
                   {badges.length > 2 ? (
@@ -367,7 +367,7 @@ export default function Storefront() {
                       type="button"
                       onClick={() => handleAddToCart(product)}
                       disabled={Number(product.countInStock || 0) <= 0}
-                      className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <FiShoppingBag /> {cartQty > 0 ? "Add another" : "Add to cart"}
                     </button>

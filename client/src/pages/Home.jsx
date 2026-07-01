@@ -38,19 +38,19 @@ const quickCollections = [
     title: "Fresh arrivals",
     subtitle: "Recently added pieces shoppers are starting to notice.",
     search: "new",
-    color: "from-[#102A43] via-[#163A5F] to-[#28507A]",
+    color: "from-[#062A63] via-[#07306B] to-[#0B5FFF]",
   },
   {
     title: "Best value",
     subtitle: "Easy picks for customers who want strong value at a good price.",
     price: "0-50000",
-    color: "from-[#F28C28] via-[#F59E0B] to-[#FDBA74]",
+    color: "from-[#0B5FFF] via-[#1273FF] to-[#5EA4FF]",
   },
   {
     title: "Statement picks",
     subtitle: "Premium products that deserve the front row of the marketplace.",
     price: "100000-10000000",
-    color: "from-[#102A43] via-[#1C4268] to-[#F28C28]",
+    color: "from-[#062A63] via-[#0A3A78] to-[#0B5FFF]",
   },
 ];
 
@@ -352,7 +352,7 @@ export default function Home() {
   return (
     <div className="w-full overflow-hidden bg-[linear-gradient(180deg,#f8fafc_0%,#eff6ff_36%,#fff7ed_100%)] text-slate-900">
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(242,140,40,0.16),transparent_28%),radial-gradient(circle_at_top_right,rgba(148,163,184,0.12),transparent_28%),linear-gradient(135deg,#0f172a_0%,#172554_48%,#1e293b_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.16),transparent_28%),radial-gradient(circle_at_top_right,rgba(148,163,184,0.12),transparent_28%),linear-gradient(135deg,#0f172a_0%,#172554_48%,#1e293b_100%)]" />
         <div className="absolute -left-16 top-24 h-48 w-48 rounded-full bg-orange-300/20 blur-3xl" />
         <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-slate-300/15 blur-3xl" />
 
@@ -364,7 +364,7 @@ export default function Home() {
 
             <h1 className="mt-5 max-w-3xl text-4xl font-black leading-[1.02] tracking-tight text-white sm:text-5xl md:text-6xl">
               The marketplace built to help shoppers buy faster
-              <span className="block bg-[linear-gradient(90deg,#bfdbfe_0%,#fdba74_58%,#fed7aa_100%)] bg-clip-text text-transparent">
+              <span className="block bg-[linear-gradient(90deg,#bfdbfe_0%,#5ea4ff_58%,#fed7aa_100%)] bg-clip-text text-transparent">
                 and sellers grow with confidence.
               </span>
             </h1>
@@ -374,7 +374,7 @@ export default function Home() {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link to="/shop" className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_32px_rgba(16,42,67,0.32)] transition hover:-translate-y-0.5">
+              <Link to="/shop" className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_32px_rgba(6,42,99,0.32)] transition hover:-translate-y-0.5">
                 Explore Marketplace <FiArrowRight />
               </Link>
               {!user ? (
@@ -478,7 +478,7 @@ export default function Home() {
             <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
               <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#102A43]">Favorite stores</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Favorite stores</p>
                   <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-900">Your seller shortcuts are ready</h2>
                   <p className="mt-2 max-w-2xl text-slate-600">Jump back into the storefronts you trust most, then keep building your basket from sellers already matching your style.</p>
                 </div>
@@ -513,11 +513,11 @@ export default function Home() {
                           <p className="mt-2 text-sm text-slate-600">{store.inStockCount || 0} ready now across {store.itemCount || 0} live product{Number(store.itemCount || 0) === 1 ? "" : "s"}.</p>
                           <p className="mt-2 text-sm font-medium text-slate-500">{getStoreNudge(store)}</p>
                           {Number(store.startingPrice || 0) > 0 ? (
-                            <p className="mt-2 text-sm font-semibold text-[#102A43]">Starts from {formatCurrency(store.startingPrice)}</p>
+                            <p className="mt-2 text-sm font-semibold text-[#062A63]">Starts from {formatCurrency(store.startingPrice)}</p>
                           ) : null}
                         </div>
                         <div className="mt-4 flex flex-wrap gap-2">
-                          <Link to={`/stores/${store.slug}`} className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5">
+                          <Link to={`/stores/${store.slug}`} className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5">
                             Visit store <FiArrowRight />
                           </Link>
                           <button
@@ -587,11 +587,11 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-4 py-14 md:px-6 md:py-20">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Featured shelves</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Featured shelves</p>
             <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-900">Products shoppers can move on quickly</h2>
             <p className="mt-2 max-w-2xl text-slate-600">A stronger front page helps buyers decide faster. These are the products already carrying the right marketplace energy.</p>
           </div>
-          <Link to="/shop" className="inline-flex items-center gap-2 text-sm font-semibold text-[#102A43] hover:text-[#081B2E]">
+          <Link to="/shop" className="inline-flex items-center gap-2 text-sm font-semibold text-[#062A63] hover:text-[#031326]">
             View full catalog <FiArrowRight />
           </Link>
         </div>
@@ -619,7 +619,7 @@ export default function Home() {
                         }}
                       />
                       <div className="pointer-events-none absolute inset-x-4 top-4 flex flex-wrap gap-2 text-xs">
-                        <span className={`rounded-full px-3 py-1 font-semibold ${Number(product.countInStock || 0) > 0 ? "bg-white/90 text-[#102A43]" : "bg-slate-900/75 text-white"}`}>
+                        <span className={`rounded-full px-3 py-1 font-semibold ${Number(product.countInStock || 0) > 0 ? "bg-white/90 text-[#062A63]" : "bg-slate-900/75 text-white"}`}>
                           {Number(product.countInStock || 0) > 0 ? `${Number(product.countInStock || 0)} ready now` : "Currently unavailable"}
                         </span>
                         {cartQty > 0 ? (
@@ -663,7 +663,7 @@ export default function Home() {
                     </div>
                     <div className="text-right">
                       <p className="text-sm text-slate-500">Price</p>
-                      <p className="text-xl font-black text-[#102A43]">{loading ? '...' : `TZS ${Number(product.price || 0).toLocaleString()}`}</p>
+                      <p className="text-xl font-black text-[#062A63]">{loading ? '...' : `TZS ${Number(product.price || 0).toLocaleString()}`}</p>
                     </div>
                   </div>
 
@@ -704,7 +704,7 @@ export default function Home() {
                         type="button"
                         onClick={() => handleRecommendationAddToCart(product)}
                         disabled={Number(product.countInStock || 0) <= 0}
-                        className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         <FiShoppingBag /> {cartQty > 0 ? 'Add another' : 'Add to cart'}
                       </button>
@@ -721,7 +721,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 py-14 md:px-6 md:py-18">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Storefronts to watch</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Storefronts to watch</p>
               <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-900">Let strong sellers become part of the shopping story</h2>
               <p className="mt-2 max-w-2xl text-slate-600">Marketplace growth looks better when shoppers can discover trusted stores, not just individual items.</p>
             </div>
@@ -731,7 +731,7 @@ export default function Home() {
             {(featuredStores.length ? featuredStores : Array.from({ length: 3 })).map((store, index) => (
               <article key={store?.slug || index} className="overflow-hidden rounded-[28px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] shadow-[0_18px_40px_rgba(15,23,42,0.05)]">
                   <div className="flex items-center gap-3 border-b border-slate-100 px-5 py-4">
-                    <div className="rounded-2xl bg-slate-100 p-3 text-[#102A43]">
+                    <div className="rounded-2xl bg-slate-100 p-3 text-[#062A63]">
                       <FiPackage size={20} />
                     </div>
                     <div>
@@ -774,7 +774,7 @@ export default function Home() {
                     </div>
                     {store?.slug ? (
                       <div className="mt-4 flex flex-wrap gap-2">
-                        <Link to={`/stores/${store.slug}`} className="inline-flex items-center gap-2 text-sm font-semibold text-[#102A43] hover:text-[#081B2E]">
+                        <Link to={`/stores/${store.slug}`} className="inline-flex items-center gap-2 text-sm font-semibold text-[#062A63] hover:text-[#031326]">
                           Visit store <FiArrowRight />
                         </Link>
                         <button

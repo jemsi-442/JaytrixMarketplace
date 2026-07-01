@@ -59,8 +59,8 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-6 md:space-y-8">
-      <div className="overflow-hidden rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_42%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Marketplace Snapshot</p>
+      <div className="overflow-hidden rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_42%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Marketplace Snapshot</p>
         <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Commerce Pulse</h1>
         <p className="mt-1 text-sm text-slate-500">
           Sales, shoppers, sellers, deliveries, and store health in one clear marketplace view.
@@ -170,7 +170,7 @@ export default function AdminDashboard() {
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <div className="rounded-2xl border border-white bg-white px-4 py-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">This Week</p>
-                <p className="mt-2 text-2xl font-black text-[#102A43]">Tsh {Number(weeklyMomentum.currentWeekRevenue || 0).toLocaleString()}</p>
+                <p className="mt-2 text-2xl font-black text-[#062A63]">Tsh {Number(weeklyMomentum.currentWeekRevenue || 0).toLocaleString()}</p>
                 <p className="mt-1 text-xs text-slate-500">{weeklyMomentum.currentWeekOrders || 0} paid orders</p>
               </div>
               <div className="rounded-2xl border border-white bg-white px-4 py-3">
@@ -181,10 +181,10 @@ export default function AdminDashboard() {
             </div>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl border border-[#102A43]/12 bg-slate-100/80 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#102A43]">Sales Growth</p>
-                <p className="mt-2 text-2xl font-black text-[#102A43]">{Number(weeklyMomentum.growthRate || 0).toLocaleString()}%</p>
-                <p className="mt-1 text-xs text-[#102A43]/80">Compared with the previous 7 days.</p>
+              <div className="rounded-2xl border border-[#062A63]/12 bg-slate-100/80 px-4 py-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#062A63]">Sales Growth</p>
+                <p className="mt-2 text-2xl font-black text-[#062A63]">{Number(weeklyMomentum.growthRate || 0).toLocaleString()}%</p>
+                <p className="mt-1 text-xs text-[#062A63]/80">Compared with the previous 7 days.</p>
               </div>
               <div className="rounded-2xl border border-orange-200 bg-orange-50/70 px-4 py-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-700">Daily Sales Pace</p>
@@ -282,7 +282,7 @@ export default function AdminDashboard() {
                       <p className="text-xs text-slate-500">{Number(product.soldQty || 0).toLocaleString()} units sold</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-black text-[#102A43]">Tsh {Number(product.revenue || 0).toLocaleString()}</p>
+                      <p className="text-sm font-black text-[#062A63]">Tsh {Number(product.revenue || 0).toLocaleString()}</p>
                       <p className="text-xs text-slate-500">sales value</p>
                     </div>
                   </div>
@@ -302,13 +302,13 @@ export default function AdminDashboard() {
                   label: "Shopper to order flow",
                   value: `${Number(stats.kpis?.conversionRate || 0).toLocaleString()}%`,
                   detail: "Shows how strongly browsing shoppers are turning into buyers.",
-                  tone: "text-[#102A43]",
+                  tone: "text-[#062A63]",
                 },
                 {
                   label: "Paid sales so far",
                   value: `Tsh ${Number(stats.kpis?.totalRevenue || 0).toLocaleString()}`,
                   detail: "Confirmed paid sales across the marketplace so far.",
-                  tone: "text-[#102A43]",
+                  tone: "text-[#062A63]",
                 },
                 {
                   label: "Live products",
@@ -384,7 +384,7 @@ export default function AdminDashboard() {
                         <p className="text-xs text-slate-500">{customer.email || "No email available"}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-black text-[#102A43]">{customer.totalOrders || 0} orders</p>
+                        <p className="text-sm font-black text-[#062A63]">{customer.totalOrders || 0} orders</p>
                         <p className="text-xs text-slate-500">Tsh {Number(customer.totalPaidRevenue || 0).toLocaleString()} lifetime paid</p>
                       </div>
                     </div>
@@ -418,7 +418,7 @@ export default function AdminDashboard() {
                   label: "Loyalty strength",
                   value: `${Number(customerInsights.repeatBuyerRate || 0).toLocaleString()}%`,
                   detail: "How much of your buying base has returned for another order.",
-                  tone: "text-[#102A43]",
+                  tone: "text-[#062A63]",
                 },
                 {
                   label: "New shopper pull",
@@ -430,7 +430,7 @@ export default function AdminDashboard() {
                   label: "Returning shopper activity",
                   value: customerInsights.returningCustomersThisMonth || 0,
                   detail: "How many familiar shoppers came back to buy this month.",
-                  tone: "text-[#102A43]",
+                  tone: "text-[#062A63]",
                 },
               ].map((item) => (
                 <div key={item.label} className="rounded-2xl border border-white bg-white px-4 py-3">
@@ -500,7 +500,7 @@ export default function AdminDashboard() {
                         <p className="text-xs text-slate-500">{area.orders || 0} orders</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-black text-[#102A43]">Tsh {Number(area.paidRevenue || 0).toLocaleString()}</p>
+                        <p className="text-sm font-black text-[#062A63]">Tsh {Number(area.paidRevenue || 0).toLocaleString()}</p>
                         <p className="text-xs text-slate-500">paid revenue</p>
                       </div>
                     </div>
@@ -615,7 +615,7 @@ export default function AdminDashboard() {
                         </div>
                         <div>
                           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Assigned</p>
-                          <p className="text-sm font-black text-[#102A43]">{rider.currentOrders || 0}</p>
+                          <p className="text-sm font-black text-[#062A63]">{rider.currentOrders || 0}</p>
                         </div>
                       </div>
                     </div>
@@ -707,7 +707,7 @@ export default function AdminDashboard() {
                 <div className="grid gap-3 text-right sm:grid-cols-3 sm:gap-5">
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">This Month</p>
-                    <p className="text-sm font-black text-[#102A43]">Tsh {Number(vendor.currentRevenue || 0).toLocaleString()}</p>
+                    <p className="text-sm font-black text-[#062A63]">Tsh {Number(vendor.currentRevenue || 0).toLocaleString()}</p>
                   </div>
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Last Month</p>
@@ -778,7 +778,7 @@ export default function AdminDashboard() {
                       <p className="text-xs text-slate-500">Store: {vendor.storeSlug} • {vendor.records} payout records</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-black text-[#102A43]">Tsh {Number(vendor.total || 0).toLocaleString()}</p>
+                      <p className="text-sm font-black text-[#062A63]">Tsh {Number(vendor.total || 0).toLocaleString()}</p>
                       <p className="text-xs text-slate-500">Paid Tsh {Number(vendor.paid || 0).toLocaleString()}</p>
                     </div>
                   </div>
@@ -794,7 +794,7 @@ export default function AdminDashboard() {
             <h3 className="mt-1 text-base font-black text-slate-900">How quickly seller payouts are completed</h3>
             <div className="mt-4 grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
               {[
-                { label: "Fastest", value: stats.payouts?.settlementPerformance?.fastestDays !== null && stats.payouts?.settlementPerformance?.fastestDays !== undefined ? `${stats.payouts.settlementPerformance.fastestDays} days` : "No data yet", tone: "text-[#102A43]" },
+                { label: "Fastest", value: stats.payouts?.settlementPerformance?.fastestDays !== null && stats.payouts?.settlementPerformance?.fastestDays !== undefined ? `${stats.payouts.settlementPerformance.fastestDays} days` : "No data yet", tone: "text-[#062A63]" },
                 { label: "Slowest", value: stats.payouts?.settlementPerformance?.slowestDays !== null && stats.payouts?.settlementPerformance?.slowestDays !== undefined ? `${stats.payouts.settlementPerformance.slowestDays} days` : "No data yet", tone: "text-red-700" },
                 { label: "Paid", value: stats.payouts?.settlementPerformance?.settledCount || 0, tone: "text-orange-700" },
               ].map((item) => (
@@ -828,7 +828,7 @@ export default function AdminDashboard() {
                   <div className="grid gap-2 text-right sm:grid-cols-3 sm:gap-4">
                     <div>
                       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Pending</p>
-                      <p className="text-sm font-black text-[#102A43]">Tsh {Number(vendor.pending || 0).toLocaleString()}</p>
+                      <p className="text-sm font-black text-[#062A63]">Tsh {Number(vendor.pending || 0).toLocaleString()}</p>
                     </div>
                     <div>
                       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">On Hold</p>
@@ -909,7 +909,7 @@ export default function AdminDashboard() {
 
 const kpiToneClasses = {
   navy:
-    "border-[#102A43]/15 bg-[linear-gradient(135deg,#eff6ff_0%,#dbeafe_40%,#ffffff_100%)] text-slate-950",
+    "border-[#062A63]/15 bg-[linear-gradient(135deg,#eff6ff_0%,#dbeafe_40%,#ffffff_100%)] text-slate-950",
   orange:
     "border-orange-200/70 bg-[linear-gradient(135deg,#fff7ed_0%,#fed7aa_35%,#ffffff_100%)] text-slate-950",
   slate: "border-slate-200/70 bg-[linear-gradient(135deg,#f8fafc_0%,#e2e8f0_46%,#ffffff_100%)] text-slate-950",
@@ -940,7 +940,7 @@ const KPI = ({ label, value, icon: Icon, tone = "navy" }) => (
 );
 
 const toneClasses = {
-  navy: "border-[#102A43]/12 bg-[linear-gradient(135deg,#eff6ff_0%,#dbeafe_42%,#ffffff_100%)] text-[#102A43]",
+  navy: "border-[#062A63]/12 bg-[linear-gradient(135deg,#eff6ff_0%,#dbeafe_42%,#ffffff_100%)] text-[#062A63]",
   orange: "border-orange-200/70 bg-[linear-gradient(135deg,#fff7ed_0%,#fed7aa_36%,#ffffff_100%)] text-orange-800",
   slate: "border-slate-200/70 bg-[linear-gradient(135deg,#f8fafc_0%,#e2e8f0_42%,#ffffff_100%)] text-slate-800",
   alert: "border-red-200/70 bg-[linear-gradient(135deg,#fef2f2_0%,#fee2e2_42%,#ffffff_100%)] text-red-800",
@@ -997,7 +997,7 @@ const PageHint = ({ message }) => (
 
 const AnalyticsNote = ({ label, title, detail, tone = "slate" }) => {
   const toneMap = {
-    navy: "border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_100%)]",
+    navy: "border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_100%)]",
     orange: "border-orange-200 bg-[linear-gradient(135deg,#fff7ed_0%,#ffffff_100%)]",
     slate: "border-slate-200 bg-[linear-gradient(135deg,#f8fafc_0%,#ffffff_100%)]",
     alert: "border-red-200 bg-[linear-gradient(135deg,#fef2f2_0%,#ffffff_100%)]",

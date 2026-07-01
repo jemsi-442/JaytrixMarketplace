@@ -28,8 +28,8 @@ import { PLACEHOLDER_IMAGE, resolveImageUrl } from "../utils/image";
 
 const statusClass = {
   pending: "bg-orange-50 text-orange-700 border-orange-200",
-  paid: "bg-slate-100 text-[#102A43] border-slate-200",
-  out_for_delivery: "bg-slate-100 text-[#102A43] border-[#102A43]/10",
+  paid: "bg-slate-100 text-[#062A63] border-slate-200",
+  out_for_delivery: "bg-slate-100 text-[#062A63] border-[#062A63]/10",
   delivered: "bg-emerald-50 text-emerald-700 border-emerald-200",
   cancelled: "bg-red-50 text-red-700 border-red-200",
   refunded: "bg-slate-100 text-slate-700 border-slate-200",
@@ -58,7 +58,7 @@ const orderStatusMeta = {
     progress: 2,
     nextTitle: "Delivery is in progress",
     nextDetail: "Keep your phone close. The next update should be delivery completion once the rider reaches your address.",
-    tone: "border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#f8fafc_100%)]",
+    tone: "border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#f8fafc_100%)]",
   },
   delivered: {
     title: "Delivered",
@@ -113,7 +113,7 @@ function TimelineStep({ label, active, complete, isLast }) {
         <div
           className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-xs font-semibold ${
             complete
-              ? "border-[#102A43]/15 bg-slate-100 text-[#102A43]"
+              ? "border-[#062A63]/15 bg-slate-100 text-[#062A63]"
               : active
                 ? "border-orange-200 bg-orange-50 text-orange-700"
                 : "border-slate-200 bg-white text-slate-400"
@@ -208,7 +208,7 @@ export default function OrderCard({
     <article className="rounded-[28px] border border-white/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(248,250,252,0.96)_100%)] p-5 shadow-[0_20px_40px_rgba(15,23,42,0.07)] transition hover:-translate-y-0.5 hover:shadow-[0_24px_50px_rgba(15,23,42,0.10)] md:p-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-[#102A43]">Marketplace order</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-[#062A63]">Marketplace order</p>
           <h3 className="font-black text-slate-900">#{String(order._id).slice(-6)}</h3>
           <p className="mt-2 text-lg font-black text-slate-900">{meta.title}</p>
           <p className="mt-1 max-w-2xl text-sm text-slate-500">{meta.detail}</p>
@@ -272,7 +272,7 @@ export default function OrderCard({
                 <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-slate-700">
                   Payment: {toLabel(order.paymentMethod || "mobile_money", "mobile money")}
                 </span>
-                <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-[#102A43]">
+                <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-[#062A63]">
                   {totalItems} item{totalItems === 1 ? "" : "s"}
                 </span>
               </div>
@@ -448,14 +448,14 @@ export default function OrderCard({
         <div className="mt-5 rounded-[24px] border border-slate-200 bg-[linear-gradient(135deg,#eff6ff_0%,#f8fafc_100%)] p-4">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#102A43]">Buy again</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#062A63]">Buy again</p>
               <p className="mt-1 text-sm text-slate-600">Add the available items from this order back into your cart and keep shopping from where you left off.</p>
             </div>
                                 <button
               type="button"
               onClick={() => onReorder(order)}
               disabled={busy}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:opacity-50"
             >
               <FiShoppingBag /> Buy again
             </button>
@@ -513,7 +513,7 @@ export default function OrderCard({
                       className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${
                         hasReview
                           ? "border border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100"
-                          : "bg-[linear-gradient(135deg,#102A43_0%,#081B2E_100%)] text-white hover:-translate-y-0.5"
+                          : "bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] text-white hover:-translate-y-0.5"
                       }`}
                     >
                       {hasReview ? <FiEdit3 /> : <FiStar />}
@@ -582,7 +582,7 @@ export default function OrderCard({
                 {selectedNetworkValidation && !selectedNetworkValidation.valid ? (
                   <p className="mt-2 text-red-600">{selectedNetworkValidation.message}</p>
                 ) : (
-                  <p className="mt-2 text-[#102A43]">This number matches {selectedNetworkLabel}.</p>
+                  <p className="mt-2 text-[#062A63]">This number matches {selectedNetworkLabel}.</p>
                 )}
               </div>
             ) : null}

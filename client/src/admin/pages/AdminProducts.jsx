@@ -219,8 +219,8 @@ export default function AdminProducts() {
   return (
     <div className="space-y-4 md:space-y-6">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-        <div className="rounded-[28px] border border-[#102A43]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_44%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Catalog Control</p>
+        <div className="rounded-[28px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_44%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Catalog Control</p>
           <h1 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Products</h1>
           <p className="text-slate-500">Monitor live listings, fix catalog quality issues, and pause products only when they need attention.</p>
         </div>
@@ -240,7 +240,7 @@ export default function AdminProducts() {
         {[
           { label: "Catalog Items", value: metrics.total, icon: FiPackage, tone: "text-slate-900", accent: "bg-slate-100 text-slate-700" },
           { label: "Not Live", value: metrics.pendingReview, icon: FiShield, tone: "text-amber-700", accent: "bg-amber-100 text-amber-600" },
-          { label: "Live", value: metrics.approved, icon: FiCheckCircle, tone: "text-[#102A43]", accent: "bg-slate-100 text-[#102A43]" },
+          { label: "Live", value: metrics.approved, icon: FiCheckCircle, tone: "text-[#062A63]", accent: "bg-slate-100 text-[#062A63]" },
           { label: "Needs Changes", value: metrics.rejected, icon: FiXCircle, tone: "text-red-700", accent: "bg-red-100 text-red-600" },
           { label: "Low Stock", value: metrics.lowStock, icon: FiAlertTriangle, tone: "text-orange-700", accent: "bg-orange-100 text-orange-600" },
         ].map((item) => {
@@ -457,7 +457,7 @@ export default function AdminProducts() {
                               setEditingProduct(product);
                               setModalOpen(true);
                             }}
-                            className="rounded-xl border border-[#102A43]/10 bg-slate-100 p-2 text-[#102A43] transition hover:bg-slate-200"
+                            className="rounded-xl border border-[#062A63]/10 bg-slate-100 p-2 text-[#062A63] transition hover:bg-slate-200"
                             title="Edit product"
                           >
                             <FiEdit />
@@ -687,7 +687,7 @@ function ProductModal({ product, onClose, onSaved, toast }) {
         onSubmit={handleSubmit}
         className="max-h-[90vh] w-full max-w-lg space-y-4 overflow-y-auto rounded-[28px] border border-white/80 bg-white/95 p-4 shadow-[0_24px_50px_rgba(15,23,42,0.18)] md:p-6"
       >
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#102A43]">Product Editor</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Product Editor</p>
         <h2 className="text-xl font-black text-slate-900">{product ? "Edit Product" : "New Product"}</h2>
 
         <input
