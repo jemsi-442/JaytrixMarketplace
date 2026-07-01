@@ -156,6 +156,12 @@ export default function Cart() {
           </div>
         </section>
 
+        <CheckoutReadinessPanel
+          itemCount={cart.reduce((sum, item) => sum + Number(item.qty || 0), 0)}
+          total={totals.total}
+          freeDeliveryRemaining={freeDeliveryRemaining}
+        />
+
         <div className="grid gap-6 md:gap-8 lg:grid-cols-3">
           <section className="lg:col-span-2 space-y-6">
             <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_35px_rgba(15,23,42,0.05)] md:p-6">
@@ -354,5 +360,59 @@ function QuickStat({ label, value }) {
       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">{label}</p>
       <p className="mt-2 text-2xl font-black text-slate-900">{Number(value || 0).toLocaleString()}</p>
     </div>
+  );
+}
+
+function CheckoutReadinessPanel({ itemCount, total, freeDeliveryRemaining }) {
+  const steps = [
+    {
+      title: "Review your picks",
+      description: `${Number(itemCount || 0).toLocaleString()} item${Number(itemCount || 0) === 1 ? "" : "s"} ready for final confirmation.`,
+      icon: FiShoppingCart,
+    },
+    {
+      title: "Confirm payment",
+      description: "Choose mobile money and approve the secure prompt on your phone.",
+      icon: FiShield,
+    },
+    {
+      title: "Track delivery",
+      description: "Your account keeps payment and delivery progress visible after checkout.",
+      icon: FiTruck,
+    },
+  ];
+
+  return (
+    <section className="rounded-[30px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#031326_0%,#062A63_58%,#0A3A78_100%)] p-5 text-white shadow-[0_24px_55px_rgba(2,6,23,0.18)] md:p-6">
+      <div className="grid gap-5 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-100">Checkout path</p>
+          <h2 className="mt-3 text-2xl font-black tracking-tight md:text-3xl">A cleaner final step before payment.</h2>
+          <p className="mt-3 text-sm leading-6 text-slate-200">
+            Total is TZS {Number(total || 0).toLocaleString()}. {freeDeliveryRemaining > 0
+              ? `Add TZS ${Number(freeDeliveryRemaining || 0).toLocaleString()} more to unlock free delivery.`
+              : "Free delivery is already unlocked for this cart."}
+          </p>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-3">
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            return (
+              <div key={step.title} className="rounded-2xl border border-white/10 bg-white/[0.08] px-4 py-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="rounded-2xl bg-white/10 p-3 text-white">
+                    <Icon />
+                  </div>
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">Step {index + 1}</span>
+                </div>
+                <p className="mt-4 font-black text-white">{step.title}</p>
+                <p className="mt-2 text-sm leading-5 text-slate-300">{step.description}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }
