@@ -1,9 +1,13 @@
-import { FiBell, FiLogOut, FiMenu, FiShoppingBag, FiUser } from "react-icons/fi";
+import { FiBell, FiHeart, FiLogOut, FiMenu, FiShoppingBag, FiShoppingCart, FiUser } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { useCart } from "../hooks/useCart";
+import { useSavedProducts } from "../hooks/useSavedProducts";
 
 export default function CustomerTopbar({ unreadCount = 0, onOpenSidebar }) {
   const { user, logout } = useAuth();
+  const { cartCount } = useCart();
+  const { savedProducts } = useSavedProducts();
   const navigate = useNavigate();
   const initial = (user?.name || "Shopper").trim().charAt(0).toUpperCase() || "S";
 
@@ -38,12 +42,32 @@ export default function CustomerTopbar({ unreadCount = 0, onOpenSidebar }) {
       </div>
 
       <div className="flex items-center gap-3 md:gap-5">
-        <Link
-          to="/shop"
-          className="hidden items-center gap-2 rounded-full border border-white/80 bg-white/80 px-4 py-2 text-sm font-semibold text-slate-700 shadow-[0_12px_30px_rgba(15,23,42,0.08)] transition hover:-translate-y-0.5 hover:text-[#062A63] sm:inline-flex"
-        >
-          <FiShoppingBag /> Shop
-        </Link>
+        <div className="hidden items-center gap-2 rounded-full border border-white/80 bg-white/72 p-1 shadow-[0_12px_30px_rgba(15,23,42,0.08)] sm:flex">
+          <Link
+            to="/shop"
+            className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white hover:text-[#062A63]"
+          >
+            <FiShoppingBag /> Shop
+          </Link>
+          <Link
+            to="/account/wishlist"
+            className="relative inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white hover:text-[#062A63]"
+          >
+            <FiHeart /> Saved
+            {savedProducts.length > 0 ? (
+              <span className="rounded-full bg-[#062A63] px-1.5 py-0.5 text-[10px] font-black text-white">{savedProducts.length}</span>
+            ) : null}
+          </Link>
+          <Link
+            to="/cart"
+            className="relative inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white hover:text-[#062A63]"
+          >
+            <FiShoppingCart /> Cart
+            {cartCount > 0 ? (
+              <span className="rounded-full bg-[#062A63] px-1.5 py-0.5 text-[10px] font-black text-white">{cartCount}</span>
+            ) : null}
+          </Link>
+        </div>
 
         <Link
           to="/account/updates"
