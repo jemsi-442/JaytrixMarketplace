@@ -1160,6 +1160,53 @@ export default function Orders({ view = "overview" }) {
     ];
   }, [favoriteStoreCount, orderStats.unread, recentProducts.length, savedProducts.length]);
 
+  const overviewInsightCards = useMemo(() => {
+    const readySavedCount = savedProducts.filter((product) => Number(product.countInStock || 0) > 0).length;
+    const averageOrderValue = orderStats.totalOrders ? orderStats.spent / orderStats.totalOrders : 0;
+    const activeOrderLabel = activeOrderFocus
+      ? `Order #${String(activeOrderFocus._id || activeOrderFocus.id || "").slice(-6)} is ${String(activeOrderFocus.status || "active").replaceAll("_", " ")}.`
+      : "No order needs attention right now.";
+
+    return [
+      {
+        label: "Needs attention",
+        value: orderStats.awaitingPayment || orderStats.unread || 0,
+        title: orderStats.awaitingPayment
+          ? "Payment is waiting"
+          : orderStats.unread
+            ? "Unread updates are waiting"
+            : "Everything is calm",
+        description: orderStats.awaitingPayment
+          ? `${orderStats.awaitingPayment} order${orderStats.awaitingPayment === 1 ? "" : "s"} still need payment confirmation.`
+          : orderStats.unread
+            ? `${orderStats.unread} update${orderStats.unread === 1 ? "" : "s"} should be reviewed.`
+            : activeOrderLabel,
+        href: orderStats.awaitingPayment ? "/account/orders" : orderStats.unread ? "/account/updates" : "/account/orders",
+        tone: orderStats.awaitingPayment || orderStats.unread ? "orange" : "green",
+      },
+      {
+        label: "Buying power",
+        value: `TZS ${Number(averageOrderValue || 0).toLocaleString()}`,
+        title: "Average order value",
+        description: orderStats.totalOrders
+          ? "This helps you understand your normal checkout size before the next purchase."
+          : "Your average order value will appear after your first checkout.",
+        href: "/account/orders",
+        tone: "blue",
+      },
+      {
+        label: "Ready to buy",
+        value: readySavedCount,
+        title: "Saved items in stock",
+        description: readySavedCount
+          ? `${readySavedCount} saved item${readySavedCount === 1 ? " is" : "s are"} available now.`
+          : "Save products you like and ready-to-buy picks will appear here.",
+        href: readySavedCount ? "/account/wishlist" : "/shop",
+        tone: "navy",
+      },
+    ];
+  }, [activeOrderFocus, orderStats.awaitingPayment, orderStats.spent, orderStats.totalOrders, orderStats.unread, savedProducts]);
+
   const reviewerSnapshot = useMemo(() => {
     const allReviewedEntries = orders
       .flatMap((order) =>
@@ -2238,6 +2285,7 @@ export default function Orders({ view = "overview" }) {
             trendData={overviewTrendData}
             stageData={overviewStageData}
             engagementData={overviewEngagementData}
+            insights={overviewInsightCards}
             stats={orderStats}
           />
         ) : null}
@@ -4219,12 +4267,43 @@ export default function Orders({ view = "overview" }) {
   );
 }
 
-function CustomerOverviewAnalytics({ trendData = [], stageData = [], engagementData = [], stats = {} }) {
+function CustomerOverviewAnalytics({ trendData = [], stageData = [], engagementData = [], insights = [], stats = {} }) {
   const hasStageData = stageData.length > 0;
   const topEngagement = engagementData.reduce((max, entry) => Math.max(max, Number(entry.value || 0)), 1);
 
   return (
-    <section className="grid gap-5 xl:grid-cols-[1.35fr_0.85fr]">
+    <section className="space-y-5">
+      <div className="grid gap-4 lg:grid-cols-3">
+        {insights.map((insight) => (
+          <Link
+            key={insight.label}
+            to={insight.href}
+            className={`group overflow-hidden rounded-[28px] border p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] transition hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(15,23,42,0.12)] ${
+              insight.tone === "orange"
+                ? "border-orange-200 bg-[linear-gradient(135deg,#fff7ed_0%,#ffffff_100%)]"
+                : insight.tone === "green"
+                  ? "border-emerald-200 bg-[linear-gradient(135deg,#ecfdf5_0%,#ffffff_100%)]"
+                  : insight.tone === "navy"
+                    ? "border-[#062A63]/10 bg-[linear-gradient(135deg,#eff6ff_0%,#ffffff_100%)]"
+                    : "border-slate-200 bg-white"
+            }`}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">{insight.label}</p>
+                <p className="mt-3 text-3xl font-black text-slate-900">{insight.value}</p>
+              </div>
+              <span className="rounded-full border border-white/80 bg-white/75 p-3 text-[#062A63] shadow-sm transition group-hover:bg-[#062A63] group-hover:text-white">
+                <FiArrowRight />
+              </span>
+            </div>
+            <h3 className="mt-4 text-lg font-black text-slate-900">{insight.title}</h3>
+            <p className="mt-2 text-sm leading-6 text-slate-600">{insight.description}</p>
+          </Link>
+        ))}
+      </div>
+
+      <div className="grid gap-5 xl:grid-cols-[1.35fr_0.85fr]">
       <article className="overflow-hidden rounded-[30px] border border-[#062A63]/10 bg-white p-5 shadow-[0_20px_50px_rgba(15,23,42,0.07)] md:p-6">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
@@ -4317,6 +4396,7 @@ function CustomerOverviewAnalytics({ trendData = [], stageData = [], engagementD
             </ResponsiveContainer>
           </div>
         </article>
+      </div>
       </div>
     </section>
   );
