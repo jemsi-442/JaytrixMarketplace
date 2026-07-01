@@ -229,7 +229,7 @@ const Checkout = () => {
                   <label className="mb-1 block text-sm font-semibold text-slate-700">Contact phone</label>
                   <input
                     type="text"
-                    placeholder="07xx xxx xxx"
+                    placeholder="+255683186987"
                     className="input"
                     value={delivery.contactPhone}
                     onChange={(e) => setDelivery({ ...delivery, contactPhone: e.target.value })}

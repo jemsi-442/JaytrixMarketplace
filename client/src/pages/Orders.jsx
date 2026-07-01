@@ -2396,7 +2396,7 @@ export default function Orders({ view = "overview" }) {
                     type="tel"
                     value={profile.phone}
                     onChange={(event) => setProfile((current) => ({ ...current, phone: event.target.value }))}
-                    placeholder="07xxxxxxxx"
+                    placeholder="+255683186987"
                     className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#062A63]/35 focus:ring-2 focus:ring-orange-100"
                   />
                 </label>

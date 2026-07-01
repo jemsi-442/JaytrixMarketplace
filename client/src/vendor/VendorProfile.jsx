@@ -178,7 +178,7 @@ export default function VendorProfile() {
                 className="input"
                 value={accountForm.email}
                 onChange={(event) => setAccountForm((prev) => ({ ...prev, email: event.target.value }))}
-                placeholder="vendor@example.com"
+                placeholder="vendor@jaytrix.co.tz"
                 required
               />
             </label>
@@ -190,7 +190,7 @@ export default function VendorProfile() {
                 className="input"
                 value={accountForm.phone}
                 onChange={(event) => setAccountForm((prev) => ({ ...prev, phone: event.target.value }))}
-                placeholder="+255 700 000 000"
+                placeholder="+255683186987"
                 required
               />
             </label>
@@ -264,7 +264,7 @@ export default function VendorProfile() {
                 className="input"
                 value={form.businessPhone}
                 onChange={(event) => setForm((prev) => ({ ...prev, businessPhone: event.target.value }))}
-                placeholder="0683 186 987"
+                placeholder="+255683186987"
               />
             </div>
 

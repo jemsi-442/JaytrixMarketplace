@@ -69,7 +69,7 @@ export default function ForgotPassword() {
               <label className="block mb-1 text-sm font-medium text-slate-700">Email</label>
               <input
                 type="email"
-                placeholder="you@example.com"
+                placeholder="name@jaytrix.co.tz"
                 className="input"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

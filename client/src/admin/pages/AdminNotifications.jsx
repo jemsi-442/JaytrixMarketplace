@@ -276,7 +276,7 @@ export default function AdminNotifications() {
                   className="input flex-1"
                   value={testPhone}
                   onChange={(event) => setTestPhone(event.target.value)}
-                  placeholder="0712345678"
+                  placeholder="+255683186987"
                 />
                 <button
                   type="button"

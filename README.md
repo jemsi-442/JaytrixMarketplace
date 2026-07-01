@@ -58,7 +58,7 @@ CLOUDINARY_NAME=replace_with_cloudinary_cloud_name
 CLOUDINARY_API_KEY=replace_with_cloudinary_api_key
 CLOUDINARY_API_SECRET=replace_with_cloudinary_api_secret
 APP_NAME=JAYTRIX Systems
-MAIL_FROM=JAYTRIX Systems <no-reply@example.com>
+MAIL_FROM=JAYTRIX Systems <no-reply@jaytrix.co.tz>
 SMTP_HOST=smtp.example.com
 SMTP_PORT=587
 SMTP_SECURE=false
@@ -285,7 +285,7 @@ With admin checks:
 ```bash
 cd server
 SMOKE_BASE_URL=https://your-backend-domain \
-SMOKE_ADMIN_EMAIL=admin@example.com \
+SMOKE_ADMIN_EMAIL=admin@jaytrix.co.tz \
 SMOKE_ADMIN_PASSWORD='your-admin-password' \
 npm run smoke:postdeploy
 ```

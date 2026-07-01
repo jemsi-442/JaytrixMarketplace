@@ -349,8 +349,8 @@ export default function VendorRiders() {
 
           <div className="mt-5 grid gap-3">
             <input className="input" placeholder="Rider name" value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} required />
-            <input type="email" className="input" placeholder="rider@example.com" value={form.email} onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))} required />
-            <input className="input" placeholder="Phone number" value={form.phone} onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))} required />
+            <input type="email" className="input" placeholder="rider@jaytrix.co.tz" value={form.email} onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))} required />
+            <input className="input" placeholder="+255683186987" value={form.phone} onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))} required />
             <input type="password" className="input" placeholder="Temporary password" value={form.password} onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))} required />
           </div>
 

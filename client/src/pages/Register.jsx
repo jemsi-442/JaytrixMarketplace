@@ -126,7 +126,7 @@ export default function Register() {
               <label className="block mb-1 text-sm font-medium text-slate-700">Email</label>
               <input
                 type="email"
-                placeholder="you@example.com"
+                placeholder="name@jaytrix.co.tz"
                 className="input"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -138,7 +138,7 @@ export default function Register() {
               <label className="block mb-1 text-sm font-medium text-slate-700">Phone number</label>
               <input
                 type="tel"
-                placeholder="+255 700 000 000"
+                placeholder="+255683186987"
                 className="input"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
