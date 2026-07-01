@@ -1,19 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiArrowRight, FiBox, FiHeart, FiPackage, FiShield, FiShoppingBag, FiStar, FiTruck } from "react-icons/fi";
+import { FiArrowRight, FiShield, FiStar, FiTruck } from "react-icons/fi";
 import { useAuth } from "../hooks/useAuth";
-import { useCart } from "../hooks/useCart";
-import { useSavedProducts } from "../hooks/useSavedProducts";
 import MarketplaceRating from "../components/MarketplaceRating";
-import RecommendationShelf from "../components/RecommendationShelf";
 import api from "../utils/axios";
 import { extractList } from "../utils/apiShape";
 import { PLACEHOLDER_IMAGE, resolveImageUrl } from "../utils/image";
-import { getRecommendedProducts, getRecommendationReason } from "../utils/marketplaceRecommendations";
-import { getProductBadges, getProductNudge, getSignalToneClasses } from "../utils/productSignals";
-import { getStoreBadges, getStoreNudge, getStoreSignalToneClasses } from "../utils/storeSignals";
-import { useToast } from "../hooks/useToast";
 
 const trustPoints = [
   {
@@ -54,35 +47,15 @@ const quickCollections = [
   },
 ];
 
-const formatCurrency = (value) => `TZS ${Number(value || 0).toLocaleString()}`;
-
 export default function Home() {
   const { user } = useAuth();
-  const { addToCart, cart } = useCart();
-  const {
-    favoriteStores,
-    favoriteStoreCount,
-    isFavoriteStore,
-    isSavedProduct,
-    recentProducts,
-    savedProducts,
-    toggleFavoriteStore,
-    toggleSavedProduct,
-  } = useSavedProducts();
-  const toast = useToast();
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const safeCart = Array.isArray(cart) ? cart : [];
-  const safeFavoriteStores = Array.isArray(favoriteStores) ? favoriteStores : [];
-  const safeRecentProducts = Array.isArray(recentProducts) ? recentProducts : [];
-  const safeSavedProducts = Array.isArray(savedProducts) ? savedProducts : [];
 
   useEffect(() => {
     let mounted = true;
 
     const fetchProducts = async () => {
       try {
-        setLoading(true);
         const { data } = await api.get('/products?status=approved');
         const rawProducts = extractList(data, ['products', 'items']);
         const normalized = rawProducts.map((product) => ({
@@ -103,10 +76,6 @@ export default function Home() {
         if (mounted) {
           setProducts([]);
         }
-      } finally {
-        if (mounted) {
-          setLoading(false);
-        }
       }
     };
 
@@ -117,19 +86,6 @@ export default function Home() {
   }, []);
 
   const featuredProducts = useMemo(() => products.slice(0, 4), [products]);
-
-  const cartProductQuantities = useMemo(() => {
-    const quantities = new Map();
-
-    safeCart.forEach((item) => {
-      const key = String(item.productId);
-      quantities.set(key, (quantities.get(key) || 0) + Number(item.qty || 0));
-    });
-
-    return quantities;
-  }, [safeCart]);
-
-  const getCartQuantity = (productId) => cartProductQuantities.get(String(productId)) || 0;
 
   const marketplaceStats = useMemo(() => {
     const uniqueStores = new Map();
@@ -151,203 +107,6 @@ export default function Home() {
     };
   }, [products]);
 
-  const featuredStores = useMemo(() => {
-    const storeMap = new Map();
-
-    products.forEach((product) => {
-      const vendor = product.vendor;
-      if (!vendor?.storeSlug) {
-        return;
-      }
-
-      const key = vendor.storeSlug;
-      const current = storeMap.get(key) || {
-        name: vendor.storeName || vendor.name || vendor.storeSlug,
-        slug: vendor.storeSlug,
-        itemCount: 0,
-        inStockCount: 0,
-        sampleImage: product.image,
-        ratingValue: 0,
-        ratedItems: 0,
-        reviewCount: 0,
-      };
-
-      current.itemCount += 1;
-      if ((product.countInStock || 0) > 0) {
-        current.inStockCount += 1;
-      }
-      if (!current.sampleImage) {
-        current.sampleImage = product.image;
-      }
-      if (Number(product.reviewCount || 0) > 0) {
-        current.ratingValue += Number(product.averageRating || 0) * Number(product.reviewCount || 0);
-        current.reviewCount += Number(product.reviewCount || 0);
-        current.ratedItems += 1;
-      }
-
-      storeMap.set(key, current);
-    });
-
-    return Array.from(storeMap.values())
-      .map((store) => ({
-        ...store,
-        averageRating: store.reviewCount ? Number((store.ratingValue / store.reviewCount).toFixed(1)) : 0,
-      }))
-      .slice(0, 3);
-  }, [products]);
-
-
-  const favoriteStoreCards = useMemo(() => {
-    if (!safeFavoriteStores.length) {
-      return [];
-    }
-
-    const storeMap = new Map();
-
-    products.forEach((product) => {
-      const vendor = product.vendor;
-      if (!vendor?.storeSlug) {
-        return;
-      }
-
-      const key = vendor.storeSlug;
-      const current = storeMap.get(key) || {
-        name: vendor.storeName || vendor.name || vendor.storeSlug,
-        slug: vendor.storeSlug,
-        itemCount: 0,
-        inStockCount: 0,
-        sampleImage: product.image,
-        startingPrice: 0,
-      };
-
-      current.itemCount += 1;
-      if ((product.countInStock || 0) > 0) {
-        current.inStockCount += 1;
-      }
-      if (!current.sampleImage) {
-        current.sampleImage = product.image;
-      }
-      if (Number(product.price || 0) > 0) {
-        current.startingPrice = current.startingPrice > 0 ? Math.min(current.startingPrice, Number(product.price || 0)) : Number(product.price || 0);
-      }
-
-      storeMap.set(key, current);
-    });
-
-    return safeFavoriteStores.map((store) => ({
-      ...store,
-      ...(storeMap.get(store.slug) || {}),
-      name: (storeMap.get(store.slug) || {}).name || store.name,
-      sampleImage: (storeMap.get(store.slug) || {}).sampleImage || store.sampleImage,
-    }));
-  }, [products, safeFavoriteStores]);
-
-
-  const isSignedInShopper = user?.role === "customer" || user?.role === "user";
-
-  const personalizedAnchors = useMemo(
-    () => [...safeSavedProducts.slice(0, 4), ...safeRecentProducts.slice(0, 4)],
-    [safeRecentProducts, safeSavedProducts]
-  );
-
-  const personalizedProducts = useMemo(() => {
-    if (!isSignedInShopper) {
-      return [];
-    }
-
-    if (!personalizedAnchors.length) {
-      return [];
-    }
-
-    return getRecommendedProducts({
-      catalog: products,
-      anchors: personalizedAnchors,
-      excludeIds: personalizedAnchors.map((item) => item._id),
-      limit: 4,
-    });
-  }, [isSignedInShopper, personalizedAnchors, products]);
-
-  const familiarStoreProducts = useMemo(() => {
-    if (!isSignedInShopper) {
-      return [];
-    }
-
-    const preferredStoreSlugs = Array.from(
-      new Set(
-        [...safeSavedProducts, ...safeRecentProducts]
-          .map((item) => item.vendor?.storeSlug)
-          .concat(safeFavoriteStores.map((store) => store.slug))
-          .filter(Boolean)
-      )
-    );
-
-    if (!preferredStoreSlugs.length) {
-      return [];
-    }
-
-    const excluded = new Set(personalizedProducts.map((item) => String(item._id)));
-    return products
-      .filter((product) => preferredStoreSlugs.includes(product.vendor?.storeSlug))
-      .filter((product) => !excluded.has(String(product._id)))
-      .slice(0, 4);
-  }, [
-    isSignedInShopper,
-    personalizedProducts,
-    products,
-    safeFavoriteStores,
-    safeRecentProducts,
-    safeSavedProducts,
-  ]);
-
-  const topRatedProducts = useMemo(() => {
-    return products
-      .filter((product) => Number(product.reviewCount || 0) > 0)
-      .sort((a, b) => {
-        const ratingGap = Number(b.averageRating || 0) - Number(a.averageRating || 0);
-        if (ratingGap !== 0) {
-          return ratingGap;
-        }
-
-        const reviewGap = Number(b.reviewCount || 0) - Number(a.reviewCount || 0);
-        if (reviewGap !== 0) {
-          return reviewGap;
-        }
-
-        return Number(a.price || 0) - Number(b.price || 0);
-      })
-      .slice(0, 4);
-  }, [products]);
-
-  const handleRecommendationAddToCart = (product) => {
-    const stock = Number(product.countInStock || 0);
-    if (stock <= 0) {
-      toast.error(`${product.name} is currently unavailable`);
-      return;
-    }
-
-    addToCart({
-      productId: product._id,
-      name: product.name,
-      price: Number(product.price || 0),
-      image: product.image,
-      qty: 1,
-      stock,
-      variant: null,
-    });
-
-    toast.success(`${product.name} added to cart`);
-  };
-
-  const handleRecommendationToggleSaved = (product) => {
-    const added = toggleSavedProduct(product);
-    toast.success(added ? `${product.name} saved for later` : `${product.name} removed from saved items`);
-  };
-
-
-  const handleToggleFavoriteStore = (store) => {
-    const added = toggleFavoriteStore(store);
-    toast.success(added ? `${store.name} saved to favorite stores` : `${store.name} removed from favorite stores`);
-  };
 
   return (
     <div className="w-full overflow-hidden bg-[linear-gradient(180deg,#f8fafc_0%,#eff6ff_36%,#fff7ed_100%)] text-slate-900">
