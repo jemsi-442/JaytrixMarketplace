@@ -1,6 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { FiArrowRight, FiBell, FiCheck, FiClock, FiEdit3, FiHeart, FiMapPin, FiPhone, FiRefreshCw, FiShield, FiShoppingBag, FiUser } from "react-icons/fi";
 import MarketplaceRating from "../components/MarketplaceRating";
 import RecommendationShelf from "../components/RecommendationShelf";
@@ -1101,6 +1115,51 @@ export default function Orders({ view = "overview" }) {
     ];
   }, [favoriteStoreCount, orderStats.unread, recentProducts.length, savedProducts.length]);
 
+  const overviewTrendData = useMemo(() => {
+    const monthLabels = Array.from({ length: 6 }, (_, index) => {
+      const date = new Date();
+      date.setMonth(date.getMonth() - (5 - index));
+      return date.toLocaleDateString(undefined, { month: "short" });
+    });
+    const seed = monthLabels.reduce((acc, label) => {
+      acc[label] = { label, orders: 0, spend: 0 };
+      return acc;
+    }, {});
+
+    orders.forEach((order) => {
+      const createdAt = order.createdAt ? new Date(order.createdAt) : null;
+      const label = createdAt && !Number.isNaN(createdAt.getTime())
+        ? createdAt.toLocaleDateString(undefined, { month: "short" })
+        : monthLabels[monthLabels.length - 1];
+
+      if (!seed[label]) return;
+      seed[label].orders += 1;
+      seed[label].spend += Number(order.totalAmount || 0);
+    });
+
+    return monthLabels.map((label) => seed[label]);
+  }, [orders]);
+
+  const overviewStageData = useMemo(() => {
+    const groups = [
+      { label: "Awaiting", value: orderStats.awaitingPayment, fill: "#f97316" },
+      { label: "Paid", value: orderStats.paidOrders, fill: "#0B5FFF" },
+      { label: "Moving", value: orderStats.movingOrders, fill: "#062A63" },
+      { label: "Delivered", value: orderStats.deliveredOrders, fill: "#10b981" },
+    ];
+
+    return groups.filter((entry) => Number(entry.value || 0) > 0);
+  }, [orderStats.awaitingPayment, orderStats.deliveredOrders, orderStats.movingOrders, orderStats.paidOrders]);
+
+  const overviewEngagementData = useMemo(() => {
+    return [
+      { label: "Saved", value: savedProducts.length },
+      { label: "Stores", value: favoriteStoreCount },
+      { label: "Viewed", value: recentProducts.length },
+      { label: "Updates", value: orderStats.unread },
+    ];
+  }, [favoriteStoreCount, orderStats.unread, recentProducts.length, savedProducts.length]);
+
   const reviewerSnapshot = useMemo(() => {
     const allReviewedEntries = orders
       .flatMap((order) =>
@@ -2102,11 +2161,11 @@ export default function Orders({ view = "overview" }) {
   };
 
   const isOverviewView = view === "overview";
-  const showProfilePanel = isOverviewView || view === "profile";
-  const showShoppingPanel = isOverviewView || view === "wishlist";
-  const showUpdatesPanel = isOverviewView || view === "updates";
-  const showOrdersPanel = isOverviewView || view === "orders";
-  const showSupportPanel = isOverviewView || view === "support";
+  const showProfilePanel = view === "profile";
+  const showShoppingPanel = view === "wishlist";
+  const showUpdatesPanel = view === "updates";
+  const showOrdersPanel = view === "orders";
+  const showSupportPanel = view === "support";
   const showLeftColumn = showProfilePanel || showShoppingPanel;
   const showRightColumn = showUpdatesPanel || showOrdersPanel;
   const pageMeta = {
@@ -2174,12 +2233,22 @@ export default function Orders({ view = "overview" }) {
           />
         ) : null}
 
+        {isOverviewView ? (
+          <CustomerOverviewAnalytics
+            trendData={overviewTrendData}
+            stageData={overviewStageData}
+            engagementData={overviewEngagementData}
+            stats={orderStats}
+          />
+        ) : null}
+
         {showSupportPanel ? (
           <CustomerCarePanel
             supportPhone="+255 683 186 987"
           />
         ) : null}
 
+        {showLeftColumn || showRightColumn ? (
         <div className={`grid gap-6 ${showLeftColumn && showRightColumn ? "xl:grid-cols-[360px_minmax(0,1fr)]" : ""}`}>
           <div className={showLeftColumn ? "space-y-6" : "hidden"}>
             <motion.section
@@ -4135,6 +4204,7 @@ export default function Orders({ view = "overview" }) {
             </motion.section>
           </div>
         </div>
+        ) : null}
       </div>
       {activeReview ? (
         <QuickReviewModal
@@ -4146,6 +4216,109 @@ export default function Orders({ view = "overview" }) {
         />
       ) : null}
     </div>
+  );
+}
+
+function CustomerOverviewAnalytics({ trendData = [], stageData = [], engagementData = [], stats = {} }) {
+  const hasStageData = stageData.length > 0;
+  const topEngagement = engagementData.reduce((max, entry) => Math.max(max, Number(entry.value || 0)), 1);
+
+  return (
+    <section className="grid gap-5 xl:grid-cols-[1.35fr_0.85fr]">
+      <article className="overflow-hidden rounded-[30px] border border-[#062A63]/10 bg-white p-5 shadow-[0_20px_50px_rgba(15,23,42,0.07)] md:p-6">
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#062A63]">Shopping momentum</p>
+            <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900">Your account activity at a glance</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              Orders and spending are grouped into a clean six-month view so the overview feels like a dashboard, not another list.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">Total spend</p>
+            <p className="mt-1 text-xl font-black text-[#062A63]">TZS {Number(stats.spent || 0).toLocaleString()}</p>
+          </div>
+        </div>
+
+        <div className="mt-6 h-[280px] rounded-[26px] border border-slate-200 bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_100%)] p-4">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={trendData} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="customerSpend" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#0B5FFF" stopOpacity={0.28} />
+                  <stop offset="95%" stopColor="#0B5FFF" stopOpacity={0.02} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} />
+              <YAxis hide />
+              <Tooltip
+                contentStyle={{
+                  border: "1px solid rgba(15,23,42,0.08)",
+                  borderRadius: 18,
+                  boxShadow: "0 18px 45px rgba(15,23,42,0.14)",
+                }}
+                formatter={(value, name) => [
+                  name === "spend" ? `TZS ${Number(value || 0).toLocaleString()}` : Number(value || 0).toLocaleString(),
+                  name === "spend" ? "Spend" : "Orders",
+                ]}
+              />
+              <Area type="monotone" dataKey="spend" stroke="#0B5FFF" strokeWidth={3} fill="url(#customerSpend)" />
+              <Area type="monotone" dataKey="orders" stroke="#062A63" strokeWidth={2} fill="transparent" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </article>
+
+      <div className="grid gap-5">
+        <article className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_20px_50px_rgba(15,23,42,0.07)] md:p-6">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Order mix</p>
+          <div className="mt-4 grid gap-4 sm:grid-cols-[160px_1fr] xl:grid-cols-1">
+            <div className="h-[180px]">
+              {hasStageData ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={stageData} dataKey="value" nameKey="label" innerRadius={52} outerRadius={78} paddingAngle={3}>
+                      {stageData.map((entry) => (
+                        <Cell key={entry.label} fill={entry.fill} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => Number(value || 0).toLocaleString()} />
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="flex h-full items-center justify-center rounded-2xl bg-slate-50 text-sm text-slate-500">No orders yet</div>
+              )}
+            </div>
+            <div className="space-y-2">
+              {stageData.length ? stageData.map((entry) => (
+                <div key={entry.label} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2">
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: entry.fill }} />
+                    {entry.label}
+                  </span>
+                  <span className="font-black text-slate-900">{Number(entry.value || 0).toLocaleString()}</span>
+                </div>
+              )) : null}
+            </div>
+          </div>
+        </article>
+
+        <article className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_20px_50px_rgba(15,23,42,0.07)] md:p-6">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Engagement bars</p>
+          <div className="mt-4 h-[180px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={engagementData} margin={{ top: 10, right: 6, left: 0, bottom: 0 }}>
+                <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} />
+                <YAxis hide domain={[0, Math.max(topEngagement, 1)]} />
+                <Tooltip formatter={(value) => Number(value || 0).toLocaleString()} />
+                <Bar dataKey="value" radius={[12, 12, 4, 4]} fill="#062A63" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </article>
+      </div>
+    </section>
   );
 }
 
