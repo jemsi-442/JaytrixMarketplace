@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiArrowRight, FiFilter, FiHeart, FiPackage, FiSearch, FiShoppingBag, FiSliders, FiStar, FiTruck } from "react-icons/fi";
+import { FiArrowRight, FiFilter, FiHeart, FiPackage, FiSearch, FiShield, FiShoppingBag, FiSliders, FiStar, FiTruck } from "react-icons/fi";
 import api from "../utils/axios";
 import { extractList } from "../utils/apiShape";
 import RecommendationShelf from "../components/RecommendationShelf";
@@ -358,6 +358,18 @@ export default function Shop() {
           </div>
         </section>
 
+        <BuyerConfidenceStrip
+          summary={marketplaceSummary}
+          onReadyNow={() => applyLane(SHOPPING_LANES[0])}
+          onValuePicks={() => applyLane(SHOPPING_LANES[1])}
+          onTopRated={() => {
+            setSearch("");
+            setPrice("all");
+            setInStockOnly(false);
+            setMobileFiltersOpen(false);
+          }}
+        />
+
         <div className="mt-6 grid gap-6 xl:grid-cols-[290px_minmax(0,1fr)]">
           <aside className="hidden xl:block">
             <FilterPanel
@@ -692,6 +704,75 @@ function FilterPanel({ search, setSearch, price, setPrice, inStockOnly, setInSto
         </label>
       </div>
     </div>
+  );
+}
+
+function BuyerConfidenceStrip({ summary, onReadyNow, onValuePicks, onTopRated }) {
+  const confidenceCards = [
+    {
+      label: "Ready products",
+      value: summary.inStock,
+      copy: "Items available for checkout now.",
+    },
+    {
+      label: "Active stores",
+      value: summary.stores,
+      copy: "Seller shelves you can compare quickly.",
+    },
+    {
+      label: "Value picks",
+      value: summary.valuePicks,
+      copy: "Lower-price options without leaving the marketplace.",
+    },
+  ];
+
+  return (
+    <section className="mt-6 overflow-hidden rounded-[30px] border border-[#062A63]/10 bg-[linear-gradient(135deg,#ffffff_0%,#eff6ff_55%,#fff7ed_100%)] p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] md:p-6">
+      <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+        <div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#062A63]/10 bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#062A63]">
+            <FiShield /> Buyer confidence
+          </div>
+          <h2 className="mt-4 text-2xl font-black tracking-tight text-slate-900">Shop with clearer signals, not guesswork.</h2>
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            Start from stock, price, or rating signals so customers move faster from browsing to checkout with fewer doubts.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={onReadyNow}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#062A63_0%,#031326_100%)] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+            >
+              <FiTruck /> Ready now
+            </button>
+            <button
+              type="button"
+              onClick={onValuePicks}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-700 transition hover:bg-orange-100"
+            >
+              <FiShoppingBag /> Value picks
+            </button>
+            <button
+              type="button"
+              onClick={onTopRated}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+            >
+              <FiStar /> Top rated
+            </button>
+          </div>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-3">
+          {confidenceCards.map((card) => (
+            <div key={card.label} className="rounded-2xl border border-white/80 bg-white/85 px-4 py-4 shadow-sm">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">{card.label}</p>
+              <p className="mt-2 text-3xl font-black text-[#062A63]">{Number(card.value || 0).toLocaleString()}</p>
+              <p className="mt-2 text-sm leading-5 text-slate-600">{card.copy}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
