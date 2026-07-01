@@ -8,7 +8,7 @@ export const createProduct = asyncHandler(async (req, res) => {
   const payload = { ...req.body };
 
   if (req.file?.buffer) {
-    const image = await uploadProductImage(req.file.buffer, req.file.originalname);
+    const image = await uploadProductImage(req.file.buffer, req.file.originalname, req.file.mimetype);
     payload.images = [...(payload.images || []), image];
   }
 
@@ -60,7 +60,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
   const payload = { ...req.body };
 
   if (req.file?.buffer) {
-    const image = await uploadProductImage(req.file.buffer, req.file.originalname);
+    const image = await uploadProductImage(req.file.buffer, req.file.originalname, req.file.mimetype);
     payload.images = [...(payload.images || []), image];
   }
 

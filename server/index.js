@@ -83,7 +83,7 @@ const validateProductionEnv = () => {
   }
 
   if (!isCloudinaryConfigured()) {
-    console.warn(" Cloudinary is not configured. Production will fall back to local uploads, which is not recommended.");
+    throw new Error("Cloudinary must be configured in production to keep uploads outside the app server");
   }
 
   if (!isSmtpConfigured()) {
@@ -103,6 +103,14 @@ export const createApp = () => {
   app.use(cors(corsOptions));
   app.options("*", cors(corsOptions));
 
+  app.use((req, res, next) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "DENY");
+    res.setHeader("Referrer-Policy", "no-referrer");
+    res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    next();
+  });
+
   app.use(
     express.json({
       limit: "2mb",
@@ -112,7 +120,18 @@ export const createApp = () => {
     })
   );
   app.use(express.urlencoded({ extended: true, limit: "2mb" }));
-  app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+  app.use(
+    "/uploads",
+    express.static(path.join(__dirname, "uploads"), {
+      fallthrough: false,
+      index: false,
+      setHeaders(res) {
+        res.setHeader("X-Content-Type-Options", "nosniff");
+        res.setHeader("Content-Security-Policy", "default-src 'none'; img-src 'self'; style-src 'none'; script-src 'none'; sandbox");
+        res.setHeader("Cache-Control", "public, max-age=86400, immutable");
+      },
+    })
+  );
 
   app.use((req, res, next) => {
     console.log(

@@ -258,10 +258,10 @@ export const sendMessagingTest = async (req, res) => {
       data: result,
     });
   } catch (err) {
-    console.error(err);
+    console.error("Messaging test failed:", err.message);
     return res.status(500).json({
-      message: err.message || "Failed to send test message",
-      data: err.payload || null,
+      message: "We could not send the test message right now",
+      data: null,
     });
   }
 };
@@ -275,10 +275,10 @@ export const getMessagingSmsStats = async (req, res) => {
       data: result,
     });
   } catch (err) {
-    console.error(err);
+    console.error("SMS account check failed:", err.message);
     return res.status(500).json({
-      message: err.message || "Failed to fetch SMS stats",
-      data: err.payload || null,
+      message: "We could not check SMS account health right now",
+      data: null,
     });
   }
 };
@@ -344,10 +344,10 @@ export const retryNotificationDelivery = async (req, res) => {
       data: notification,
     });
   } catch (err) {
-    console.error(err);
+    console.error("Notification retry failed:", err.message);
     return res.status(500).json({
-      message: err.message || "Failed to retry external notification",
-      data: err.payload || null,
+      message: "We could not retry that message right now",
+      data: null,
     });
   }
 };

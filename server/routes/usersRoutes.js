@@ -464,8 +464,8 @@ router.post("/riders", verifyToken, adminMiddleware, async (req, res) => {
       },
     });
   } catch (err) {
-    console.error(err);
-    return res.status(400).json({ message: err.message || "Failed to create rider" });
+    console.error("Rider account save failed:", err.message);
+    return res.status(400).json({ message: "We could not save the rider account right now" });
   }
 });
 

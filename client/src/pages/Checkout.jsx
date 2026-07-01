@@ -13,6 +13,7 @@ import {
   getMobileNetworkLabel,
   validatePhoneForNetwork,
 } from "../utils/mobileMoneyNetworks";
+import { reportClientIssue } from "../utils/reportClientIssue";
 
 const STEPS = [
   { key: "delivery", label: "Delivery", description: "Where should this order reach you?" },
@@ -133,7 +134,7 @@ const Checkout = () => {
       setStep(0);
       navigate("/account/orders");
     } catch (err) {
-      console.error(err);
+      reportClientIssue("Checkout could not be completed");
       toast.error(err.response?.data?.message || "Failed to place order");
     } finally {
       setPlacing(false);

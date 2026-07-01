@@ -26,8 +26,7 @@ export default function AdminDashboard() {
       const { data } = await axios.get("/admin/dashboard");
       const payload = extractOne(data);
       setStats(payload);
-    } catch (err) {
-      console.error(err);
+    } catch {
       toast.error("Unable to load marketplace overview");
     }
   };

@@ -41,7 +41,8 @@ router.get("/:slug", async (req, res) => {
       recentReviews: reviewSummary.recentReviews,
     });
   } catch (error) {
-    return sendResponse(res, 500, error.message || "Failed to fetch store", null);
+    console.error("Store lookup failed:", error.message);
+    return sendResponse(res, 500, "We could not load this store right now", null);
   }
 });
 

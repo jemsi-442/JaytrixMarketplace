@@ -148,7 +148,8 @@ router.post("/register", registerRateLimiter, async (req, res) => {
       token: generateToken(safeUser._id),
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("Registration failed:", err.message);
+    res.status(500).json({ message: "We could not create the account right now" });
   }
 });
 
@@ -185,7 +186,8 @@ router.post("/login", loginRateLimiter, async (req, res) => {
       res.status(401).json({ message: "Invalid credentials" });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("Login failed:", err.message);
+    res.status(500).json({ message: "We could not sign you in right now" });
   }
 });
 
@@ -234,7 +236,8 @@ router.post("/forgot-password", forgotPasswordRateLimiter, async (req, res) => {
       resetUrl,
     });
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    console.error("Password reset request failed:", err.message);
+    return res.status(500).json({ message: "We could not prepare password reset right now" });
   }
 });
 

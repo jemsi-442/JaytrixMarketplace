@@ -9,20 +9,39 @@ import ProductReviewService from "./ProductReviewService.js";
 const ALLOWED_CREATE_FIELDS = ["name", "description", "price", "stock", "image", "sku"];
 const ALLOWED_UPDATE_FIELDS = ["name", "description", "price", "stock", "image", "sku"];
 
+const normalizeImageUrl = (value) => {
+  const normalized = String(value || "").trim();
+  if (!normalized) return undefined;
+
+  if (normalized.startsWith("/uploads/products/")) {
+    return normalized;
+  }
+
+  try {
+    const parsed = new URL(normalized);
+    if (!["https:", "http:"].includes(parsed.protocol)) {
+      throw new Error("Unsupported image URL");
+    }
+    return parsed.href;
+  } catch {
+    throw new ApiError(400, "Use a valid product image");
+  }
+};
+
 const normalizeImage = (input) => {
   if (!input) return undefined;
 
-  if (typeof input === "string") return input;
+  if (typeof input === "string") return normalizeImageUrl(input);
 
   if (Array.isArray(input) && input.length === 0) return undefined;
 
   if (Array.isArray(input) && input.length > 0) {
     const first = input[0];
-    if (typeof first === "string") return first;
-    if (first && typeof first === "object" && first.url) return first.url;
+    if (typeof first === "string") return normalizeImageUrl(first);
+    if (first && typeof first === "object" && first.url) return normalizeImageUrl(first.url);
   }
 
-  if (typeof input === "object" && input.url) return input.url;
+  if (typeof input === "object" && input.url) return normalizeImageUrl(input.url);
 
   throw new ApiError(400, "Invalid image payload");
 };

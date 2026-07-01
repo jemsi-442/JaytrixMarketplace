@@ -11,6 +11,7 @@ import { useToast } from "../hooks/useToast";
 import { PLACEHOLDER_IMAGE, resolveImageUrl } from "../utils/image";
 import { getProductBadges, getProductNudge, getSignalToneClasses } from "../utils/productSignals";
 import { getStoreBadges, getStoreNudge, getStoreSignalToneClasses } from "../utils/storeSignals";
+import { reportClientIssue } from "../utils/reportClientIssue";
 
 const formatCurrency = (value) => `TZS ${Number(value || 0).toLocaleString()}`;
 
@@ -72,7 +73,7 @@ export default function Storefront() {
         setRecentReviews(Array.isArray(payload.recentReviews) ? payload.recentReviews : []);
         setError("");
       } catch (err) {
-        console.error(err);
+        reportClientIssue("Storefront could not be loaded");
         setError(err.response?.data?.message || "Failed to load store.");
         setStore(null);
         setProducts([]);

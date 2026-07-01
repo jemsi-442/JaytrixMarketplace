@@ -17,6 +17,7 @@ import { PLACEHOLDER_IMAGE, resolveImageUrl } from "../../utils/image";
 import PageState from "../../components/PageState";
 import { useToast } from "../../hooks/useToast";
 import { getProductReviewStatusTone } from "../../utils/statusStyles";
+import { reportClientIssue } from "../../utils/reportClientIssue";
 
 const LOW_STOCK_LIMIT = 5;
 
@@ -65,9 +66,9 @@ export default function AdminProducts() {
       const { data } = await axios.get("/products");
       setProducts(extractList(data, ["products", "items"]));
       setError("");
-    } catch (err) {
-      console.error("Fetch products error:", err.response?.data || err.message);
-      setError("Failed to fetch products");
+    } catch {
+      reportClientIssue("Product list could not be loaded");
+      setError("Products could not be loaded right now");
       setProducts([]);
     } finally {
       setLoading(false);
@@ -186,7 +187,7 @@ export default function AdminProducts() {
       toast.success("Product deleted");
       fetchProducts();
     } catch (err) {
-      console.error("Delete error:", err.response?.data || err.message);
+      reportClientIssue("Product delete could not be completed");
       toast.error(err.response?.data?.message || "Failed to delete product");
     }
   };
@@ -210,7 +211,7 @@ export default function AdminProducts() {
       closeReviewModal();
       fetchProducts();
     } catch (err) {
-      console.error("Review error:", err.response?.data || err.message);
+      reportClientIssue("Product review decision could not be saved");
       toast.error(err.response?.data?.message || "Failed to save review decision");
       setReviewSubmitting(false);
     }
@@ -676,7 +677,7 @@ function ProductModal({ product, onClose, onSaved, toast }) {
       await onSaved();
       onClose();
     } catch (err) {
-      console.error("Save product error:", err.response?.data || err.message);
+      reportClientIssue("Product save could not be completed");
       toast.error(err.response?.data?.message || "Failed to save product");
     }
   };

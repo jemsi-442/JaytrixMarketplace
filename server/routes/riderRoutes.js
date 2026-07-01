@@ -240,7 +240,7 @@ router.put("/orders/:id/delivered", verifyToken, upload.single("proofImage"), ri
   let proofImage = null;
 
   if (req.file?.buffer) {
-    proofImage = await uploadDeliveryProofImage(req.file.buffer, req.file.originalname || "delivery-proof");
+    proofImage = await uploadDeliveryProofImage(req.file.buffer, req.file.originalname || "delivery-proof", req.file.mimetype);
   }
 
   order.status = "delivered";

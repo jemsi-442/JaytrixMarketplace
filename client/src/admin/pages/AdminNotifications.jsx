@@ -5,6 +5,7 @@ import { extractList } from "../../utils/apiShape";
 import PageState from "../../components/PageState";
 import useNotificationPreferences from "../../hooks/useNotificationPreferences";
 import useToast from "../../hooks/useToast";
+import { reportClientIssue } from "../../utils/reportClientIssue";
 
 const externalStatusClass = (status) => {
   if (status === "sent") return "bg-emerald-100 text-emerald-700";
@@ -60,9 +61,9 @@ export default function AdminNotifications() {
         mesejiSmsEnabled: Boolean(nextSettings?.mesejiSmsEnabled),
       });
       setError("");
-    } catch (err) {
-      console.error(err);
-      setError("Failed to fetch notifications");
+    } catch {
+      reportClientIssue("Notification center could not be loaded");
+      setError("Notifications could not be loaded right now");
     } finally {
       setLoading(false);
     }
@@ -78,7 +79,7 @@ export default function AdminNotifications() {
       await axios.post(`/admin/notifications/send`, { orderId });
       fetchNotifications();
     } catch (err) {
-      console.error(err);
+      reportClientIssue("Notification could not be sent");
       toast.error(err.response?.data?.message || "Failed to send notification");
     } finally {
       setSendingId(null);
@@ -91,7 +92,7 @@ export default function AdminNotifications() {
       await axios.patch(`/notifications/${notificationId}/read`);
       fetchNotifications();
     } catch (err) {
-      console.error(err);
+      reportClientIssue("Notification read status could not be saved");
       toast.error(err.response?.data?.message || "Failed to mark notification as read");
     } finally {
       setMarkingId(null);
@@ -105,7 +106,7 @@ export default function AdminNotifications() {
       toast.success(data?.message || "External delivery retried");
       fetchNotifications();
     } catch (err) {
-      console.error(err);
+      reportClientIssue("Message retry could not be completed");
       toast.error(err.response?.data?.message || "Failed to retry external delivery");
     } finally {
       setRetryingId(null);
@@ -137,7 +138,7 @@ export default function AdminNotifications() {
       });
       toast.success(data?.message || "Messaging settings updated");
     } catch (err) {
-      console.error(err);
+      reportClientIssue("Messaging settings could not be saved");
       toast.error(err.response?.data?.message || "Failed to update messaging settings");
     } finally {
       setSavingSettings(false);
@@ -154,7 +155,7 @@ export default function AdminNotifications() {
       });
       toast.success(data?.message || "Test message processed");
     } catch (err) {
-      console.error(err);
+      reportClientIssue("Test message could not be sent");
       toast.error(err.response?.data?.message || "Failed to send test message");
     } finally {
       setSendingTest(false);
@@ -206,10 +207,10 @@ export default function AdminNotifications() {
       <section className="rounded-[26px] border border-white/80 bg-white/[0.92] p-4 shadow-[0_18px_36px_rgba(15,23,42,0.06)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">External Messaging</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Customer Messaging</p>
             <h2 className="mt-1 text-lg font-black text-slate-900">Meseji messaging controls</h2>
             <p className="mt-1 max-w-2xl text-sm text-slate-500">
-              Choose which notification types may leave the platform. API keys, sender IDs, and phone number IDs stay protected in server env.
+              Choose which customer updates may be sent by SMS or WhatsApp. Private provider details stay protected away from the dashboard.
             </p>
             <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
               <span className={`rounded-full px-3 py-1 ${settings?.providers?.mesejiWhatsapp?.configured ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}`}>
@@ -219,7 +220,7 @@ export default function AdminNotifications() {
                 {settingsDraft.mesejiWhatsappEnabled ? "WhatsApp enabled" : "WhatsApp disabled"}
               </span>
               <span className={`rounded-full px-3 py-1 ${settings?.providers?.mesejiSms?.configured ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>
-                {settings?.providers?.mesejiSms?.configured ? "Meseji SMS configured" : "SMS API key or sender missing"}
+                {settings?.providers?.mesejiSms?.configured ? "Meseji SMS ready" : "SMS setup incomplete"}
               </span>
               <span className={`rounded-full px-3 py-1 ${settingsDraft.mesejiSmsEnabled ? "bg-blue-100 text-[#062A63]" : "bg-slate-100 text-slate-600"}`}>
                 {settingsDraft.mesejiSmsEnabled ? "SMS enabled" : "SMS disabled"}
@@ -286,7 +287,7 @@ export default function AdminNotifications() {
                   {sendingTest ? "Sending..." : "Send test"}
                 </button>
               </div>
-              <p className="mt-2 text-xs text-slate-500">Use this after adding the Meseji SMS API key or WhatsApp credentials in server env.</p>
+              <p className="mt-2 text-xs text-slate-500">Use this after the messaging account has been connected for production use.</p>
             </div>
             <div className="rounded-3xl border border-[#062A63]/10 bg-blue-50/60 p-3">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">SMS account health</p>
@@ -446,7 +447,7 @@ export default function AdminNotifications() {
             {paymentLogs.length === 0 && (
               <tr>
                 <td colSpan={6} className="p-3 text-center text-slate-500">
-                  No payment webhook logs yet.
+                  No payment confirmation records yet.
                 </td>
               </tr>
             )}
