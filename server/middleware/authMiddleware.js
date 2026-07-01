@@ -31,7 +31,7 @@ export const protect = async (req, res, next) => {
   try {
     const { token, user } = await loadAuthenticatedUser(req.headers.authorization || "");
     if (!token) {
-      return res.status(401).json({ success: false, message: "No token provided", data: null });
+      return res.status(401).json({ success: false, message: "Please sign in to continue", data: null });
     }
 
     req.user = user;
@@ -42,10 +42,10 @@ export const protect = async (req, res, next) => {
     }
 
     if (error.message === "USER_NOT_FOUND") {
-      return res.status(401).json({ success: false, message: "User not found", data: null });
+      return res.status(401).json({ success: false, message: "Please sign in again", data: null });
     }
 
-    return res.status(401).json({ success: false, message: "Invalid token", data: null });
+    return res.status(401).json({ success: false, message: "Please sign in again", data: null });
   }
 };
 

@@ -775,7 +775,9 @@ export const refreshOrderPaymentStatus = async (req, res) => {
   } catch (error) {
     console.error("REFRESH PAYMENT STATUS ERROR:", error);
     return res.status(error.statusCode || 500).json({
-      message: error.message || "Failed to refresh payment status",
+      message: error.statusCode && error.statusCode < 500
+        ? "Payment status could not be refreshed right now"
+        : "Failed to refresh payment status",
     });
   }
 };
@@ -841,7 +843,9 @@ export const retryOrderPaymentPush = async (req, res) => {
   } catch (error) {
     console.error("RETRY PAYMENT PUSH ERROR:", error);
     return res.status(error.statusCode || 500).json({
-      message: error.message || "Failed to create a new mobile money prompt",
+      message: error.statusCode && error.statusCode < 500
+        ? "We could not send a new mobile money prompt right now"
+        : "Failed to create a new mobile money prompt",
     });
   }
 };

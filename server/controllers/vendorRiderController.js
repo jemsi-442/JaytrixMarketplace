@@ -184,7 +184,8 @@ const riderEarningsExportHeaders = [
 ];
 
 const escapeCsvValue = (value) => {
-  const normalized = value === null || value === undefined ? "" : String(value);
+  const raw = value === null || value === undefined ? "" : String(value);
+  const normalized = /^[=+\-@\t\r]/.test(raw) ? `'${raw}` : raw;
   if (!/[",\n]/.test(normalized)) return normalized;
   return "\"" + normalized.replace(/\"/g, "\"\"") + "\"";
 };
