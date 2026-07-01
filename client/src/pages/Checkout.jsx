@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FiArrowRight, FiCheckCircle, FiClock, FiMapPin, FiShield, FiSmartphone, FiTruck } from "react-icons/fi";
 import api from "../utils/axios";
 import PaymentNetworkBadge from "../components/PaymentNetworkBadge";
+import CustomerJourneyStrip from "../components/CustomerJourneyStrip";
 import { useCart } from "../hooks/useCart";
 import { useToast } from "../hooks/useToast";
 import { useAuth } from "../hooks/useAuth";
@@ -156,6 +157,8 @@ const Checkout = () => {
             </div>
           </div>
         </section>
+
+        <CustomerJourneyStrip active="checkout" compact />
 
         <div className="grid gap-6 md:gap-8 lg:grid-cols-3">
           <section className="lg:col-span-2 rounded-[32px] border border-white/80 bg-white/[0.92] p-5 shadow-[0_24px_50px_rgba(15,23,42,0.08)] md:p-7">

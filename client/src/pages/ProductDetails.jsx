@@ -8,6 +8,7 @@ import { extractList, extractOne } from "../utils/apiShape";
 import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
 import { useSavedProducts } from "../hooks/useSavedProducts";
+import CustomerJourneyStrip from "../components/CustomerJourneyStrip";
 import { PLACEHOLDER_IMAGE, resolveImageUrl } from "../utils/image";
 import { getProductBadges, getProductNudge, getSignalToneClasses } from "../utils/productSignals";
 import { getRecommendedProducts, getRecommendationReason, normalizeMarketplaceProduct } from "../utils/marketplaceRecommendations";
@@ -362,8 +363,10 @@ export default function ProductDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8 md:px-6 md:py-12">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.08),transparent_28%),linear-gradient(180deg,#f8fafc_0%,#eff6ff_45%,#ffffff_100%)] px-4 py-8 md:px-6 md:py-12">
       <div className="mx-auto max-w-7xl space-y-8">
+        <CustomerJourneyStrip active="save-or-cart" compact />
+
         <div className="grid gap-7 md:gap-10 lg:grid-cols-2">
           <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-5">
             <motion.div
