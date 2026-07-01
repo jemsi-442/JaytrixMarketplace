@@ -171,7 +171,7 @@ NOTIFICATION_RELAY_INTERVAL_MS=2000
 NOTIFICATION_EVENT_CLEANUP_INTERVAL_MS=600000
 NOTIFICATION_EVENT_RETENTION_HOURS=24
 NOTIFICATION_EXTERNAL_CHANNELS=
-NOTIFICATION_EXTERNAL_TYPES=rider_payment_settled,customer_delivery_issue_update
+NOTIFICATION_EXTERNAL_TYPES=customer_payment_pending,customer_payment_completed,customer_payment_issue,customer_order_status,customer_delivery_issue_update,rider_payment_settled,rider_payment_reopened,rider_bonus_updated
 MESEJI_WHATSAPP_ENABLED=false
 MESEJI_BASE_URL=https://api.meseji.app
 MESEJI_API_TOKEN=replace_with_meseji_api_token
@@ -251,7 +251,7 @@ Recommended notification env vars on multi-instance deploys:
 - `NOTIFICATION_EVENT_CLEANUP_INTERVAL_MS=600000`
 - `NOTIFICATION_EVENT_RETENTION_HOURS=24`
 - `NOTIFICATION_EXTERNAL_CHANNELS=meseji_whatsapp,meseji_sms`
-- `NOTIFICATION_EXTERNAL_TYPES=rider_payment_settled,customer_delivery_issue_update`
+- `NOTIFICATION_EXTERNAL_TYPES=customer_payment_pending,customer_payment_completed,customer_payment_issue,customer_order_status,customer_delivery_issue_update,rider_payment_settled,rider_payment_reopened,rider_bonus_updated`
 - `MESEJI_WHATSAPP_ENABLED=false`
 - `MESEJI_BASE_URL=https://api.meseji.app`
 - `MESEJI_API_TOKEN=...`

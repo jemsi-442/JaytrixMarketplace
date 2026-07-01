@@ -12,6 +12,17 @@ import {
   sendMesejiWhatsAppText,
 } from "../services/MessagingService.js";
 
+const recommendedExternalTypes = [
+  "customer_payment_pending",
+  "customer_payment_completed",
+  "customer_payment_issue",
+  "customer_order_status",
+  "customer_delivery_issue_update",
+  "rider_payment_settled",
+  "rider_payment_reopened",
+  "rider_bonus_updated",
+].join(",");
+
 const withEnv = async (values, callback) => {
   const previous = {};
   for (const key of Object.keys(values)) {
@@ -168,6 +179,47 @@ test("external notifications can use SMS when Meseji SMS channel is enabled", as
           message: "Rider paid",
           contacts: "255712345678",
         });
+      }
+    );
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+test("recommended SMS allowlist includes customer order and payment updates", async () => {
+  const originalFetch = global.fetch;
+  let requestBody = null;
+
+  global.fetch = async (url, init = {}) => {
+    requestBody = JSON.parse(String(init.body || "{}"));
+    return new Response(JSON.stringify({ status: "success", batch_id: "allowlist-test" }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  };
+
+  try {
+    await withEnv(
+      {
+        NOTIFICATION_EXTERNAL_CHANNELS: "meseji_sms",
+        NOTIFICATION_EXTERNAL_TYPES: recommendedExternalTypes,
+        MESSAGING_SETTINGS_SOURCE: "env",
+        MESEJI_SMS_ENABLED: "true",
+        MESEJI_TZ_API_KEY: "zs_test_key",
+        MESEJI_TZ_BASE_URL: "https://meseji.co.tz/api/v1",
+        MESEJI_SMS_SENDER_ID: "MESEJI",
+      },
+      async () => {
+        const results = await deliverExternalNotification({
+          type: "customer_order_status",
+          phone: "0683186987",
+          message: "Your order is now out for delivery.",
+        });
+
+        assert.equal(results.length, 1);
+        assert.equal(results[0].provider, "meseji_sms");
+        assert.equal(results[0].skipped, false);
+        assert.equal(requestBody.contacts, "255683186987");
       }
     );
   } finally {
