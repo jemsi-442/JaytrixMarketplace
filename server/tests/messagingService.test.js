@@ -6,6 +6,7 @@ import {
   isMesejiSmsConfigured,
   isMesejiWhatsAppConfigured,
   normalizeWhatsAppPhone,
+  selectPrimaryExternalResult,
   sendMesejiSmsText,
   sendMesejiWhatsAppText,
 } from "../services/MessagingService.js";
@@ -215,4 +216,22 @@ test("Meseji SMS user stats use the documented account stats endpoint", async ()
   } finally {
     global.fetch = originalFetch;
   }
+});
+
+test("primary external result prefers delivered SMS over skipped WhatsApp", () => {
+  const primary = selectPrimaryExternalResult([
+    {
+      skipped: true,
+      provider: "meseji_whatsapp",
+      reason: "Meseji WhatsApp is not configured",
+    },
+    {
+      skipped: false,
+      provider: "meseji_sms",
+      payload: { batch_id: "batch_abc123" },
+    },
+  ]);
+
+  assert.equal(primary.provider, "meseji_sms");
+  assert.equal(primary.skipped, false);
 });
