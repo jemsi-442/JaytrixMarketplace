@@ -16,6 +16,7 @@ const customerEmail =
   process.env.SMOKE_CUSTOMER_EMAIL || `smoke_${emailSeed}@example.com`;
 const customerPassword = process.env.SMOKE_CUSTOMER_PASSWORD || "Password123!";
 const customerName = process.env.SMOKE_CUSTOMER_NAME || "Smoke Test Customer";
+const customerPhone = process.env.SMOKE_CUSTOMER_PHONE || process.env.SMOKE_PHONE || "0683186987";
 
 const adminEmail = process.env.SMOKE_ADMIN_EMAIL || process.env.ADMIN_EMAIL || "";
 const adminPassword = process.env.SMOKE_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || "";
@@ -68,6 +69,7 @@ const registerCustomer = async () => {
     body: {
       name: customerName,
       email: customerEmail,
+      phone: customerPhone,
       password: customerPassword,
     },
   });
