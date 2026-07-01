@@ -6,6 +6,7 @@ import UserLayout from "./components/UserLayout";
 import AdminLayout from "./admin/pages/AdminLayout";
 import RiderLayout from "./rider/RiderLayout";
 import VendorLayout from "./vendor/VendorLayout";
+import CustomerLayout from "./customer/CustomerLayout";
 
 /* Route guards */
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -92,27 +93,33 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="account"
-            element={
-              <ProtectedRoute allowedRoles={["customer"]}>
-                <Orders />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="orders"
-            element={
-              <ProtectedRoute allowedRoles={["customer", "admin", "rider"]}>
-                <Orders />
-              </ProtectedRoute>
-            }
-          />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password" element={<ResetPassword />} />
           <Route path="stores/:slug" element={<Storefront />} />
+        </Route>
+
+        {/* CUSTOMER DASHBOARD */}
+        <Route
+          path="account"
+          element={
+            <ProtectedRoute allowedRoles={["customer"]}>
+              <CustomerLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Orders />} />
+        </Route>
+        <Route
+          path="orders"
+          element={
+            <ProtectedRoute allowedRoles={["customer"]}>
+              <CustomerLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Orders />} />
         </Route>
 
         {/* ADMIN */}

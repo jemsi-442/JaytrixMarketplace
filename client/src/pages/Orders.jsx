@@ -2128,8 +2128,8 @@ export default function Orders() {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.08),transparent_30%),linear-gradient(180deg,#f8fafc_0%,#eff6ff_42%,#ffffff_100%)] px-4 py-8 md:px-6 md:py-12">
-      <div className="mx-auto max-w-6xl space-y-6">
+    <div className="min-h-full px-4 py-5 md:px-6 md:py-6">
+      <div className="mx-auto max-w-7xl space-y-6">
         <motion.section
           id="customer-dashboard"
           initial={{ opacity: 0, y: 16 }}
@@ -4183,7 +4183,7 @@ function CustomerDashboardNav({ stats, onJump }) {
   ];
 
   return (
-    <nav className="sticky top-20 z-20 rounded-[28px] border border-white/80 bg-white/90 p-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)] backdrop-blur">
+    <nav className="sticky top-4 z-20 rounded-[28px] border border-white/80 bg-white/90 p-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)] backdrop-blur">
       <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-6">
         {items.map((item) => {
           const Icon = item.icon;
