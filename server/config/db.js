@@ -18,7 +18,7 @@ export const resolveDatabaseUrl = (...candidates) => {
 
     try {
       const parsed = new URL(value);
-      if (parsed.protocol) {
+      if (["postgres:", "postgresql:"].includes(parsed.protocol)) {
         return value;
       }
     } catch (error) {
@@ -30,35 +30,52 @@ export const resolveDatabaseUrl = (...candidates) => {
 };
 
 export const hasProductionDatabaseConfig = (env = process.env) => {
-  if (resolveDatabaseUrl(env.DATABASE_URL, env.MARIADB_URL)) {
+  if (resolveDatabaseUrl(env.DATABASE_URL, env.POSTGRES_URL)) {
     return true;
   }
 
   return ["DB_HOST", "DB_NAME", "DB_USER"].every((key) => !isTemplateValue(env[key]));
 };
 
-const databaseUrl = resolveDatabaseUrl(process.env.DATABASE_URL, process.env.MARIADB_URL);
+const databaseUrl = resolveDatabaseUrl(process.env.DATABASE_URL, process.env.POSTGRES_URL);
+const dialect = process.env.DB_DIALECT || "postgres";
+const sslEnabled = String(process.env.DB_SSL || "").toLowerCase() === "true";
+const pool = {
+  max: Number(process.env.DB_POOL_MAX || 10),
+  min: Number(process.env.DB_POOL_MIN || 0),
+  acquire: Number(process.env.DB_POOL_ACQUIRE_MS || 30000),
+  idle: Number(process.env.DB_POOL_IDLE_MS || 10000),
+};
+const dialectOptions = {
+  connectTimeout: Number(process.env.DB_CONNECT_TIMEOUT_MS || 10000),
+  ...(sslEnabled
+    ? {
+        ssl: {
+          require: true,
+          rejectUnauthorized: String(process.env.DB_SSL_REJECT_UNAUTHORIZED || "true").toLowerCase() !== "false",
+        },
+      }
+    : {}),
+};
 
 const sequelize = databaseUrl
   ? new Sequelize(databaseUrl, {
-      dialect: "postgres",
+      dialect,
       logging: false,
-      dialectOptions: {
-        connectTimeout: 10000,
-      },
+      dialectOptions,
+      pool,
     })
-
-  :new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT || 5432),
-      dialect: "postgres",        logging: false,
-        dialectOptions: {
-          connectTimeout: 10000,
-        },
+  : new Sequelize(
+      process.env.DB_NAME || "marketplace",
+      process.env.DB_USER || "jaytrix",
+      process.env.DB_PASSWORD || "",
+      {
+        host: process.env.DB_HOST || "127.0.0.1",
+        port: Number(process.env.DB_PORT || 5432),
+        dialect,
+        logging: false,
+        dialectOptions,
+        pool,
       }
     );
 

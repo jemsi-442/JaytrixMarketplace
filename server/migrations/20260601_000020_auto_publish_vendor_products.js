@@ -20,7 +20,7 @@ export const up = async ({ queryInterface, transaction }) => {
     "products",
     "status",
     {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING(32),
       allowNull: false,
       defaultValue: "approved",
     },

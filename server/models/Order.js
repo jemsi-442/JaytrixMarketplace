@@ -21,19 +21,12 @@ const Order = sequelize.define(
       field: "total",
     },
     status: {
-      type: DataTypes.ENUM(
-        "pending",
-        "paid",
-        "out_for_delivery",
-        "delivered",
-        "cancelled",
-        "refunded"
-      ),
+      type: DataTypes.STRING(32),
       allowNull: false,
       defaultValue: "pending",
     },
     deliveryType: {
-      type: DataTypes.ENUM("home", "pickup"),
+      type: DataTypes.STRING(32),
       allowNull: false,
       defaultValue: "home",
       field: "delivery_type",

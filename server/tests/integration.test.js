@@ -11,6 +11,13 @@ process.env.SNIPPE_WEBHOOK_SECRET =
   process.env.SNIPPE_WEBHOOK_SECRET || "test_snippe_webhook_secret";
 process.env.SNIPPE_BASE_URL = "https://mock.snippe.test";
 process.env.JWT_SECRET = process.env.JWT_SECRET || "integration-test-jwt-secret";
+process.env.MESEJI_WHATSAPP_ENABLED = "false";
+process.env.MESEJI_API_TOKEN = "replace_with_meseji_api_token";
+process.env.MESEJI_WHATSAPP_FROM = "replace_with_meseji_phone_number_id";
+process.env.MESEJI_SMS_ENABLED = "false";
+process.env.MESEJI_TZ_API_KEY = "replace_with_meseji_tz_api_key";
+process.env.MESEJI_SMS_SENDER_ID = "MESEJI";
+process.env.MESSAGING_SETTINGS_SOURCE = "database";
 
 const runId = Date.now();
 const testEmail = `integration_${runId}@example.com`;

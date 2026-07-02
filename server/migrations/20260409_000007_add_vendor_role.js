@@ -9,16 +9,13 @@ const hasUsersTable = async (queryInterface, transaction) => {
     .includes("users");
 };
 
-export const up = async ({ sequelize, transaction }) => {
-  await sequelize.query(
-    `
-      ALTER TABLE users
-      ALTER COLUMN role TYPE VARCHAR(20);
+export const up = async ({ queryInterface, transaction }) => {
+  if (!(await hasUsersTable(queryInterface, transaction))) {
+    return;
+  }
 
-      ALTER TABLE users
-      ADD CONSTRAINT role_check
-      CHECK (role IN ('customer','vendor','admin','rider'));
-    `,
+  await queryInterface.sequelize.query(
+    "ALTER TABLE users ALTER COLUMN role TYPE VARCHAR(32) USING role::VARCHAR, ALTER COLUMN role SET NOT NULL, ALTER COLUMN role SET DEFAULT 'customer'",
     { transaction }
   );
 };

@@ -242,7 +242,7 @@ class ProductService {
 
   static async approveProduct(productId, adminId, reviewNotes = "") {
     return sequelize.transaction(async (transaction) => {
-      const product = await Product.findByPk(productId, { transaction, lock: true, include: productIncludes });
+      const product = await Product.findByPk(productId, { transaction, lock: true });
 
       if (!product) {
         throw new ApiError(404, "Product not found");
@@ -252,7 +252,8 @@ class ProductService {
       const previousStatus = product.status;
 
       if (product.status === "approved") {
-        return { product: serializeProduct(product), idempotent: true };
+        const approvedProduct = await Product.findByPk(product.id, { transaction, include: productIncludes });
+        return { product: serializeProduct(approvedProduct), idempotent: true };
       }
 
       await product.update(
@@ -290,7 +291,7 @@ class ProductService {
 
   static async rejectProduct(productId, adminId, reviewNotes) {
     return sequelize.transaction(async (transaction) => {
-      const product = await Product.findByPk(productId, { transaction, lock: true, include: productIncludes });
+      const product = await Product.findByPk(productId, { transaction, lock: true });
 
       if (!product) {
         throw new ApiError(404, "Product not found");
@@ -300,7 +301,8 @@ class ProductService {
       const previousStatus = product.status;
 
       if (product.status === "rejected" && product.reviewNotes === normalizedReviewNotes) {
-        return { product: serializeProduct(product), idempotent: true, updatedExisting: false };
+        const rejectedProduct = await Product.findByPk(product.id, { transaction, include: productIncludes });
+        return { product: serializeProduct(rejectedProduct), idempotent: true, updatedExisting: false };
       }
 
       await product.update(

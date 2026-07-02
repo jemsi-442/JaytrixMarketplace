@@ -164,6 +164,18 @@ app.get("/", (req, res) => {
   });
 });
 
+  app.get("/api/health", (req, res) => {
+    res.json({
+      success: true,
+      message: "API healthy",
+      data: {
+        environment: process.env.NODE_ENV || "development",
+        database: process.env.DB_DIALECT || "postgres",
+        timestamp: new Date().toISOString(),
+      },
+    });
+  });
+
   app.use("/api/admin", adminRoutes);
   app.use("/api/admin", adminDashboardRoutes);
   app.use("/api/auth", authRoutes);
@@ -191,7 +203,7 @@ export const startServer = async ({
 } = {}) => {
   validateProductionEnv();
   await connectDB();
-  console.log(" MariaDB connected");
+  console.log(" PostgreSQL connected");
 
   if (bootstrapAdmin) {
     const result = await ensureAdminAccount({ resetExisting: false });

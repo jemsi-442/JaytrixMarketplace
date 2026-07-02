@@ -22,7 +22,7 @@ const createUsersTable = async (queryInterface, transaction) => {
       email: { type: DataTypes.STRING(120), allowNull: false, unique: true },
       password: { type: DataTypes.STRING(255), allowNull: false },
       role: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(32),
         allowNull: false,
         defaultValue: "customer",
       },
@@ -73,7 +73,7 @@ const createProductsTable = async (queryInterface, transaction) => {
       image: { type: DataTypes.STRING(255), allowNull: true, defaultValue: null },
       sku: { type: DataTypes.STRING(64), allowNull: true, unique: true },
       status: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(32),
         allowNull: false,
         defaultValue: "pending",
       },
@@ -99,12 +99,12 @@ const createOrdersTable = async (queryInterface, transaction) => {
       user_id: { type: DataTypes.INTEGER, allowNull: false },
       total: { type: DataTypes.DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
       status: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(32),
         allowNull: false,
         defaultValue: "pending",
       },
       delivery_type: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(32),
         allowNull: false,
         defaultValue: "home",
       },
@@ -218,7 +218,7 @@ const createAuditLogsTable = async (queryInterface, transaction) => {
       user_name: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
       rider_name: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
       type: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(32),
         allowNull: false,
       },
       action: { type: DataTypes.STRING, allowNull: false },
@@ -259,7 +259,7 @@ const createVendorPayoutsTable = async (queryInterface, transaction) => {
       order_id: { type: DataTypes.INTEGER, allowNull: false },
       amount: { type: DataTypes.DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
       status: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(32),
         allowNull: false,
         defaultValue: "pending",
       },

@@ -1,17 +1,27 @@
 [Unit]
 Description=JAYTRIX Marketplace API
-After=network.target mariadb.service
+After=network.target postgresql.service
 
 [Service]
 Type=simple
-WorkingDirectory=/var/www/jaytrix/server
-ExecStart=/usr/bin/npm start
+
+WorkingDirectory=/opt/jaytrix/marketplace/server
+
+ExecStart=/usr/bin/node index.js
+
 Restart=always
-RestartSec=5
+RestartSec=3
+
 Environment=NODE_ENV=production
-EnvironmentFile=/var/www/jaytrix/server/.env
+EnvironmentFile=/opt/jaytrix/marketplace/server/.env
+
 User=www-data
 Group=www-data
+
+# HARDENING
+LimitNOFILE=65535
+KillSignal=SIGINT
+TimeoutStopSec=30
 
 [Install]
 WantedBy=multi-user.target

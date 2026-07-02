@@ -1,12 +1,12 @@
 # JAYTRIX VPS Deployment
 
-This checklist is for deploying JAYTRIX Systems Marketplace on a Linux VPS with Nginx, Node.js, MariaDB, and HTTPS.
+This checklist is for deploying JAYTRIX Systems Marketplace on a Linux VPS with Nginx, Node.js, PostgreSQL, and HTTPS.
 
 ## 1. Server Packages
 
 ```bash
 sudo apt update
-sudo apt install -y nginx mariadb-server git curl certbot python3-certbot-nginx
+sudo apt install -y nginx postgresql postgresql-contrib git curl certbot python3-certbot-nginx
 node -v
 npm -v
 ```
@@ -35,7 +35,9 @@ Required production values:
 NODE_ENV=production
 PORT=5001
 JWT_SECRET=replace_with_long_random_secret
-DATABASE_URL=mariadb://USER:PASSWORD@127.0.0.1:3306/ecommerce
+DATABASE_URL=postgres://USER:PASSWORD@127.0.0.1:5432/marketplace
+DB_DIALECT=postgres
+DB_SSL=false
 DB_SYNC=false
 DB_SYNC_ALTER=false
 CLIENT_URL=https://example.com
@@ -49,14 +51,14 @@ Also configure Cloudinary, SMTP, Snippe, and Meseji credentials from `server/.en
 ## 4. Database
 
 ```bash
-sudo mariadb
+sudo -u postgres psql
 ```
 
 ```sql
-CREATE DATABASE ecommerce CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'jaytrix_user'@'localhost' IDENTIFIED BY 'replace_with_strong_password';
-GRANT ALL PRIVILEGES ON ecommerce.* TO 'jaytrix_user'@'localhost';
-FLUSH PRIVILEGES;
+CREATE USER jaytrix_user WITH PASSWORD 'replace_with_strong_password';
+CREATE DATABASE marketplace OWNER jaytrix_user;
+\c marketplace
+GRANT ALL PRIVILEGES ON DATABASE marketplace TO jaytrix_user;
 ```
 
 Then run:

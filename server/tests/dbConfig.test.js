@@ -10,7 +10,8 @@ import {
 test("database config ignores placeholder URLs", () => {
   assert.equal(resolveDatabaseUrl("replace_with_database_url"), null);
   assert.equal(resolveDatabaseUrl("${{DATABASE_URL}}"), null);
-  assert.equal(resolveDatabaseUrl("mariadb://user:pass@127.0.0.1:3306/ecommerce"), "mariadb://user:pass@127.0.0.1:3306/ecommerce");
+  assert.equal(resolveDatabaseUrl("sqlite://local.db"), null);
+  assert.equal(resolveDatabaseUrl("postgres://user:pass@127.0.0.1:5432/marketplace"), "postgres://user:pass@127.0.0.1:5432/marketplace");
 });
 
 test("production database guard requires explicit database config", () => {
@@ -18,14 +19,14 @@ test("production database guard requires explicit database config", () => {
   assert.equal(
     hasProductionDatabaseConfig({
       DB_HOST: "127.0.0.1",
-      DB_NAME: "ecommerce",
-      DB_USER: "root",
+      DB_NAME: "marketplace",
+      DB_USER: "jaytrix",
     }),
     true
   );
   assert.equal(
     hasProductionDatabaseConfig({
-      DATABASE_URL: "mariadb://user:pass@db.example.com:3306/ecommerce",
+      DATABASE_URL: "postgres://user:pass@db.example.com:5432/marketplace",
     }),
     true
   );

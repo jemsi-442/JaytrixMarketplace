@@ -24,29 +24,54 @@ export const up = async ({ queryInterface, sequelize, transaction }) => {
   }
 
   if (!columns.store_name) {
-    await queryInterface.sequelize.query(
-      "ALTER TABLE users ADD COLUMN store_name VARCHAR(120) NULL",
+    await queryInterface.addColumn(
+      "users",
+      "store_name",
+      {
+        type: sequelize.Sequelize.DataTypes.STRING(120),
+        allowNull: true,
+        defaultValue: null,
+      },
       { transaction }
     );
   }
 
   if (!columns.store_slug) {
-    await queryInterface.sequelize.query(
-      "ALTER TABLE users ADD COLUMN store_slug VARCHAR(80) NULL UNIQUE",
+    await queryInterface.addColumn(
+      "users",
+      "store_slug",
+      {
+        type: sequelize.Sequelize.DataTypes.STRING(80),
+        allowNull: true,
+        defaultValue: null,
+        unique: true,
+      },
       { transaction }
     );
   }
 
   if (!columns.business_phone) {
-    await queryInterface.sequelize.query(
-      "ALTER TABLE users ADD COLUMN business_phone VARCHAR(40) NULL",
+    await queryInterface.addColumn(
+      "users",
+      "business_phone",
+      {
+        type: sequelize.Sequelize.DataTypes.STRING(40),
+        allowNull: true,
+        defaultValue: null,
+      },
       { transaction }
     );
   }
 
   if (!columns.business_description) {
-    await queryInterface.sequelize.query(
-      "ALTER TABLE users ADD COLUMN business_description TEXT NULL",
+    await queryInterface.addColumn(
+      "users",
+      "business_description",
+      {
+        type: sequelize.Sequelize.DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: null,
+      },
       { transaction }
     );
   }

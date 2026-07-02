@@ -6,7 +6,7 @@ JAYTRIX Systems is a multi-vendor marketplace and delivery platform built for sh
 
 - Frontend: React, TailwindCSS
 - Backend: Node.js, Express.js
-- Database: MariaDB (Sequelize ORM)
+- Database: PostgreSQL 16 (Sequelize ORM)
 - Auth: JWT (role-based)
 - Media: Cloudinary
 
@@ -27,7 +27,7 @@ JAYTRIX Systems is a multi-vendor marketplace and delivery platform built for sh
 - `client/` - frontend app
 - `server/` - backend API
 
-## Backend Setup (MariaDB)
+## Backend Setup (PostgreSQL)
 
 ### 1. Install dependencies
 
@@ -45,12 +45,14 @@ NODE_ENV=development
 PORT=5001
 JWT_SECRET=replace_with_a_long_random_secret_min_32_chars
 
-DATABASE_URL=mariadb://root:your_mysql_password@127.0.0.1:3306/ecommerce
+DATABASE_URL=postgres://jaytrix:secret@127.0.0.1:5432/marketplace
 DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_NAME=ecommerce
-DB_USER=root
-DB_PASSWORD=your_mysql_password
+DB_PORT=5432
+DB_NAME=marketplace
+DB_USER=jaytrix
+DB_PASSWORD=secret
+DB_DIALECT=postgres
+DB_SSL=false
 DB_SYNC=false
 DB_SYNC_ALTER=false
 
@@ -70,13 +72,6 @@ CLIENT_URLS=http://localhost:5173,http://127.0.0.1:5173
 
 ### 3. Prepare database
 
-i already created:
-
-- `users`
-- `products`
-- `orders`
-- `order_items`
-
 Run migrations explicitly:
 
 ```bash
@@ -89,6 +84,23 @@ Check migration status:
 ```bash
 cd server
 npm run migrate:status
+```
+
+### PostgreSQL Docker reset (development only)
+
+Use this only when you intentionally want a clean local schema:
+
+```bash
+docker compose down -v
+docker compose up -d postgres
+cd server
+npm run migrate
+```
+
+To run backend and PostgreSQL together:
+
+```bash
+docker compose up -d
 ```
 
 `DB_SYNC` is now intended only as a local fallback for development. In production, keep `DB_SYNC=false` and use migrations instead of `sequelize.sync`.
@@ -191,7 +203,7 @@ Flow:
 Realtime notification notes:
 
 - Set a unique `NOTIFICATION_INSTANCE_ID` per backend instance.
-- `notification_events` acts as a MariaDB outbox so multi-instance deployments can relay notification events across instances.
+- `notification_events` acts as a database outbox so multi-instance deployments can relay notification events across instances.
 - Old outbox rows are cleaned up automatically based on `NOTIFICATION_EVENT_RETENTION_HOURS`.
 - External WhatsApp/SMS delivery is off until Meseji credentials are configured and admin enables the channel in Admin Notifications.
 - Admin can retry skipped/failed external deliveries from the Notifications page without creating a duplicate in-app notification.
@@ -217,7 +229,7 @@ This sends a signed local `payment.completed` webhook for order `123` and amount
 
 ## Deploy (Render - Backend)
 
-For VPS hosting with Nginx, systemd, MariaDB, and HTTPS, see [`docs/VPS_DEPLOYMENT.md`](docs/VPS_DEPLOYMENT.md).
+For VPS hosting with Nginx, systemd, PostgreSQL, and HTTPS, see [`docs/VPS_DEPLOYMENT.md`](docs/VPS_DEPLOYMENT.md).
 
 Set:
 
@@ -230,7 +242,7 @@ Required env vars on Render:
 - `NODE_ENV=production`
 - `JWT_SECRET=...`
 - `CLIENT_URL=https://your-frontend-domain`
-- `DATABASE_URL=mariadb://USER:PASSWORD@HOST:3306/DBNAME`
+- `DATABASE_URL=postgres://USER:PASSWORD@HOST:5432/DBNAME`
 - `CLOUDINARY_NAME=...`
 - `CLOUDINARY_API_KEY=...`
 - `CLOUDINARY_API_SECRET=...`

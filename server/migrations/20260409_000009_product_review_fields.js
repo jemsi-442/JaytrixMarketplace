@@ -1,3 +1,5 @@
+import { DataTypes } from "sequelize";
+
 const hasProductsTable = async (queryInterface, transaction) => {
   const tables = await queryInterface.showAllTables({ transaction });
   return tables
@@ -24,22 +26,28 @@ export const up = async ({ queryInterface, transaction }) => {
   }
 
   if (!columns.reviewed_at) {
-    await queryInterface.sequelize.query(
-      "ALTER TABLE products ADD COLUMN reviewed_at TIMESTAMP NULL",
+    await queryInterface.addColumn(
+      "products",
+      "reviewed_at",
+      { type: DataTypes.DATE, allowNull: true, defaultValue: null },
       { transaction }
     );
   }
 
   if (!columns.reviewed_by) {
-    await queryInterface.sequelize.query(
-      "ALTER TABLE products ADD COLUMN reviewed_by INT NULL",
+    await queryInterface.addColumn(
+      "products",
+      "reviewed_by",
+      { type: DataTypes.INTEGER, allowNull: true, defaultValue: null },
       { transaction }
     );
   }
 
   if (!columns.review_notes) {
-    await queryInterface.sequelize.query(
-      "ALTER TABLE products ADD COLUMN review_notes TEXT NULL",
+    await queryInterface.addColumn(
+      "products",
+      "review_notes",
+      { type: DataTypes.TEXT, allowNull: true, defaultValue: null },
       { transaction }
     );
   }

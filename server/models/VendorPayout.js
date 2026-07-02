@@ -25,7 +25,7 @@ const VendorPayout = sequelize.define(
       defaultValue: 0,
     },
     status: {
-      type: DataTypes.ENUM("pending", "paid", "on_hold"),
+      type: DataTypes.STRING(32),
       allowNull: false,
       defaultValue: "pending",
     },

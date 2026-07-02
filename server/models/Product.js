@@ -46,7 +46,7 @@ const Product = sequelize.define(
       },
     },
     status: {
-      type: DataTypes.ENUM("pending", "approved", "rejected"),
+      type: DataTypes.STRING(32),
       allowNull: false,
       defaultValue: "approved",
     },
