@@ -25,21 +25,21 @@ export const up = async ({ queryInterface, transaction }) => {
 
   if (!columns.reviewed_at) {
     await queryInterface.sequelize.query(
-      "ALTER TABLE products ADD COLUMN reviewed_at TIMESTAMP NULL",
+      "ALTER TABLE products ADD COLUMN reviewed_at DATETIME NULL AFTER approved_by",
       { transaction }
     );
   }
 
   if (!columns.reviewed_by) {
     await queryInterface.sequelize.query(
-      "ALTER TABLE products ADD COLUMN reviewed_by INT NULL",
+      "ALTER TABLE products ADD COLUMN reviewed_by INT NULL AFTER reviewed_at",
       { transaction }
     );
   }
 
   if (!columns.review_notes) {
     await queryInterface.sequelize.query(
-      "ALTER TABLE products ADD COLUMN review_notes TEXT NULL",
+      "ALTER TABLE products ADD COLUMN review_notes TEXT NULL AFTER reviewed_by",
       { transaction }
     );
   }

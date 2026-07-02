@@ -13,7 +13,7 @@ const ensureMigrationTable = async () => {
   await sequelize.query(`
     CREATE TABLE IF NOT EXISTS ${migrationTableName} (
       name VARCHAR(255) NOT NULL PRIMARY KEY,
-      applied_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+      applied_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
   `);
 };

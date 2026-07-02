@@ -142,15 +142,27 @@ export const createApp = () => {
     next();
   });
 
-  app.get("/", (req, res) => {
-    res.json({
-      success: true,
-      message: "API Running",
-      data: {
-        environment: process.env.NODE_ENV || "development",
-      },
-    });
+  app.get("/api/health", (req, res) => {
+  res.json({
+    success: true,
+    message: "OK",
+    data: {
+      service: "jaytrix-api",
+      status: "healthy",
+      time: new Date().toISOString()
+    }
   });
+});
+
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "API Running",
+    data: {
+      environment: process.env.NODE_ENV || "development",
+    },
+  });
+});
 
   app.use("/api/admin", adminRoutes);
   app.use("/api/admin", adminDashboardRoutes);

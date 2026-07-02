@@ -21,8 +21,8 @@ export const up = async ({ queryInterface, transaction }) => {
         notes TEXT NULL,
         created_by INT NULL,
         processed_by INT NULL,
-        paid_at TIMESTAMP NULL,
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        paid_at DATETIME NULL,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         UNIQUE KEY uniq_vendor_payouts_order_vendor (order_id, vendor_id),
         KEY idx_vendor_payouts_vendor_status_created (vendor_id, status, created_at)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,

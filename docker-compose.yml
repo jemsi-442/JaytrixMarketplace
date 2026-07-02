@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: jaytrix_db
+    restart: always
+
+    environment:
+      POSTGRES_USER: jaytrix
+      POSTGRES_PASSWORD: strongpassword
+      POSTGRES_DB: marketplace
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jaytrix"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./server
+    command: sh -c "npm run migrate && npm start"
+    container_name: jaytrix_api
+    restart: always
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    env_file:
+      - ./server/.env
+
+    environment:
+      NODE_ENV: production
+      DB_HOST: postgres
+      DB_USER: jaytrix
+      DB_PASSWORD: strongpassword
+      DB_NAME: marketplace
+
+    ports:
+      - "5000:5000"
+
+volumes:
+  pgdata:

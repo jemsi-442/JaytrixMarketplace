@@ -10,12 +10,17 @@ const hasUsersTable = async (queryInterface, transaction) => {
 };
 
 export const up = async ({ queryInterface, transaction }) => {
+  if (!(await hasUsersTable(queryInterface, transaction))) {
+    return;
+  }
+
   await queryInterface.sequelize.query(
-    `
-      ALTER TABLE users
-      ALTER COLUMN role TYPE VARCHAR(20),
-      ALTER COLUMN role SET DEFAULT 'customer';
-    `,
+    "UPDATE users SET role = 'customer' WHERE role = 'user'",
+    { transaction }
+  );
+
+  await queryInterface.sequelize.query(
+    "ALTER COLUMN role TYPE VARCHAR(20)('customer','admin','rider') NOT NULL DEFAULT 'customer'",
     { transaction }
   );
 };

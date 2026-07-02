@@ -41,21 +41,21 @@ const databaseUrl = resolveDatabaseUrl(process.env.DATABASE_URL, process.env.MAR
 
 const sequelize = databaseUrl
   ? new Sequelize(databaseUrl, {
-      dialect: "mariadb",
+      dialect: "postgres",
       logging: false,
       dialectOptions: {
         connectTimeout: 10000,
       },
     })
-  : new Sequelize(
-      process.env.DB_NAME || "rihancollection",
-      process.env.DB_USER || "root",
-      process.env.DB_PASSWORD || "",
-      {
-        host: process.env.DB_HOST || "127.0.0.1",
-        port: Number(process.env.DB_PORT || 3306),
-        dialect: "mariadb",
-        logging: false,
+
+  :new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT || 5432),
+      dialect: "postgres",        logging: false,
         dialectOptions: {
           connectTimeout: 10000,
         },
