@@ -1,0 +1,1575 @@
+<!doctype html>
+<html lang="sw">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jaytrix Marketplace | Mwongozo wa Mfumo na Biashara</title>
+    <style>
+      :root {
+        --primary: #062a63;
+        --primary-deep: #031326;
+        --accent: #0b5fff;
+        --accent-soft: #e0f2fe;
+        --graphite: #151a21;
+        --ink: #07111f;
+        --text: #263545;
+        --muted: #64748b;
+        --line: #d9e4f2;
+        --soft: #f6f9fd;
+        --white: #ffffff;
+        --orange: #f28c28;
+      }
+
+      @page {
+        size: A4;
+        margin: 14mm 13mm 16mm;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        color: var(--ink);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      body {
+        margin: 0;
+        background: var(--white);
+      }
+
+      .page {
+        min-height: 267mm;
+        page-break-after: always;
+        position: relative;
+      }
+
+      .page:last-child {
+        page-break-after: auto;
+      }
+
+      .cover {
+        background:
+          radial-gradient(circle at 78% 20%, rgba(11, 95, 255, 0.18), transparent 28%),
+          linear-gradient(135deg, var(--primary-deep), var(--primary) 58%, var(--graphite));
+        color: var(--white);
+        margin: -14mm -13mm -16mm;
+        padding: 22mm 18mm;
+        min-height: 297mm;
+        overflow: hidden;
+      }
+
+      .cover-top {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 18mm;
+      }
+
+      .logo-card {
+        background: var(--white);
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        border-radius: 14px;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+        overflow: hidden;
+        padding: 5px;
+        width: 190px;
+      }
+
+      .logo-card img {
+        display: block;
+        width: 100%;
+      }
+
+      .cover-kicker,
+      .section-kicker {
+        color: var(--accent-soft);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.8px;
+        text-transform: uppercase;
+      }
+
+      .cover-top .cover-kicker {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(219, 234, 254, 0.32);
+        border-radius: 999px;
+        padding: 9px 13px;
+      }
+
+      .cover-audience {
+        color: #93c5fd;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.8px;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+      }
+
+      .cover-hero {
+        align-items: center;
+        display: grid;
+        gap: 10px;
+        grid-template-columns: minmax(0, 1.35fr) minmax(150px, 0.8fr);
+      }
+
+      .cover-illustration {
+        justify-self: end;
+        width: 190px;
+      }
+
+      .cover-illustration svg {
+        display: block;
+        height: auto;
+        overflow: visible;
+        width: 100%;
+      }
+
+      .cover h1 {
+        font-size: 44px;
+        line-height: 1;
+        margin: 8px 0 13px;
+        max-width: 410px;
+      }
+
+      .cover p {
+        color: #dbeafe;
+        font-size: 16px;
+        max-width: 410px;
+      }
+
+      .cover-owner {
+        align-items: center;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(219, 234, 254, 0.25);
+        border-radius: 10px;
+        color: #dbeafe;
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 7px 18px;
+        margin-top: 10px;
+        padding: 9px 13px;
+      }
+
+      .cover-owner strong { color: white; }
+
+      .cover-grid {
+        border-top: 1px solid rgba(255, 255, 255, 0.24);
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(3, 1fr);
+        margin-top: 18mm;
+        padding-top: 9mm;
+      }
+
+      .cover-metric {
+        background: rgba(255, 255, 255, 0.075);
+        border: 1px solid rgba(219, 234, 254, 0.22);
+        border-left: 4px solid var(--orange);
+        border-radius: 10px;
+        min-height: 110px;
+        padding: 12px;
+      }
+
+      .cover-metric-icon {
+        align-items: center;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 8px;
+        color: #bfdbfe;
+        display: inline-flex;
+        height: 32px;
+        justify-content: center;
+        margin-bottom: 8px;
+        width: 32px;
+      }
+
+      .cover-metric-icon svg {
+        fill: none;
+        height: 19px;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.8;
+        width: 19px;
+      }
+
+      .cover-metric strong {
+        display: block;
+        font-size: 16px;
+        margin-bottom: 3px;
+      }
+
+      .cover-metric span {
+        color: #bfdbfe;
+        font-size: 11px;
+      }
+
+      .document-meta {
+        bottom: 18mm;
+        color: #bfdbfe;
+        font-size: 11px;
+        left: 18mm;
+        position: absolute;
+      }
+
+      .header {
+        align-items: center;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 18px;
+        padding-bottom: 10px;
+      }
+
+      .header img {
+        width: 118px;
+      }
+
+      .header span {
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        color: var(--primary);
+        font-size: 25px;
+        line-height: 1.1;
+        margin: 0 0 10px;
+      }
+
+      h3 {
+        color: var(--graphite);
+        font-size: 15px;
+        margin: 18px 0 8px;
+      }
+
+      p {
+        color: var(--text);
+        margin: 0 0 9px;
+      }
+
+      .lead {
+        color: var(--text);
+        font-size: 14px;
+        max-width: 690px;
+      }
+
+      .section-kicker {
+        color: var(--accent);
+        margin-bottom: 6px;
+      }
+
+      .band {
+        background: linear-gradient(135deg, #eff6ff, #ffffff);
+        border: 1px solid var(--line);
+        border-left: 6px solid var(--accent);
+        border-radius: 8px;
+        margin: 14px 0;
+        padding: 13px 15px;
+      }
+
+      .grid-2 {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-3 {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+      }
+
+      .card strong {
+        color: var(--primary);
+        display: block;
+        font-size: 13px;
+        margin-bottom: 5px;
+      }
+
+      .icon-card {
+        --tone: #225d9c;
+        --tone-bg: #e7f0fc;
+        --tone-border: #c0d6f3;
+        background: var(--tone-bg);
+        border: 1px solid var(--tone-border);
+        border-left: 5px solid var(--tone);
+        border-radius: 10px;
+        color: var(--tone);
+        min-height: 96px;
+        padding: 12px;
+      }
+
+      .tone-inventory { --tone: #176b59; --tone-bg: #e1f4ef; --tone-border: #b9e3d8; }
+      .tone-people { --tone: #8b365e; --tone-bg: #f8e7ef; --tone-border: #edc6d6; }
+      .tone-payment { --tone: #176777; --tone-bg: #e2f3f6; --tone-border: #bfdee5; }
+      .tone-reports { --tone: #994b2b; --tone-bg: #fbeade; --tone-border: #f0cbb6; }
+      .tone-security { --tone: #4b5598; --tone-bg: #eaebfb; --tone-border: #cdd0f0; }
+      .tone-admin { --tone: #4e6178; --tone-bg: #e8eef4; --tone-border: #cbd7e2; }
+      .tone-warning { --tone: #955700; --tone-bg: #fff1d1; --tone-border: #f4d28c; }
+
+      .icon-heading {
+        align-items: center;
+        display: flex;
+        gap: 9px;
+        margin-bottom: 7px;
+      }
+
+      .icon-box {
+        align-items: center;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid currentColor;
+        border-radius: 8px;
+        display: inline-flex;
+        height: 34px;
+        justify-content: center;
+        flex: 0 0 34px;
+        width: 34px;
+      }
+
+      .icon-box svg {
+        height: 20px;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.8;
+        width: 20px;
+      }
+
+      .icon-card strong {
+        color: var(--tone);
+        margin: 0;
+      }
+
+      .icon-card p {
+        color: #34465b;
+        font-size: 11px;
+        margin: 0;
+      }
+
+      .benefit-grid .icon-card {
+        min-height: 78px;
+        padding: 9px 11px;
+      }
+
+      .number {
+        align-items: center;
+        background: var(--primary);
+        border-radius: 999px;
+        color: var(--white);
+        display: inline-flex;
+        font-size: 11px;
+        font-weight: 800;
+        height: 22px;
+        justify-content: center;
+        margin-right: 7px;
+        width: 22px;
+      }
+
+      .flow {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(5, 1fr);
+        margin: 14px 0;
+      }
+
+      .flow-step {
+        background: var(--soft);
+        border: 1px solid var(--line);
+        border-top: 4px solid var(--accent);
+        border-radius: 8px;
+        min-height: 82px;
+        padding: 10px;
+        position: relative;
+      }
+
+      .flow-step strong {
+        color: var(--primary);
+        display: block;
+        font-size: 12px;
+        margin-bottom: 4px;
+      }
+
+      .flow-icon {
+        align-items: center;
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        color: var(--accent);
+        display: inline-flex;
+        height: 25px;
+        justify-content: center;
+        margin-bottom: 6px;
+        width: 25px;
+      }
+
+      .flow-icon svg {
+        height: 15px;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.8;
+        width: 15px;
+      }
+
+      .flow-step:not(:last-child)::after {
+        color: var(--orange);
+        content: "›";
+        font-size: 24px;
+        font-weight: 800;
+        position: absolute;
+        right: -8px;
+        top: 34%;
+        z-index: 2;
+      }
+
+      .flow-step:nth-child(2) { border-top-color: #17725d; background: #e8f5f1; }
+      .flow-step:nth-child(3) { border-top-color: #176777; background: #e8f4f6; }
+      .flow-step:nth-child(4) { border-top-color: #4b5598; background: #eef0fb; }
+      .flow-step:nth-child(5) { border-top-color: #955700; background: #fff5e2; }
+
+      .status-grid {
+        display: grid;
+        gap: 9px;
+        grid-template-columns: repeat(4, 1fr);
+        margin: 14px 0;
+      }
+
+      .status-card {
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--accent);
+        border-radius: 8px;
+        background: var(--soft);
+        min-height: 74px;
+        padding: 10px;
+      }
+
+      .status-card strong {
+        color: var(--primary);
+        display: block;
+        font-size: 11px;
+        margin-bottom: 4px;
+      }
+
+      .status-card span {
+        color: var(--muted);
+        font-size: 10px;
+      }
+
+      .status-card.is-hold { background: #fff4df; border-color: #f0d49d; border-left-color: #b36a00; }
+      .status-card.is-ready { background: #e5f5ed; border-color: #bfdfce; border-left-color: #218457; }
+      .status-card.is-closed { background: #f3e9eb; border-color: #e5c6cb; border-left-color: #a34252; }
+
+      .payout-main {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: 1fr 1fr;
+        margin: 14px 0 9px;
+      }
+
+      .payout-node {
+        background: #eaf2fc;
+        border: 1px solid #bed2ee;
+        border-radius: 9px;
+        color: var(--primary);
+        min-height: 66px;
+        padding: 10px 12px;
+        position: relative;
+      }
+
+      .payout-node:first-child::after {
+        color: #b56b00;
+        content: "→";
+        font-size: 21px;
+        font-weight: 800;
+        position: absolute;
+        right: -16px;
+        top: 19px;
+      }
+
+      .payout-node strong,
+      .payout-branch strong { display: block; font-size: 12px; margin-bottom: 4px; }
+      .payout-node span,
+      .payout-branch span,
+      .payout-terminal span { color: #4b5c70; font-size: 10px; }
+
+      .payout-branch-label {
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.8px;
+        margin: 6px 0;
+        text-transform: uppercase;
+      }
+
+      .payout-branches {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .payout-branch {
+        background: #fff4df;
+        border: 1px solid #f0d49d;
+        border-left: 4px solid #b36a00;
+        border-radius: 8px;
+        padding: 10px 12px;
+      }
+
+      .payout-branch.is-ready {
+        background: #e5f5ed;
+        border-color: #bfdfce;
+        border-left-color: #218457;
+      }
+
+      .payout-terminal {
+        background: #f7e8eb;
+        border: 1px solid #e5c6cb;
+        border-left: 4px solid #a34252;
+        border-radius: 8px;
+        margin-top: 9px;
+        padding: 8px 12px;
+      }
+
+      .payout-terminal strong { color: #8e3545; font-size: 11px; }
+
+      .diagram-flow {
+        align-items: stretch;
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(4, 1fr);
+        margin: 16px 0 8px;
+      }
+
+      .diagram-node {
+        background: #eaf2fc;
+        border: 1px solid #bed2ee;
+        border-radius: 10px;
+        color: var(--primary);
+        min-height: 74px;
+        padding: 11px;
+        position: relative;
+      }
+
+      .diagram-node:not(:last-child)::after {
+        color: #b56b00;
+        content: "→";
+        font-size: 20px;
+        font-weight: 700;
+        position: absolute;
+        right: -15px;
+        top: 24px;
+        z-index: 2;
+      }
+
+      .diagram-node strong { display: block; font-size: 12px; margin-bottom: 4px; }
+      .diagram-node span { color: #42556d; font-size: 10px; }
+      .diagram-node.is-done { background: #e5f5ed; border-color: #bfdfce; color: #176b4c; }
+      .diagram-note {
+        background: #fff3df;
+        border: 1px dashed #d79b45;
+        border-radius: 7px;
+        color: #744400;
+        font-size: 11px;
+        margin: 8px 0 14px;
+        padding: 8px 11px;
+      }
+
+      .payment-results {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: 1fr 1fr;
+        margin: 8px 0 14px;
+      }
+
+      .payment-result {
+        background: #e5f5ed;
+        border: 1px solid #bfdfce;
+        border-left: 4px solid #218457;
+        border-radius: 8px;
+        padding: 9px 11px;
+      }
+
+      .payment-result.is-error {
+        background: #fff4df;
+        border-color: #f0d49d;
+        border-left-color: #b36a00;
+      }
+
+      .payment-result strong { color: var(--primary); display: block; font-size: 11px; margin-bottom: 4px; }
+      .payment-result span { color: #4b5c70; font-size: 10px; }
+
+      .notification-results {
+        display: grid;
+        gap: 9px;
+        grid-template-columns: repeat(3, 1fr);
+        margin: 9px 0 14px;
+      }
+
+      .notification-results .status-card { min-height: 64px; }
+
+      .status-card.is-skipped {
+        background: #edf1f5;
+        border-color: #d5dee7;
+        border-left-color: #64748b;
+      }
+
+      .model-flow {
+        align-items: center;
+        display: grid;
+        gap: 5px;
+        grid-template-columns: 1fr 18px 1fr 18px 1fr;
+        margin: 13px 0;
+      }
+
+      .model-node {
+        background: #eaf2fc;
+        border: 1px solid #c5d8f0;
+        border-top: 3px solid var(--primary);
+        border-radius: 8px;
+        min-height: 70px;
+        padding: 8px 9px;
+      }
+
+      .model-node:nth-of-type(3) { background: #e7f4ef; border-color: #c0dfd2; border-top-color: #218457; }
+      .model-node:nth-of-type(5) { background: #f8eaf0; border-color: #edc9d8; border-top-color: #a34469; }
+      .model-node span,
+      .model-node small { color: var(--muted); display: block; font-size: 9px; }
+      .model-node span { font-weight: 800; letter-spacing: 0.7px; margin-bottom: 3px; text-transform: uppercase; }
+      .model-node strong { color: var(--primary); display: block; font-size: 11px; margin-bottom: 3px; }
+      .model-arrow { color: var(--orange); font-size: 20px; font-weight: 800; text-align: center; }
+
+      ul {
+        margin: 7px 0 0 18px;
+        padding: 0;
+      }
+
+      li {
+        color: var(--text);
+        margin: 3px 0;
+      }
+
+      table {
+        border-collapse: collapse;
+        margin: 12px 0;
+        width: 100%;
+      }
+
+      th {
+        background: var(--primary);
+        color: var(--white);
+        font-size: 11px;
+        text-align: left;
+      }
+
+      td,
+      th {
+        border: 1px solid var(--line);
+        padding: 8px;
+        vertical-align: top;
+      }
+
+      td {
+        color: var(--text);
+      }
+
+      .tag {
+        background: var(--accent-soft);
+        border-radius: 999px;
+        color: var(--primary);
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 800;
+        margin: 2px 4px 2px 0;
+        padding: 4px 8px;
+      }
+
+      .tag-success { background: #e4f4ea; color: #176b4c; }
+      .tag-progress { background: #e3f2f5; color: #176777; }
+      .tag-warning { background: #fff1d1; color: #955700; }
+      .tag-closed { background: #f7e8eb; color: #9b3f50; }
+      .tag-purple { background: #efebfb; color: #58449a; }
+
+      .footer {
+        border-top: 1px solid var(--line);
+        bottom: 0;
+        color: var(--muted);
+        display: flex;
+        font-size: 10px;
+        justify-content: space-between;
+        left: 0;
+        padding-top: 7px;
+        position: absolute;
+        right: 0;
+      }
+
+      .accent-line {
+        background: linear-gradient(90deg, var(--accent), var(--orange), var(--primary));
+        border-radius: 999px;
+        height: 5px;
+        margin: 14px 0 18px;
+        width: 180px;
+      }
+
+      .checklist {
+        margin-left: 0;
+      }
+
+      .checklist li {
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-left: 3px solid #218457;
+        border-radius: 6px;
+        list-style: none;
+        margin: 5px 0;
+        min-height: 27px;
+        padding: 5px 7px 5px 25px;
+        position: relative;
+      }
+
+      .checklist li::before {
+        background: #ffffff;
+        border: 1.5px solid #218457;
+        border-radius: 3px;
+        content: "";
+        height: 12px;
+        left: 6px;
+        position: absolute;
+        top: 7px;
+        width: 12px;
+      }
+
+      .checklist-data li { border-left-color: var(--accent); }
+      .checklist-data li::before { border-color: var(--accent); }
+
+      .toc-grid {
+        display: grid;
+        gap: 6px;
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .toc-item {
+        align-items: center;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--accent);
+        border-radius: 6px;
+        color: var(--text);
+        display: flex;
+        font-size: 9px;
+        justify-content: space-between;
+        line-height: 1.2;
+        min-height: 30px;
+        padding: 5px 7px;
+        text-decoration: none;
+      }
+
+      .toc-item span:last-child {
+        background: var(--accent-soft);
+        border-radius: 999px;
+        color: var(--primary);
+        flex: 0 0 auto;
+        font-size: 8px;
+        font-weight: 800;
+        margin-left: 5px;
+        padding: 3px 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="cover page">
+      <div class="cover-top">
+        <div class="logo-card">
+          <img src="../client/dist/brand/jaytrix-logo.png" alt="Jaytrix Systems" />
+        </div>
+      <div class="cover-kicker">Mwongozo wa Mfumo na Biashara</div>
+      </div>
+
+      <div class="cover-hero">
+        <div class="cover-copy">
+          <div class="cover-audience">Mwongozo kwa wateja, wafanyabiashara na washirika</div>
+          <h1>Jaytrix Marketplace</h1>
+          <p class="cover-intro">
+            Mfumo wa soko la mtandaoni (marketplace) unaowaunganisha wateja na maduka mengi. Mwongozo huu unaeleza
+            jinsi ya kutumia mfumo kusimamia bidhaa, oda, malipo na usafirishaji.
+          </p>
+        </div>
+        <div class="cover-illustration" aria-hidden="true">
+          <svg viewBox="0 0 240 220" fill="none">
+            <g stroke="#f28c28" stroke-dasharray="4 5" stroke-width="2" opacity=".95">
+              <path d="M120 110 45 45M120 110 195 45M120 110 45 175M120 110 195 175"/>
+            </g>
+            <g fill="#ffffff" fill-opacity=".09" stroke="#93c5fd" stroke-opacity=".8" stroke-width="1.5">
+              <circle cx="45" cy="45" r="25"/><circle cx="195" cy="45" r="25"/>
+              <circle cx="45" cy="175" r="25"/><circle cx="195" cy="175" r="25"/>
+            </g>
+            <circle cx="120" cy="110" r="43" fill="#0b5fff" stroke="#dbeafe" stroke-width="2"/>
+            <g stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4">
+              <path d="M104 105h32l-3 19h-25l-4-25h-6M109 105l4-10h16l4 10M114 113h12"/>
+              <path d="M35 49h20V37H35zM33 49v9h24v-9M40 42h3M48 42h3"/>
+              <circle cx="195" cy="40" r="6"/><path d="M183 57c1-8 5-12 12-12s11 4 12 12"/>
+              <path d="m34 169 11-6 11 6v13l-11 6-11-6zM34 169l11 7 11-7M45 176v12"/>
+              <circle cx="187" cy="181" r="4"/><circle cx="202" cy="181" r="4"/>
+              <path d="m187 181 5-12h6l5 12M190 174h10M195 169l-3-5h-4"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="cover-owner">
+        <span><strong>Kampuni mmiliki</strong> · JAYTRIX SYSTEMS</span>
+        <span><strong>Mfumo</strong> · Jaytrix Marketplace</span>
+      </div>
+
+      <div class="cover-grid">
+        <div class="cover-metric">
+          <span class="cover-metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10h18l-2 10H5L3 10Z"/><path d="m5 10 2-6h10l2 6M9 14h6"/></svg></span>
+          <strong>Maduka mengi</strong>
+          <span>Maduka tofauti huuza bidhaa zao sehemu moja.</span>
+        </div>
+        <div class="cover-metric">
+          <span class="cover-metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></span>
+          <strong>Malipo ya simu</strong>
+          <span>Lipa kwa mitandao ya simu inayotumika Tanzania.</span>
+        </div>
+        <div class="cover-metric">
+          <span class="cover-metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="m6 17 4-7h4l4 7M9 13h7M12 10l-2-3H7"/></svg></span>
+          <strong>Usafirishaji</strong>
+          <span>Fuatilia oda na hali ya usafirishaji.</span>
+        </div>
+      </div>
+
+      <div class="document-meta">
+        Inamilikiwa na JAYTRIX SYSTEMS<br />
+        Toleo la 1.23 · 5 Oktoba 2026
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <img src="../client/dist/brand/jaytrix-logo.png" alt="JAYTRIX SYSTEMS" />
+        <span>Kampuni mmiliki</span>
+      </div>
+      <div class="section-kicker">Kampuni inayomiliki mfumo</div>
+      <h2 id="about-jaytrix">About JAYTRIX SYSTEMS</h2>
+      <div class="accent-line"></div>
+      <p class="lead">
+        JAYTRIX SYSTEMS is a Tanzania-based technology company providing software development,
+        systems design, Linux administration, IT support, and cybersecurity services.
+      </p>
+      <p>
+        We build practical digital tools around the way an organization actually works: from
+        business applications and APIs to point-of-sale, payroll, inventory, and management platforms.
+      </p>
+      <p>
+        Our work emphasizes reliable delivery, clear communication, secure access, and maintainable
+        systems that can grow with the people who depend on them.
+      </p>
+      <div class="band">
+        <strong>Ufafanuzi wa majina:</strong> JAYTRIX SYSTEMS ni kampuni mmiliki na nembo ni ya kampuni.
+        Jaytrix Marketplace ni mfumo wa soko la mtandaoni unaomilikiwa na kampuni hiyo.
+      </div>
+      <h3>Huduma za kampuni</h3>
+      <div class="grid-2">
+        <div class="icon-card tone-payment">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg></span>
+            <strong>Utengenezaji wa programu</strong>
+          </div>
+          <p>Programu za biashara, tovuti na API zinazolingana na mahitaji ya taasisi.</p>
+        </div>
+        <div class="icon-card tone-inventory">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></span>
+            <strong>Ubunifu wa mifumo</strong>
+          </div>
+          <p>Kuunganisha programu, taarifa na taratibu za kazi ziwe mfumo mmoja.</p>
+        </div>
+        <div class="icon-card tone-admin">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M7 9h4M7 12h7"/></svg></span>
+            <strong>Usimamizi wa Linux na seva</strong>
+          </div>
+          <p>Kusanidi, kusimamia na kutunza mazingira ya Linux yanayoendesha huduma za kidigitali.</p>
+        </div>
+        <div class="icon-card tone-security">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6l8-3Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <strong>Usaidizi wa IT na usalama</strong>
+          </div>
+          <p>Msaada wa kiufundi na usalama wa mifumo na taarifa.</p>
+        </div>
+      </div>
+      <h3>Maneno muhimu katika mwongozo</h3>
+      <ul>
+        <li><strong>Mteja (customer):</strong> mtu anayenunua bidhaa kupitia mfumo.</li>
+        <li><strong>Mfanyabiashara (vendor):</strong> mmiliki wa duka na bidhaa zinazouzwa.</li>
+        <li><strong>Msafirishaji (rider):</strong> mtu anayekabidhiwa kusafirisha oda.</li>
+        <li><strong>Msimamizi (admin):</strong> anayeendesha na kufuatilia shughuli za mfumo.</li>
+      </ul>
+      <h3>Yaliyomo</h3>
+      <div class="toc-grid">
+        <a class="toc-item" href="#about-jaytrix"><span>Kampuni mmiliki</span><span>01</span></a>
+        <a class="toc-item" href="#marketplace-overview"><span>Muhtasari</span><span>02</span></a>
+        <a class="toc-item" href="#user-roles"><span>Watumiaji na majukumu</span><span>03</span></a>
+        <a class="toc-item" href="#products-stores"><span>Bidhaa na maduka</span><span>04</span></a>
+        <a class="toc-item" href="#order-flow"><span>Mtiririko wa oda</span><span>05</span></a>
+        <a class="toc-item" href="#payments-delivery"><span>Malipo na usafirishaji</span><span>06</span></a>
+        <a class="toc-item" href="#vendor-payouts"><span>Malipo ya maduka</span><span>07</span></a>
+        <a class="toc-item" href="#notifications"><span>Taarifa na usimamizi</span><span>08</span></a>
+        <a class="toc-item" href="#vendor-onboarding"><span>Kuanza kutumia</span><span>09</span></a>
+      </div>
+      <div class="footer">
+        <span>JAYTRIX SYSTEMS · Jaytrix Marketplace</span>
+        <span>01</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <img src="../client/dist/brand/jaytrix-logo.png" alt="Jaytrix Systems" />
+        <span>Jinsi mfumo unavyofanya kazi</span>
+      </div>
+      <div class="section-kicker">Muhtasari</div>
+      <h2 id="marketplace-overview">Jaytrix inaunganisha wateja, maduka, wasafirishaji na wasimamizi</h2>
+      <div class="accent-line"></div>
+      <p class="lead">
+        JAYTRIX SYSTEMS inamiliki Jaytrix Marketplace. Ndani ya mfumo huu, kila mfanyabiashara
+        anaweza kusajili duka, kuweka bidhaa na kupokea oda. Wateja wanaweza kununua katika sehemu
+        moja, kulipa kwa simu na kufuatilia oda hadi bidhaa ifike.
+      </p>
+
+      <div class="model-flow" aria-label="Uhusiano wa kampuni, mfumo na watumiaji">
+        <div class="model-node">
+          <span>Kampuni mmiliki</span>
+          <strong>JAYTRIX SYSTEMS</strong>
+          <small>inamiliki na kuendesha</small>
+        </div>
+        <div class="model-arrow" aria-hidden="true">→</div>
+        <div class="model-node">
+          <span>Mfumo</span>
+          <strong>Jaytrix Marketplace</strong>
+          <small>huunganisha biashara</small>
+        </div>
+        <div class="model-arrow" aria-hidden="true">→</div>
+        <div class="model-node">
+          <span>Watumiaji</span>
+          <strong>Maduka na wateja</strong>
+          <small>bidhaa, oda na malipo</small>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="icon-card tone-inventory">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 10h18l-2 10H5L3 10Z"/><path d="m5 10 2-6h10l2 6M9 14h6"/></svg></span>
+            <strong>Kwa mfanyabiashara</strong>
+          </div>
+          <p>Anasimamia duka na bidhaa zake, hupokea oda na hufuatilia malipo anayotarajia kupokea.</p>
+        </div>
+        <div class="icon-card tone-people">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M17 11a3 3 0 1 0 0-6M18 14a4 4 0 0 1 3 4v2"/></svg></span>
+            <strong>Kwa mteja</strong>
+          </div>
+          <p>Hutafuta bidhaa, huweka bidhaa kwenye kikapu, hulipa na kufuatilia oda.</p>
+        </div>
+        <div class="icon-card tone-payment">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="2"/><path d="m9 22 1-7-3 2-3-4 2-1 2 2 3-3 4 3 3 1-1 2-4-1-2-2-1 8"/></svg></span>
+            <strong>Kwa msafirishaji</strong>
+          </div>
+          <p>Huona kazi za kusafirisha, historia ya kazi na makadirio ya malipo yake.</p>
+        </div>
+        <div class="icon-card tone-security">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6l8-3Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <strong>Kwa msimamizi</strong>
+          </div>
+          <p>Hufuatilia watumiaji, bidhaa, oda, malipo, taarifa na kumbukumbu za shughuli.</p>
+        </div>
+      </div>
+
+      <h3>Faida kwa mfanyabiashara</h3>
+      <div class="grid-2 benefit-grid">
+        <div class="icon-card tone-inventory">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 10h18l-2 10H5L3 10Z"/><path d="m5 10 2-6h10l2 6M9 14h6"/></svg></span>
+            <strong>Duka na bidhaa</strong>
+          </div>
+          <p>Fungua duka, ongeza taarifa na weka bidhaa zenye bei na idadi iliyopo.</p>
+        </div>
+        <div class="icon-card tone-people">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 7h18v13H3zM3 7l2-4h14l2 4M8 12h8M8 16h5"/></svg></span>
+            <strong>Oda za duka</strong>
+          </div>
+          <p>Angalia oda za bidhaa zako, hata pale mteja anaponunua kutoka maduka mengi.</p>
+        </div>
+        <div class="icon-card tone-payment">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5M4 19h17M8 15l4-4 3 2 5-6"/></svg></span>
+            <strong>Makadirio ya malipo</strong>
+          </div>
+          <p>Fuatilia kiasi kinachotarajiwa na hali ya malipo kwa kila oda.</p>
+        </div>
+        <div class="icon-card tone-admin">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="m6 17 4-7h4l4 7M9 13h7M12 10l-2-3H7"/></svg></span>
+            <strong>Usafirishaji wa duka</strong>
+          </div>
+          <p>Simamia wasafirishaji na weka bonasi ya safari inapohitajika.</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>JAYTRIX SYSTEMS · Jaytrix Marketplace</span>
+        <span>02</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <img src="../client/dist/brand/jaytrix-logo.png" alt="Jaytrix Systems" />
+        <span>Watumiaji na majukumu</span>
+      </div>
+      <div class="section-kicker">Majukumu ya watumiaji</div>
+      <h2 id="user-roles">Kila mtumiaji ana majukumu na taarifa zake</h2>
+      <div class="accent-line"></div>
+
+      <h3>Majukumu kwa kila mtumiaji</h3>
+      <div class="grid-2">
+        <div class="icon-card tone-people">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M17 11a3 3 0 1 0 0-6M18 14a4 4 0 0 1 3 4v2"/></svg></span>
+            <strong>Mteja</strong>
+          </div>
+          <p>Hufungua akaunti, hutafuta bidhaa, hulipa na kufuatilia oda hadi bidhaa ifike.</p>
+        </div>
+        <div class="icon-card tone-inventory">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 10h18l-2 10H5L3 10Z"/><path d="m5 10 2-6h10l2 6M9 14h6"/></svg></span>
+            <strong>Mfanyabiashara</strong>
+          </div>
+          <p>Huendesha duka, huweka bidhaa, hufuata oda na hupata taarifa za mauzo.</p>
+        </div>
+        <div class="icon-card tone-payment">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="m6 17 4-7h4l4 7M9 13h7M12 10l-2-3H7"/></svg></span>
+            <strong>Msafirishaji</strong>
+          </div>
+          <p>Hukubali kazi, husafirisha oda na huthibitisha bidhaa imefikishwa.</p>
+        </div>
+        <div class="icon-card tone-security">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6l8-3Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <strong>Msimamizi</strong>
+          </div>
+          <p>Husimamia akaunti, bidhaa, oda, malipo na ukaguzi wa shughuli muhimu.</p>
+        </div>
+      </div>
+
+      <h3>Upatikanaji wa taarifa</h3>
+      <p>
+        Mfumo humpa kila aina ya mtumiaji ruhusa kulingana na jukumu lake. Mteja, mfanyabiashara,
+        msafirishaji na msimamizi huona kurasa na vitendo vinavyowahusu. Hii husaidia kulinda taarifa
+        za maduka na kuzuia ufikiaji usiohusika.
+      </p>
+
+      <div class="grid-3">
+        <div class="icon-card tone-inventory">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 10h18l-2 10H5L3 10Z"/><path d="m5 10 2-6h10l2 6M9 14h6"/></svg></span>
+            <strong>Duka la mtandaoni</strong>
+          </div>
+          <p>Kila mfanyabiashara ana jina, kiungo, simu na maelezo ya duka.</p>
+        </div>
+        <div class="icon-card tone-payment">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 8 9 5 9-5M3 8v9l9 5 9-5V8M12 13v9"/></svg></span>
+            <strong>Umiliki wa bidhaa</strong>
+          </div>
+          <p>Kila bidhaa huhusishwa na duka lililoiweka, hivyo oda huonekana kwa duka husika.</p>
+        </div>
+        <div class="icon-card tone-security">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg></span>
+            <strong>Taarifa zinazoonekana</strong>
+          </div>
+          <p>Msimamizi hufuatilia mfumo mzima; mfanyabiashara huona shughuli za duka lake.</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>JAYTRIX SYSTEMS · Jaytrix Marketplace</span>
+        <span>03</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <img src="../client/dist/brand/jaytrix-logo.png" alt="Jaytrix Systems" />
+        <span>Bidhaa na maduka</span>
+      </div>
+      <div class="section-kicker">Bidhaa na duka</div>
+      <h2 id="products-stores">Mfanyabiashara huongeza bidhaa na kuzianza kuuza</h2>
+      <div class="accent-line"></div>
+
+      <p class="lead">
+        Mfumo umeundwa ili maduka yaanze kuuza bila kusubiri ukaguzi wa awali wa kila bidhaa.
+        Bidhaa huchapishwa zinapowekwa. Msimamizi bado anaweza kuzikagua na kuziondoa ikiwa
+        hazifai kuonekana sokoni.
+      </p>
+
+      <div class="flow">
+        <div class="flow-step">
+          <span class="flow-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 10h18l-2 10H5L3 10Z"/><path d="m5 10 2-6h10l2 6M9 14h6"/></svg></span>
+          <strong>1. Tengeneza duka</strong>
+          Mfanyabiashara anaweka jina la duka, kiungo chake, simu na maelezo.
+        </div>
+        <div class="flow-step">
+          <span class="flow-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 8 9 5 9-5M3 8v9l9 5 9-5V8M12 13v9"/></svg></span>
+          <strong>2. Weka bidhaa</strong>
+          Anaweka jina, bei, idadi iliyopo, namba ya bidhaa na picha.
+        </div>
+        <div class="flow-step">
+          <span class="flow-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg></span>
+          <strong>3. Chapisha bidhaa</strong>
+          Bidhaa huonekana sokoni bila kusubiri idhini ya msimamizi.
+        </div>
+        <div class="flow-step">
+          <span class="flow-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 4h2l2.5 12h10l3-9H6"/><circle cx="10" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg></span>
+          <strong>4. Mteja ananunua</strong>
+          Mteja anaongeza bidhaa kwenye kikapu na kulipa.
+        </div>
+        <div class="flow-step">
+          <span class="flow-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5M4 19h17M8 15l4-4 3 2 5-6"/></svg></span>
+          <strong>5. Fuatilia oda</strong>
+          Mfanyabiashara hufuatilia oda na makadirio ya malipo.
+        </div>
+      </div>
+
+      <h3>Jinsi bidhaa zinavyosimamiwa</h3>
+      <ul>
+        <li><span class="tag tag-success">Idadi iliyopo</span> Mfumo hukagua bidhaa zilizobaki na kusasisha idadi oda inapowekwa.</li>
+        <li><span class="tag tag-progress">Namba ya bidhaa</span> Namba ya SKU humsaidia mfanyabiashara kuitambua bidhaa.</li>
+        <li><span class="tag tag-warning">Ukaguzi</span> Msimamizi anaweza kukagua bidhaa na kuamua kama ibaki sokoni.</li>
+        <li><span class="tag tag-purple">Picha</span> Picha za bidhaa hupakiwa kwenye huduma ya kuhifadhi picha iliyosanidiwa.</li>
+      </ul>
+
+      <div class="band">
+        <strong>Kwa mfanyabiashara:</strong> weka bidhaa na uanze kuuza haraka. Msimamizi anaweza
+        kuchukua hatua baadaye endapo bidhaa inahitaji ukaguzi.
+      </div>
+
+      <div class="footer">
+        <span>JAYTRIX SYSTEMS · Jaytrix Marketplace</span>
+        <span>04</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <img src="../client/dist/brand/jaytrix-logo.png" alt="Jaytrix Systems" />
+        <span>Mtiririko wa oda</span>
+      </div>
+      <div class="section-kicker">Mtiririko wa oda</div>
+      <h2 id="order-flow">Fuatilia oda kuanzia malipo hadi bidhaa ifike</h2>
+      <div class="accent-line"></div>
+
+      <div class="diagram-flow">
+        <div class="diagram-node">
+          <strong>01 · Oda imeundwa</strong>
+          <span>Malipo yanasubiri kuthibitishwa.</span>
+        </div>
+        <div class="diagram-node">
+          <strong>02 · Malipo yamethibitishwa</strong>
+          <span>Duka linaanza kuandaa oda.</span>
+        </div>
+        <div class="diagram-node">
+          <strong>03 · Inasafirishwa</strong>
+          <span>Msafirishaji yuko njiani.</span>
+        </div>
+        <div class="diagram-node is-done">
+          <strong>04 · Imefikishwa</strong>
+          <span>Kipindi cha ukaguzi kinaanza.</span>
+        </div>
+      </div>
+      <div class="diagram-note"><strong>Njia mbadala:</strong> oda inaweza kufutwa au fedha kurejeshwa kulingana na hali ya malipo na oda.</div>
+
+      <div class="diagram-note"><strong>Kuhusu majina ya hali:</strong> Maneno ya Kiingereza yanaonyesha hali zinazoonekana kwenye mfumo; maelezo ya Kiswahili yanafafanua maana yake.</div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Hali ya oda</th>
+            <th>Maana yake</th>
+            <th>Hatua inayofuata</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag">pending · Inasubiri malipo</span></td>
+            <td>Mteja ameanza kununua. Idadi ya bidhaa imehifadhiwa kwa oda.</td>
+            <td>Imelipwa au imefutwa.</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-success">paid · Imelipwa</span></td>
+            <td>Malipo yamethibitishwa. Ikiwa ni usafirishaji wa nyumbani, mfumo hutafuta msafirishaji.</td>
+            <td>Inasafirishwa, imefutwa au fedha zimerejeshwa.</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-progress">out_for_delivery · Inasafirishwa</span></td>
+            <td>Oda imekabidhiwa kwa msafirishaji na iko njiani.</td>
+            <td>Imefikishwa, imefutwa au fedha zimerejeshwa.</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-success">delivered</span></td>
+            <td>Bidhaa imefikishwa kwa mteja. Kipindi cha ukaguzi wa mteja huanza.</td>
+            <td>Malipo kwa mfanyabiashara yanaendelea baada ya kipindi hicho kuisha.</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-closed">cancelled/refunded</span></td>
+            <td>Oda imefutwa au fedha zimerejeshwa kwa mteja.</td>
+            <td>Malipo kwa mfanyabiashara yanasitishwa au hayafanyiki.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Kwa nini hatua hizi ni muhimu?</h3>
+      <p>
+        Hatua hizi humsaidia mteja kujua oda ilipo, mfanyabiashara kujua lini aandae bidhaa,
+        na msafirishaji kujua kazi aliyopewa. Msimamizi pia anaweza kufuatilia oda zilizofutwa,
+        fedha zilizorejeshwa au matatizo ya usafirishaji.
+      </p>
+
+      <div class="footer">
+        <span>JAYTRIX SYSTEMS · Jaytrix Marketplace</span>
+        <span>05</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <img src="../client/dist/brand/jaytrix-logo.png" alt="Jaytrix Systems" />
+        <span>Malipo na usafirishaji</span>
+      </div>
+      <div class="section-kicker">Malipo na usafirishaji</div>
+      <h2 id="payments-delivery">Malipo ya simu na kugawa kazi za usafirishaji</h2>
+      <div class="accent-line"></div>
+
+      <div class="grid-2">
+        <div class="icon-card tone-payment">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></span>
+            <strong>Kulipa kwa simu</strong>
+          </div>
+          <p>
+            Mteja huchagua huduma ya pesa kwa simu. Snippe hutuma ombi la malipo kwenye simu;
+            mteja hulithibitisha, kisha mfumo hupokea matokeo ya malipo.
+          </p>
+        </div>
+        <div class="icon-card tone-inventory">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 8a10 10 0 0 1 14 0M8 11a6 6 0 0 1 8 0M11 14a2 2 0 0 1 2 0"/><circle cx="12" cy="18" r="1"/></svg></span>
+            <strong>Huduma zinazotumika</strong>
+          </div>
+          <p>
+            Mfumo unasaidia M-Pesa, Airtel Money, Mixx by Yas na HaloPesa.
+          </p>
+        </div>
+        <div class="icon-card tone-people">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="m6 17 4-7h4l4 7M9 13h7M12 10l-2-3H7"/></svg></span>
+            <strong>Kumtafuta msafirishaji</strong>
+          </div>
+          <p>
+            Oda ikilipwa na mteja akichagua kusafirishiwa nyumbani, mfumo hujaribu kumpata
+            msafirishaji anayehusishwa na duka husika.
+          </p>
+        </div>
+        <div class="icon-card tone-security">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v14H4z"/><circle cx="9" cy="10" r="2"/><path d="m5 17 5-4 3 2 3-4 4 5"/></svg></span>
+            <strong>Uthibitisho wa kufikisha</strong>
+          </div>
+          <p>
+            Mfumo unaweza kuhifadhi jina la aliyepokea, maelezo na picha ya uthibitisho.
+          </p>
+        </div>
+      </div>
+
+      <h3>Mtiririko wa malipo kwa simu</h3>
+      <div class="diagram-flow">
+        <div class="diagram-node">
+          <strong>01 · Oda imeundwa</strong>
+          <span>Mteja anachagua kulipa kwa simu.</span>
+        </div>
+        <div class="diagram-node">
+          <strong>02 · Ombi limetumwa</strong>
+          <span>Snippe hutuma ombi kwenye simu ya mteja.</span>
+        </div>
+        <div class="diagram-node">
+          <strong>03 · Mteja anathibitisha</strong>
+          <span>Anakamilisha malipo kwenye simu.</span>
+        </div>
+        <div class="diagram-node is-done">
+          <strong>04 · Mfumo hupokea hali</strong>
+          <span>Taarifa hurudi kupitia ujumbe wa kiotomatiki (webhook) au ukaguzi wa hali.</span>
+        </div>
+      </div>
+      <div class="payment-results">
+        <div class="payment-result">
+          <strong>completed · Malipo yamekamilika</strong>
+          <span>Oda huwekwa imelipwa na hatua zinazofuata zinaanza.</span>
+        </div>
+        <div class="payment-result is-error">
+          <strong>failed · expired · voided</strong>
+          <span>Malipo yameshindikana, muda wa ombi umeisha au ombi limebatilishwa. Mteja anaweza kuomba ombi jipya la malipo.</span>
+        </div>
+      </div>
+
+      <h3>Kushughulikia tatizo la usafirishaji</h3>
+      <p>
+        Mteja au timu ya uendeshaji inaweza kuripoti tatizo. Mfanyabiashara anaweza kuweka hali kuwa
+        limefunguliwa, linachunguzwa au limetatuliwa. Mfumo huhifadhi kila sasisho na kumjulisha mteja.
+      </p>
+
+      <div class="band">
+        <strong>Malipo ya msafirishaji:</strong> malipo ya msingi yanaweza kuanza Tsh 3,000 ikiwa
+        kiwango kingine hakijawekwa kwenye mipangilio ya seva. Mfanyabiashara anaweza kuongeza bonasi
+        kwa safari hadi kikomo kilichosanidiwa (Tsh 50,000 kwa mipangilio ya kawaida). Mfanyabiashara
+        ndiye anayemlipa msafirishaji moja kwa moja.
+      </div>
+
+      <div class="footer">
+        <span>JAYTRIX SYSTEMS · Jaytrix Marketplace</span>
+        <span>06</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <img src="../client/dist/brand/jaytrix-logo.png" alt="Jaytrix Systems" />
+        <span>Malipo kwa wafanyabiashara</span>
+      </div>
+      <div class="section-kicker">Malipo kwa wafanyabiashara</div>
+      <h2 id="vendor-payouts">Malipo kwa duka husubiri ukaguzi wa mteja</h2>
+      <div class="accent-line"></div>
+
+      <p class="lead">
+        Baada ya oda kufikishwa, mfumo husubiri kipindi cha ukaguzi wa mteja kiishe kabla ya kuandaa
+        malipo ya mfanyabiashara. Ikiwa kuna tatizo la usafirishaji ambalo halijatatuliwa, malipo
+        husitishwa hadi suala hilo lishughulikiwe.
+      </p>
+
+      <div class="payout-main">
+        <div class="payout-node">
+          <strong>Bidhaa imefikishwa</strong>
+          <span>Kipindi cha mteja kukagua oda kinaanza.</span>
+        </div>
+        <div class="payout-node">
+          <strong>waiting_customer_window</strong>
+          <span>Malipo yanasubiri kipindi cha ukaguzi kiishe.</span>
+        </div>
+      </div>
+      <div class="payout-branch-label">Baada ya kipindi cha ukaguzi</div>
+      <div class="payout-branches">
+        <div class="payout-branch">
+          <span>Ikiwa tatizo bado liko wazi</span>
+          <strong>issue_on_hold · Malipo yanasitishwa</strong>
+          <span>Huendelea baada ya tatizo kutatuliwa.</span>
+        </div>
+        <div class="payout-branch is-ready">
+          <span>Ikiwa hakuna tatizo lililo wazi</span>
+          <strong>ready · Malipo yanaweza kuandaliwa</strong>
+          <span>Msimamizi anaweza kuyaweka kwenye foleni ya malipo.</span>
+        </div>
+      </div>
+      <div class="payout-terminal">
+        <strong>Oda iliyofutwa au kurejeshewa fedha → not_payable</strong><br />
+        <span>Malipo kwa mfanyabiashara hayafanyiki.</span>
+      </div>
+
+      <h3>Taarifa anazoona mfanyabiashara</h3>
+      <ul>
+        <li>Thamani ya bidhaa zake ndani ya kila oda.</li>
+        <li>Makadirio ya malipo na kama yanasubiri, yanaandaliwa, yako tayari au yamesitishwa.</li>
+        <li>Msimamizi huona orodha ya malipo na kurekodi yaliyokamilika.</li>
+        <li>Mfumo huhifadhi kumbukumbu za kuandaa na kushughulikia malipo.</li>
+      </ul>
+
+      <div class="band">
+        <strong>Muda wa ukaguzi:</strong> unasimamiwa na mpangilio wa seva
+        <em>PAYOUT_DISPUTE_WINDOW_HOURS</em>; kwa mipangilio ya kawaida ni saa 24.
+      </div>
+
+      <div class="footer">
+        <span>JAYTRIX SYSTEMS · Jaytrix Marketplace</span>
+        <span>07</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <img src="../client/dist/brand/jaytrix-logo.png" alt="Jaytrix Systems" />
+        <span>Taarifa na usimamizi</span>
+      </div>
+      <div class="section-kicker">Taarifa na usimamizi</div>
+      <h2 id="notifications">Taarifa na kumbukumbu husaidia kufuatilia shughuli</h2>
+      <div class="accent-line"></div>
+
+      <div class="grid-2">
+        <div class="icon-card tone-payment">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></span>
+            <strong>Taarifa ndani ya mfumo</strong>
+          </div>
+          <p>
+            Mfumo hutuma taarifa kuhusu malipo yanayosubiri au yaliyokamilika, mabadiliko ya oda,
+            matatizo ya usafirishaji na malipo au bonasi za wasafirishaji.
+          </p>
+        </div>
+        <div class="icon-card tone-admin">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+            <strong>Taarifa za papo hapo (real-time)</strong>
+          </div>
+          <p>
+            Taarifa mpya huwasilishwa kwa watumiaji waliounganishwa mara tu zinapotokea.
+          </p>
+        </div>
+        <div class="icon-card tone-people">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v12H9l-5 3V5Z"/><path d="M8 9h8M8 13h5"/></svg></span>
+            <strong>WhatsApp na SMS</strong>
+          </div>
+          <p>
+            Ujumbe wa WhatsApp na SMS unaweza kuwashwa baada ya kuweka taarifa za huduma na
+            msimamizi kuidhinisha njia hizo.
+          </p>
+        </div>
+        <div class="icon-card tone-security">
+          <div class="icon-heading">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h8l4 4v14H7z"/><path d="M15 3v5h5M10 13h6M10 17h6"/></svg></span>
+            <strong>Kumbukumbu za shughuli</strong>
+          </div>
+          <p>
+            Vitendo vinavyohusu usafirishaji, malipo na ukaguzi wa bidhaa huhifadhiwa ili viweze kufuatiliwa.
+          </p>
+        </div>
+      </div>
+
+      <h3>Jinsi taarifa zinavyofika</h3>
+      <div class="diagram-flow">
+        <div class="diagram-node">
+          <strong>01 · Tukio limetokea</strong>
+          <span>Mabadiliko ya oda au malipo.</span>
+        </div>
+        <div class="diagram-node">
+          <strong>02 · Taarifa ndani ya mfumo</strong>
+          <span>Huhifadhiwa na kuonyeshwa kwa mtumiaji.</span>
+        </div>
+        <div class="diagram-node">
+          <strong>03 · Mipangilio hukaguliwa</strong>
+          <span>Aina ya taarifa na njia iliyoruhusiwa.</span>
+        </div>
+        <div class="diagram-node is-done">
+          <strong>04 · Ujumbe wa nje</strong>
+          <span>SMS au WhatsApp ikiwashwa na kusanidiwa.</span>
+        </div>
+      </div>
+      <div class="notification-results">
+        <div class="status-card is-ready">
+          <strong>Imetumwa</strong>
+          <span>Mtoa huduma amekubali ujumbe.</span>
+        </div>
+        <div class="status-card is-skipped">
+          <strong>Haikutumwa</strong>
+          <span>Njia au aina ya taarifa haijawashwa.</span>
+        </div>
+        <div class="status-card is-hold">
+          <strong>Imeshindwa</strong>
+          <span>Msimamizi anaweza kujaribu tena.</span>
+        </div>
+      </div>
+
+      <h3>Vifaa vya msimamizi na uendeshaji</h3>
+      <ul>
+        <li>Dashibodi (dashboard) ya msimamizi huonyesha takwimu za soko la mtandaoni.</li>
+        <li>Msimamizi husimamia akaunti, bidhaa, oda, malipo na taarifa.</li>
+        <li>Mfanyabiashara anaweza kuweka bonasi na maelezo ya malipo ya msafirishaji.</li>
+        <li>Matatizo ya usafirishaji hufuatiliwa hadi yatatuliwe.</li>
+      </ul>
+
+      <div class="footer">
+        <span>JAYTRIX SYSTEMS · Jaytrix Marketplace</span>
+        <span>08</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <img src="../client/dist/brand/jaytrix-logo.png" alt="Jaytrix Systems" />
+        <span>Kuanza kutumia mfumo</span>
+      </div>
+      <div class="section-kicker">Orodha ya hatua (checklist) ya mfanyabiashara</div>
+      <h2 id="vendor-onboarding">Hatua za mfanyabiashara kuanza kutumia Jaytrix</h2>
+      <div class="accent-line"></div>
+
+      <div class="grid-2">
+        <div>
+          <h3>Anza kwa kufanya haya</h3>
+          <ul class="checklist">
+            <li>Kusajili akaunti ya mfanyabiashara.</li>
+            <li>Kukamilisha taarifa za duka: jina, kiungo, simu na maelezo.</li>
+            <li>Kuandaa majina ya bidhaa, bei, idadi iliyopo na picha.</li>
+            <li>Kuweka bidhaa na kuthibitisha kuwa zinaonekana kwenye soko la mtandaoni.</li>
+            <li>Kuongeza wasafirishaji wa duka ikiwa duka linasimamia usafirishaji.</li>
+            <li>Kukagua oda na taarifa za malipo mara kwa mara.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Taarifa za kuandaa</h3>
+          <ul class="checklist checklist-data">
+            <li>Jina la biashara au duka.</li>
+            <li>Namba ya simu ya biashara.</li>
+            <li>Maelezo mafupi ya biashara.</li>
+            <li>Orodha ya bidhaa na bei zake.</li>
+            <li>Maeneo ya usafirishaji na wasafirishaji wanaohusika.</li>
+            <li>Utaratibu wa biashara wa kushughulikia malipo.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="band">
+        <strong>Jaytrix inamsaidia mfanyabiashara:</strong> kuwa na duka la mtandaoni, kupokea oda,
+        kukubali malipo ya simu, kufuatilia usafirishaji na kuona taarifa za malipo sehemu moja.
+      </div>
+
+      <h3>Maneno rahisi ya kuelezea mfumo</h3>
+      <p>
+        “Jaytrix Marketplace inakuwezesha kuuza bidhaa zako mtandaoni, kupokea oda za wateja,
+        kufuatilia usafirishaji na kuona makadirio ya malipo yako. Mteja na mfanyabiashara wanaweza
+        kufuatilia malipo, uthibitisho wa kufikisha bidhaa na matatizo yanayohitaji kushughulikiwa.”
+      </p>
+
+      <div class="footer">
+        <span>JAYTRIX SYSTEMS · Jaytrix Marketplace</span>
+        <span>09</span>
+      </div>
+    </section>
+  </body>
+</html>

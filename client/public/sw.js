@@ -3,7 +3,7 @@ const APP_SHELL = [
   "/",
   "/manifest.webmanifest",
   "/brand/jaytrix-mark.svg",
-  "/brand/jaytrix-logo.svg",
+  "/brand/jaytrix-logo.png",
   "/brand/jaytrix-icon-192.png",
   "/brand/jaytrix-icon-512.png",
   "/brand/jaytrix-maskable-192.png",
