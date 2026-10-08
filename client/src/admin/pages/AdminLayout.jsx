@@ -84,10 +84,14 @@ export default function AdminLayout() {
           activeIssueCount={deliveryIssueSummary.activeCount}
           onOpenSidebar={() => setMobileSidebarOpen(true)}
         />
-        <main className="min-h-0 flex-1 overflow-y-auto bg-[linear-gradient(160deg,#f8fafc_0%,#eff6ff_48%,#fff7ed_100%)] p-4 pb-6 md:p-6">
-          <Outlet />
-        </main>
-        <InternalFooter />
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <div className="flex min-h-full flex-col">
+            <main className="flex-1 bg-[linear-gradient(160deg,#f8fafc_0%,#eff6ff_48%,#fff7ed_100%)] p-4 pb-6 md:p-6">
+              <Outlet />
+            </main>
+            <InternalFooter />
+          </div>
+        </div>
       </div>
     </div>
   );
