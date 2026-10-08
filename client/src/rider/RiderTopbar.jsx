@@ -1,9 +1,10 @@
-import { FiMenu, FiTruck, FiUser } from "react-icons/fi";
+import SidebarMenuToggle from "../components/SidebarMenuToggle";
+import { FiTruck, FiUser } from "react-icons/fi";
 import { useAuth } from "../hooks/useAuth";
 import useNotificationAlerts from "../hooks/useNotificationAlerts";
 import useNotificationPreferences from "../hooks/useNotificationPreferences";
 
-export default function RiderTopbar({ onOpenSidebar }) {
+export default function RiderTopbar({ onOpenSidebar, collapsed, onToggleCollapse }) {
   const { user } = useAuth();
   const initial = (user?.name || "Rider").trim().charAt(0).toUpperCase() || "R";
   const notificationPreferences = useNotificationPreferences("rider");
@@ -21,14 +22,7 @@ export default function RiderTopbar({ onOpenSidebar }) {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(6,42,99,0)_0%,rgba(6,42,99,0.78)_28%,rgba(11,95,255,0.72)_64%,rgba(11,95,255,0)_100%)]" />
 
       <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={onOpenSidebar}
-          className="rounded-2xl border border-white/80 bg-white/75 p-2.5 text-slate-700 shadow-[0_12px_30px_rgba(15,23,42,0.08)] transition hover:-translate-y-0.5 hover:bg-white lg:hidden"
-          aria-label="Open sidebar"
-        >
-          <FiMenu size={18} />
-        </button>
+        <SidebarMenuToggle collapsed={collapsed} onToggleCollapse={onToggleCollapse} onOpenSidebar={onOpenSidebar} />
 
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#062A63]">Delivery Console</p>

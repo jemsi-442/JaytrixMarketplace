@@ -52,7 +52,6 @@ export default function CustomerLayout() {
         className="hidden lg:flex"
         unreadCount={unreadCount}
         collapsed={desktopSidebarCollapsed}
-        onToggleCollapse={() => setDesktopSidebarCollapsed((value) => !value)}
       />
 
       {mobileSidebarOpen ? (
@@ -74,7 +73,7 @@ export default function CustomerLayout() {
       ) : null}
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-        <CustomerTopbar unreadCount={unreadCount} onOpenSidebar={() => setMobileSidebarOpen(true)} />
+        <CustomerTopbar collapsed={desktopSidebarCollapsed} onToggleCollapse={() => setDesktopSidebarCollapsed((value) => !value)} unreadCount={unreadCount} onOpenSidebar={() => setMobileSidebarOpen(true)} />
         <CustomerMobileCommerceDock />
         <main className="min-h-0 flex-1 overflow-y-auto bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.08),transparent_30%),linear-gradient(160deg,#f8fafc_0%,#eff6ff_52%,#fff7ed_100%)]">
           <Outlet />

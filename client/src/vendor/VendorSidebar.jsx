@@ -11,7 +11,6 @@ import {
   FiHome,
   FiX,
 } from "react-icons/fi";
-import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand } from "react-icons/tb";
 import { useAuth } from "../hooks/useAuth";
 import BrandMark from "../components/BrandMark";
 
@@ -30,7 +29,6 @@ export default function VendorSidebar({
   activeIssueCount = 0,
   mobile = false,
   collapsed = false,
-  onToggleCollapse,
   onNavigate,
   onClose,
 }) {
@@ -54,18 +52,6 @@ export default function VendorSidebar({
             {user?.storeName || "Seller workspace"}
           </p>}
         </div>
-        {!mobile ? (
-          <button
-            type="button"
-            onClick={onToggleCollapse}
-            className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl text-slate-300 transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 lg:inline-flex"
-            aria-expanded={!collapsed}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {collapsed ? <TbLayoutSidebarLeftExpand size={24} aria-hidden="true" /> : <TbLayoutSidebarLeftCollapse size={24} aria-hidden="true" />}
-          </button>
-        ) : null}
         {mobile ? (
           <button
             type="button"

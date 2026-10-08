@@ -57,7 +57,6 @@ export default function AdminLayout() {
         unreadCount={unreadCount}
         activeIssueCount={deliveryIssueSummary.activeCount}
         collapsed={desktopSidebarCollapsed}
-        onToggleCollapse={() => setDesktopSidebarCollapsed((value) => !value)}
       />
 
       {mobileSidebarOpen ? (
@@ -80,7 +79,7 @@ export default function AdminLayout() {
       ) : null}
 
       <div className="flex min-w-0 min-h-0 flex-1 flex-col">
-        <AdminTopbar
+        <AdminTopbar collapsed={desktopSidebarCollapsed} onToggleCollapse={() => setDesktopSidebarCollapsed((value) => !value)}
           unreadCount={unreadCount}
           activeIssueCount={deliveryIssueSummary.activeCount}
           onOpenSidebar={() => setMobileSidebarOpen(true)}
