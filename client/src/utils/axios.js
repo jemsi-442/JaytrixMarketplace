@@ -20,14 +20,17 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor (optional: handle errors globally)
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Example: handle 401 globally
-    if (error.response && error.response.status === 401) {
+    const isLoginRequest = /\/auth\/login\/?(?:\?|$)/.test(error.config?.url || "");
+
+    // Let the login form display rejected credentials without reloading the page.
+    if (error.response?.status === 401 && !isLoginRequest) {
       localStorage.removeItem("token");
-      window.location.href = "/login"; // redirect to login
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
     }
     return Promise.reject(error);
   }
