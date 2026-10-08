@@ -1,6 +1,6 @@
-# JAYTRIX Systems
+# JaytrixMarketplace
 
-JAYTRIX Systems is a multi-vendor marketplace and delivery platform built for shoppers, vendors, riders, and modern retail operations.
+JaytrixMarketplace is a multi-vendor marketplace and delivery platform built for shoppers, vendors, riders, and modern retail operations. A product of JAYTRIX SYSTEMS.
 
 ## Stack
 
@@ -59,8 +59,8 @@ DB_SYNC_ALTER=false
 CLOUDINARY_NAME=replace_with_cloudinary_cloud_name
 CLOUDINARY_API_KEY=replace_with_cloudinary_api_key
 CLOUDINARY_API_SECRET=replace_with_cloudinary_api_secret
-APP_NAME=JAYTRIX Systems
-MAIL_FROM=JAYTRIX Systems <no-reply@jaytrix.co.tz>
+APP_NAME=JaytrixMarketplace
+MAIL_FROM=JaytrixMarketplace <no-reply@jaytrix.co.tz>
 SMTP_HOST=smtp.example.com
 SMTP_PORT=587
 SMTP_SECURE=false
