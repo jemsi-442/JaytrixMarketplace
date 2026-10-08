@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FiBell, FiChevronLeft, FiChevronRight, FiCreditCard, FiHeart, FiHome, FiLogOut, FiShoppingBag, FiShield, FiUser, FiX } from "react-icons/fi";
+import { FiBell, FiCreditCard, FiHeart, FiHome, FiLogOut, FiShoppingBag, FiShield, FiUser, FiX } from "react-icons/fi";
+import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand } from "react-icons/tb";
 import BrandMark from "../components/BrandMark";
 import { useAuth } from "../hooks/useAuth";
 
@@ -37,7 +38,7 @@ export default function CustomerSidebar({
     <aside
       className={`sticky top-0 flex h-screen shrink-0 flex-col overflow-y-auto border-r border-slate-800 bg-[radial-gradient(circle_at_top_left,rgba(11,95,255,0.18),transparent_30%),linear-gradient(180deg,#020617_0%,#0f172a_52%,#111827_100%)] text-slate-200 transition-[width] duration-300 ease-out ${collapsed && !mobile ? "w-24" : "w-72"} ${className}`}
     >
-      <div className={`flex items-start border-b border-white/10 py-6 ${collapsed && !mobile ? "justify-center px-4" : "justify-between px-6"}`}>
+      <div className={`flex gap-4 border-b border-white/10 py-6 ${collapsed && !mobile ? "flex-col items-center px-4" : "items-start justify-between px-6"}`}>
         <div className={collapsed && !mobile ? "flex justify-center" : ""}>
           <BrandMark context="Shopper Hub" light iconOnly={collapsed && !mobile} markClassName={collapsed && !mobile ? "h-12 w-12" : ""} />
           {collapsed && !mobile ? null : (
@@ -50,11 +51,12 @@ export default function CustomerSidebar({
           <button
             type="button"
             onClick={onToggleCollapse}
-            className="hidden rounded-2xl border border-white/10 bg-white/5 p-2.5 text-slate-300 transition hover:bg-white/10 hover:text-white lg:inline-flex"
+            className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl text-slate-300 transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 lg:inline-flex"
+            aria-expanded={!collapsed}
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
-            {collapsed ? <FiChevronRight size={20} /> : <FiChevronLeft size={20} />}
+            {collapsed ? <TbLayoutSidebarLeftExpand size={24} aria-hidden="true" /> : <TbLayoutSidebarLeftCollapse size={24} aria-hidden="true" />}
           </button>
         ) : null}
         {mobile ? (
